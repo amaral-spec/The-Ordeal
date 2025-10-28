@@ -10,7 +10,7 @@ import SwiftData
 import SwiftUI
 
 @Model
-final class Atividades {
+final class Tarefas {
     var partitura: Data
     
     @Relationship(inverse: \Alunos.atividades)
