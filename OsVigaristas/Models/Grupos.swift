@@ -13,6 +13,7 @@ final class Grupos {
     var nome: String
     var descricao: String
     var qtdAlunos: Int
+    var membros: [Usuarios] = []
     
     init(nome: String, descricao: String, qtdAlunos: Int) {
         self.nome = nome

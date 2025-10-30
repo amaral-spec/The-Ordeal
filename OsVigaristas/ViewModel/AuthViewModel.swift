@@ -6,11 +6,13 @@
 //
 import SwiftUI
 import AuthenticationServices
+import SwiftData
 
 @MainActor
 class AuthViewModel: ObservableObject {
     @AppStorage("appleUserID") var appleUserID: String = ""
     @Published var logado = false
+    @Published var mensagem: String = ""
     
     init() {
         checkAppleSignInStatus()

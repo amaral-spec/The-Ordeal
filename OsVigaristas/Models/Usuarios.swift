@@ -10,16 +10,18 @@ import Foundation
 
 @Model
 final class Usuarios {
+    var nome: String?
+    var email: String?
+    var senha: String?
     var isProfessor: Bool = false
-    var nome: String
-    var desafios: [Desafio] = []
-    var tarefas: [Tarefas] = []
+    var desafios: [Desafio]? = []
+    var tarefas: [Tarefas]? = []
     
-    init(isProfessor: Bool, nome: String, desafios: [Desafio], tarefas: [Tarefas]) {
-        self.isProfessor = isProfessor
+    init(nome: String, email: String, senha: String, isProfessor: Bool) {
         self.nome = nome
-        self.desafios = desafios
-        self.tarefas = tarefas
+        self.email = email
+        self.senha = senha
+        self.isProfessor = isProfessor
     }
     
 }

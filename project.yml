@@ -1,6 +1,6 @@
 name: OsVigaristas
 options:
-  bundleIdPrefix: gabrielAmaral.OsVigaristas
+  bundleIdPrefix: gabrielAmaral
   deploymentTarget:
     iOS: "18.0"
   productName: Os Vigaristas
@@ -22,3 +22,8 @@ targets:
         TARGETED_DEVICE_FAMILY: "1" # iPhone (1)
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         GENERATE_INFOPLIST_FILE: YES
+        DEVELOPMENT_TEAM: 7N9YG996K2
+        CODE_SIGN_ENTITLEMENTS: OsVigaristas/OsVigaristas.entitlements
+        
+    capabilities:
+      - signInWithApple: {}
