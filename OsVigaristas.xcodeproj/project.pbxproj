@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -21,7 +21,7 @@
 		0B6E1AC4C6EF24A759ECB023 /* Tarefas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tarefas.swift; sourceTree = "<group>"; };
 		1E681E57894345C37F117F22 /* Desafio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Desafio.swift; sourceTree = "<group>"; };
 		2A361ACB059103A9440542DD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		4C17123365D33E1A85A0C93E /* OsVigaristas.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = OsVigaristas.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C17123365D33E1A85A0C93E /* OsVigaristas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OsVigaristas.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F7CC1A3B7BD4323FA008075 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		85D8F3D2B2FC1A8FC8DBBBF6 /* OsVigaristas.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OsVigaristas.entitlements; sourceTree = "<group>"; };
 		9BAC468AB4E1CD52FCB9C93E /* Usuarios.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Usuarios.swift; sourceTree = "<group>"; };
@@ -116,11 +116,6 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
-				TargetAttributes = {
-					BB993A8A28D805330B1B3F02 = {
-						DevelopmentTeam = 7N9YG996K2;
-					};
-				};
 			};
 			buildConfigurationList = 666D7FB344974CFC7B13FF09 /* Build configuration list for PBXProject "OsVigaristas" */;
 			compatibilityVersion = "Xcode 14.0";
@@ -132,7 +127,6 @@
 			);
 			mainGroup = F284E017050705A976399550;
 			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -177,7 +171,7 @@
 				CODE_SIGN_ENTITLEMENTS = OsVigaristas/OsVigaristas.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7N9YG996K2;
+				DEVELOPMENT_TEAM = LF52FBNMZB;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFO_PLIST_FILE = OsVigaristas/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -260,7 +254,7 @@
 				CODE_SIGN_ENTITLEMENTS = OsVigaristas/OsVigaristas.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7N9YG996K2;
+				DEVELOPMENT_TEAM = LF52FBNMZB;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFO_PLIST_FILE = OsVigaristas/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
