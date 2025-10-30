@@ -64,3 +64,13 @@ Package.resolved
 
 # === Env files ===
 .env
+
+# Ignorar o projeto gerado pelo XCodeGen
+*.xcodeproj
+
+# Ignorar dados de build do Xcode
+DerivedData/
+Build/
+
+# Ignorar arquivos temporários
+*.xcuserdata

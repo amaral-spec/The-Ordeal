@@ -1,0 +1,24 @@
+name: OsVigaristas
+options:
+  bundleIdPrefix: gabrielAmaral.OsVigaristas
+  deploymentTarget:
+    iOS: "18.0"
+  productName: Os Vigaristas
+  createIntermediateGroups: true
+
+targets:
+  OsVigaristas:
+    type: application
+    platform: iOS
+    sources:
+      - path: OsVigaristas
+    resources:
+      - path: OsVigaristas/Assets.xcassets
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: gabrielAmaral.OsVigaristas
+        CURRENT_PROJECT_VERSION: 1
+        INFO_PLIST_FILE: OsVigaristas/Info.plist
+        TARGETED_DEVICE_FAMILY: "1" # iPhone (1)
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        GENERATE_INFOPLIST_FILE: YES
