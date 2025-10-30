@@ -12,7 +12,7 @@ import SwiftData
 struct OsVigaristasApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Professor.self,
+            Usuarios.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 

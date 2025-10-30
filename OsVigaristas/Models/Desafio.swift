@@ -11,7 +11,7 @@ import SwiftData
 @Model
 final class Desafio {
     var musica: URL
-    var alunos: [Alunos] = []
+    var alunos: [Usuarios] = []
     
     init(musica: URL, qtdAlunos: Int) {
         self.musica = musica

@@ -13,8 +13,8 @@ import SwiftUI
 final class Tarefas {
     var partitura: Data
     
-    @Relationship(inverse: \Alunos.atividades)
-    var alunos: [Alunos] = []
+    @Relationship(inverse: \Usuarios.tarefas)
+    var alunos: [Usuarios] = []
     
     init(partitura: Data, qtdAlunos: Int){
         self.partitura = partitura

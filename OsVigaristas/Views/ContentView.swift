@@ -7,15 +7,50 @@
 
 import SwiftUI
 import SwiftData
+import AuthenticationServices
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Professor]
+    @Query private var items: [Usuarios]
+    @StateObject private var authVM = AuthViewModel()
 
     var body: some View {
-        
+        NavigationStack {
+            Group {
+                if authVM.logado {
+                    VStack {
+                        Text("Logado")
+                            .padding()
+                        
+                        Button("Logout") {
+                            authVM.logout()
+                        }
+                        .buttonStyle(.borderedProminent)
+                    }
+                } else {
+                    VStack {
+                        Text("Bem-vindo!")
+                            .font(.title2)
+                            .padding(.bottom)
+                        SignInWithAppleButton(
+                            .signIn,
+                            onRequest: { request in
+                                request.requestedScopes = [.fullName, .email]
+                            },
+                            onCompletion: { result in
+                                authVM.handle(result)
+                            }
+                        )
+                        .frame(height: 45)
+                        .padding()
+                        .signInWithAppleButtonStyle(.black)
+                    }
+                }
+            }
+        }
+        .backgroundStyle(.white)
     }
-
+    
     private func addItem() {
         withAnimation {
             // criar o objeto
@@ -34,5 +69,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(for: Professor.self, inMemory: true)
+        .modelContainer(for: Usuarios.self, inMemory: true)
 }
