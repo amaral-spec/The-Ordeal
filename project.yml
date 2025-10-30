@@ -14,16 +14,23 @@ targets:
       - path: OsVigaristas
     resources:
       - path: OsVigaristas/Assets.xcassets
+
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: gabrielAmaral.OsVigaristas
         CURRENT_PROJECT_VERSION: 1
         INFO_PLIST_FILE: OsVigaristas/Info.plist
-        TARGETED_DEVICE_FAMILY: "1" # iPhone (1)
+        TARGETED_DEVICE_FAMILY: "1" # iPhone only
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         GENERATE_INFOPLIST_FILE: YES
-        DEVELOPMENT_TEAM: 7N9YG996K2
         CODE_SIGN_ENTITLEMENTS: OsVigaristas/OsVigaristas.entitlements
-        
+
+    entitlements:
+      path: OsVigaristas/OsVigaristas.entitlements
+      properties:
+        com.apple.developer.applesignin:
+          - Default
+
     capabilities:
-      - signInWithApple: {}
+      signInWithApple:
+        enabled: true
