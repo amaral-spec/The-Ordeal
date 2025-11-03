@@ -7,12 +7,16 @@
 
 import SwiftUI
 import SwiftData
+import UIKit
 
 @main
 struct OsVigaristasApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Usuarios.self,
+            Grupos.self,
+            Tarefas.self,
+            Desafio.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 

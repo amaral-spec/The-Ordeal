@@ -7,65 +7,32 @@
 
 import SwiftUI
 import SwiftData
-import AuthenticationServices
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Usuarios]
-    @StateObject private var authVM = AuthViewModel()
-
+    @Query private var usuarios: [Usuarios]
+    @State private var searchText: String = ""
+    
     var body: some View {
-        NavigationStack {
-            Group {
-                if authVM.logado {
-                    VStack {
-                        Text("Logado")
-                            .padding()
-                        
-                        Button("Logout") {
-                            authVM.logout()
-                        }
-                        .buttonStyle(.borderedProminent)
-                    }
-                } else {
-                    VStack {
-                        Text("Bem-vindo!")
-                            .font(.title2)
-                            .padding(.bottom)
-                        SignInWithAppleButton(
-                            .signIn,
-                            onRequest: { request in
-                                request.requestedScopes = [.fullName, .email]
-                            },
-                            onCompletion: { result in
-                                authVM.handle(result)
-                            }
-                        )
-                        .frame(height: 45)
-                        .padding()
-                        .signInWithAppleButtonStyle(.black)
-                    }
-                }
+        TabView() {
+            Tab("Início", systemImage: "house") {
+                LoginView()
+            }
+            Tab("Alunos", systemImage: "person.3") {
+                //alunos view
+            }
+            Tab("Perfil", systemImage: "person.crop.circle") {
+                //perfil view
+            }
+            Tab("Buscar", systemImage: "magnifyingglass", role: .search) {
+                //buscar view
             }
         }
-        .backgroundStyle(.white)
-    }
-    
-    private func addItem() {
-        withAnimation {
-            // criar o objeto
-//            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-//            for index in offsets {
-//                modelContext.delete(items[index])
-//            }
-        }
+        .foregroundStyle(Color(red: 0.65, green: 0.13, blue: 0.29))
+        .searchable(text: $searchText)
     }
 }
+    
 
 #Preview {
     ContentView()

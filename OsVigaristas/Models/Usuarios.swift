@@ -13,13 +13,14 @@ final class Usuarios {
     var isProfessor: Bool = false
     var nome: String
     var desafios: [Desafio] = []
+    
+    @Relationship
     var tarefas: [Tarefas] = []
     
-    init(isProfessor: Bool, nome: String, desafios: [Desafio], tarefas: [Tarefas]) {
+    init(isProfessor: Bool, nome: String, desafios: [Desafio]) {
         self.isProfessor = isProfessor
         self.nome = nome
         self.desafios = desafios
-        self.tarefas = tarefas
     }
     
 }
