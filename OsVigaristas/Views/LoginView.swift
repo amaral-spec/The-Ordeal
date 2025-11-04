@@ -31,7 +31,7 @@ struct LoginView: View {
                     VStack {
                         Rectangle()
                             .foregroundStyle(Color(red: 0.65, green: 0.13, blue: 0.29))
-                            .frame(width: .infinity, height: 150)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
                             .padding()
                         
                         Text("Login or sign up")
@@ -63,4 +63,3 @@ struct LoginView: View {
     LoginView()
         .modelContainer(for: Usuarios.self, inMemory: true)
 }
-

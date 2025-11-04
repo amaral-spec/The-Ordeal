@@ -28,7 +28,7 @@ struct ContentView: View {
                 //buscar view
             }
         }
-        .foregroundStyle(Color(red: 0.65, green: 0.13, blue: 0.29))
+        .tint(Color(red: 0.65, green: 0.13, blue: 0.29))
         .searchable(text: $searchText)
     }
 }
