@@ -7,10 +7,11 @@
 
 import SwiftUI
 import SwiftData
-import UIKit
 
 @main
 struct OsVigaristasApp: App {
+    @StateObject private var authVM = AuthViewModel()
+    
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Usuarios.self,
@@ -29,7 +30,13 @@ struct OsVigaristasApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if authVM.logado {
+                ContentView()
+                    .environmentObject(authVM)
+            } else {
+                LoginView()
+                    .environmentObject(authVM)
+            }
         }
         .modelContainer(sharedModelContainer)
     }
