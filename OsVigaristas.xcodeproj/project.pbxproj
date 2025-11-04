@@ -8,29 +8,29 @@
 
 /* Begin PBXBuildFile section */
 		16CBCBB6FA06A46E0B45F082 /* Tarefas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B6E1AC4C6EF24A759ECB023 /* Tarefas.swift */; };
+		287EE062C88140AF5BEF050D /* TermosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7782CB7CE5D7D5CA94FFB74D /* TermosView.swift */; };
 		316590D399C17B87F2CD0E2A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A361ACB059103A9440542DD /* ContentView.swift */; };
-		386438F52EB8DE050008DAEB /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386438F42EB8DE050008DAEB /* SignUpView.swift */; };
-		386438F72EB8E8D30008DAEB /* TermosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386438F62EB8E8D30008DAEB /* TermosView.swift */; };
-		386438F92EB8ECE00008DAEB /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386438F82EB8ECE00008DAEB /* LoginView.swift */; };
+		3CED3AC6FEBBD9FA006E1120 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AE41C43219300A2DB9CAE0 /* SignUpView.swift */; };
 		64EBCD31A3CE2624A1A1ABD0 /* Grupos.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A732EC743392F7A645A642 /* Grupos.swift */; };
 		655060229DEB9782E50C25FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B37169C5882B84647CD11061 /* Assets.xcassets */; };
 		99240E08EE39B345616E54F0 /* OsVigaristasApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEAEDCA77589FFDE88D3143C /* OsVigaristasApp.swift */; };
 		9E2C1C17F747401BCF0522E7 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7CC1A3B7BD4323FA008075 /* AuthViewModel.swift */; };
 		A83A0381DED23052DABFF27D /* Usuarios.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BAC468AB4E1CD52FCB9C93E /* Usuarios.swift */; };
+		D4C055DE70B12443538A9302 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEB326395948AB9FEEF1044 /* LoginView.swift */; };
 		E6128FF36FB4CAF7DDBAE4A2 /* Desafio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E681E57894345C37F117F22 /* Desafio.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0B6E1AC4C6EF24A759ECB023 /* Tarefas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tarefas.swift; sourceTree = "<group>"; };
 		1E681E57894345C37F117F22 /* Desafio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Desafio.swift; sourceTree = "<group>"; };
+		27AE41C43219300A2DB9CAE0 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		2A361ACB059103A9440542DD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		386438F42EB8DE050008DAEB /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
-		386438F62EB8E8D30008DAEB /* TermosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermosView.swift; sourceTree = "<group>"; };
-		386438F82EB8ECE00008DAEB /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		4C17123365D33E1A85A0C93E /* OsVigaristas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OsVigaristas.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F7CC1A3B7BD4323FA008075 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		7782CB7CE5D7D5CA94FFB74D /* TermosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermosView.swift; sourceTree = "<group>"; };
 		85D8F3D2B2FC1A8FC8DBBBF6 /* OsVigaristas.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OsVigaristas.entitlements; sourceTree = "<group>"; };
 		9BAC468AB4E1CD52FCB9C93E /* Usuarios.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Usuarios.swift; sourceTree = "<group>"; };
+		9EEB326395948AB9FEEF1044 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		B37169C5882B84647CD11061 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B8A732EC743392F7A645A642 /* Grupos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grupos.swift; sourceTree = "<group>"; };
 		BEAEDCA77589FFDE88D3143C /* OsVigaristasApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsVigaristasApp.swift; sourceTree = "<group>"; };
@@ -41,9 +41,9 @@
 			isa = PBXGroup;
 			children = (
 				2A361ACB059103A9440542DD /* ContentView.swift */,
-				386438F42EB8DE050008DAEB /* SignUpView.swift */,
-				386438F62EB8E8D30008DAEB /* TermosView.swift */,
-				386438F82EB8ECE00008DAEB /* LoginView.swift */,
+				9EEB326395948AB9FEEF1044 /* LoginView.swift */,
+				27AE41C43219300A2DB9CAE0 /* SignUpView.swift */,
+				7782CB7CE5D7D5CA94FFB74D /* TermosView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -162,13 +162,13 @@
 			files = (
 				9E2C1C17F747401BCF0522E7 /* AuthViewModel.swift in Sources */,
 				316590D399C17B87F2CD0E2A /* ContentView.swift in Sources */,
-				386438F72EB8E8D30008DAEB /* TermosView.swift in Sources */,
 				E6128FF36FB4CAF7DDBAE4A2 /* Desafio.swift in Sources */,
 				64EBCD31A3CE2624A1A1ABD0 /* Grupos.swift in Sources */,
-				386438F52EB8DE050008DAEB /* SignUpView.swift in Sources */,
+				D4C055DE70B12443538A9302 /* LoginView.swift in Sources */,
 				99240E08EE39B345616E54F0 /* OsVigaristasApp.swift in Sources */,
+				3CED3AC6FEBBD9FA006E1120 /* SignUpView.swift in Sources */,
 				16CBCBB6FA06A46E0B45F082 /* Tarefas.swift in Sources */,
-				386438F92EB8ECE00008DAEB /* LoginView.swift in Sources */,
+				287EE062C88140AF5BEF050D /* TermosView.swift in Sources */,
 				A83A0381DED23052DABFF27D /* Usuarios.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -180,6 +180,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = OsVigaristas/OsVigaristas.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7N9YG996K2;
@@ -262,6 +263,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = OsVigaristas/OsVigaristas.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7N9YG996K2;
