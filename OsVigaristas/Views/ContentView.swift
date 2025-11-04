@@ -12,7 +12,7 @@ import AuthenticationServices
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var usuarios: [Usuarios]
-    @StateObject private var authVM = AuthViewModel()
+    @StateObject var authVM: AuthViewModel
     
     // variaveis para login/cadastro
     @State private var email = ""
@@ -56,7 +56,3 @@ struct ContentView: View {
     }
 }
 
-#Preview {
-    ContentView()
-        .modelContainer(for: Usuarios.self, inMemory: true)
-}
