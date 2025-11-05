@@ -21,9 +21,9 @@ struct SignUpView: View {
                     .foregroundStyle(.white)
             }
             
-            Text("Sign Up")
+            Text("Sing up")
                 .font(.system(size: 30))
-                .padding(.bottom, 60)
+                .padding(.bottom, 50)
             
             TextField("Nome de usuário", text: $nome)
                 .padding()
@@ -55,7 +55,7 @@ struct SignUpView: View {
                 authVM.makeRegistration(isProfessor: isProfessor, nome: nome)
                 onContinue?()
             }) {
-                Text("Continuar")
+                Text("Seguir para termos")
                     .font(.headline)
                     .foregroundColor(.white)
                     .padding()
@@ -65,17 +65,6 @@ struct SignUpView: View {
             }
             .padding(.horizontal)
             .padding(.top, 60)
-            
-            Button(action: {
-                mostrarTermos = true
-            }) {
-                Text("Termos e Condições")
-                    .font(.footnote)
-                    .foregroundStyle(Color(red: 0.65, green: 0.13, blue: 0.29))
-            }
-        }
-        .sheet(isPresented: $mostrarTermos) {
-            TermosView()
         }
     }
 }

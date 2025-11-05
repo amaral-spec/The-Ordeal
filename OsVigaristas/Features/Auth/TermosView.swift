@@ -51,11 +51,20 @@ struct TermosView: View {
         }
         .padding()
         
-        if aceite {
-            Button("Entrar") {
-                viewModel.finishRegistration()
-            }
+        Button(action: {
+            viewModel.finishRegistration()
+        }) {
+            Text("Entrar")
+                .font(.headline)
+                .foregroundColor(.white)
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(aceite ? Color(red: 0.65, green: 0.13, blue: 0.29) : Color.gray)
+                .cornerRadius(10)
+            
         }
+        .disabled(!aceite)
+        .padding()
 
     }
 }

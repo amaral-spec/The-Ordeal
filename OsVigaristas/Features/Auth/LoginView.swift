@@ -20,7 +20,7 @@ struct LoginView: View {
                     .foregroundStyle(.white)
             }
             
-            Text("Login or sign up")
+            Text("Login or sing up")
                 .font(.system(size: 30))
                 .padding(.vertical, 90)
             

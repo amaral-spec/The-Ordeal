@@ -32,6 +32,7 @@ struct OsVigaristasApp: App {
         WindowGroup {
             AppRootView()
                 .environmentObject(authService) // Compartilha o estado global de login
+                .preferredColorScheme(.light)
         }
         .modelContainer(sharedModelContainer)
     }
