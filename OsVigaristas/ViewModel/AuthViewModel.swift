@@ -15,6 +15,7 @@ class AuthViewModel: ObservableObject {
     @Published var logado = false
     @Published var mensagem: String = ""
     @Published var email = ""
+    @Published var nome = ""
     
     private var modelContext: ModelContext
     
@@ -52,8 +53,8 @@ class AuthViewModel: ObservableObject {
         case .success(let auth):
             if let credential = auth.credential as? ASAuthorizationAppleIDCredential {
                 appleUserID = credential.user
+                nome = credential.fullName?.givenName ?? ""
                 email = credential.email ?? ""
-                
                 logado = true
                 
                 Task {
@@ -76,7 +77,7 @@ class AuthViewModel: ObservableObject {
         do {
             let existing = try modelContext.fetch(fetchDescriptor)
             if existing.isEmpty {
-                let newUser = Usuarios(id: id, nome: nil, email: email)
+                let newUser = Usuarios(id: appleUserID, nome: nome, email: email)
                 modelContext.insert(newUser)
                 
                 try modelContext.save()
