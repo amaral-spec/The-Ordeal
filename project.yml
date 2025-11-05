@@ -40,21 +40,21 @@ targets:
           - CloudKit
         com.apple.developer.icloud-container-identifiers:
           - iCloud.eumesmo.OsVigaristas
-        aps-environments: "development"
+        aps-environment: "development"
         com.apple.security.app-sandbox: true
         com.apple.developer.ubiquity-kvstore-identifier: "$(TeamIdentifierPrefix)$(CFBundleIdentifier)"
+    
+# Capabilities só dependem dos entitlemnts.
+#    Precisa melhorar para ter todos as capabilities necessarias
+#    capabilities:
+#      pushNotifications:
+#      signInWithApple:
+#      iCloud:
+#        services: ["CloudKit"]
+#        containers: ["iCloud.eumesmo.OsVigaristas"]
+#      backgroundModes:
+#        modes: ["remote-notification"]
+      
+
+
         
-    # Precisa melhorar para ter todos as capabilities necessarias
-    capabilities:
-      signInWithApple:
-        enabled: true
-      iCloud:
-        enabled: true
-        services: ["CloudKit"]
-
-        containers: ["iCloud.eumesmo.OsVigaristas"]
-      backgroundModes:
-        modes: ["remote-notification"]
-      pushNotifications:
-        enabled: true
-
