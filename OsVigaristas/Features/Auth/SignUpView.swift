@@ -23,7 +23,7 @@ struct SignUpView: View {
             
             Text("Sign Up")
                 .font(.system(size: 30))
-                .padding(.vertical, 30)
+                .padding(.bottom, 60)
             
             TextField("Nome de usuário", text: $nome)
                 .padding()
@@ -61,14 +61,22 @@ struct SignUpView: View {
                     .padding()
                     .frame(maxWidth: .infinity)
                     .background(Color(red: 0.65, green: 0.13, blue: 0.29))
-                    .cornerRadius(10)
+                    .cornerRadius(50)
             }
             .padding(.horizontal)
-            .padding(.top, 20)
+            .padding(.top, 60)
             
-            Spacer()
+            Button(action: {
+                mostrarTermos = true
+            }) {
+                Text("Termos e Condições")
+                    .font(.footnote)
+                    .foregroundStyle(Color(red: 0.65, green: 0.13, blue: 0.29))
+            }
         }
-        .background(Color.white.ignoresSafeArea())
+        .sheet(isPresented: $mostrarTermos) {
+            TermosView()
+        }
     }
 }
 
