@@ -24,6 +24,7 @@
 		4C17123365D33E1A85A0C93E /* OsVigaristas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OsVigaristas.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F7CC1A3B7BD4323FA008075 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		85D8F3D2B2FC1A8FC8DBBBF6 /* OsVigaristas.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OsVigaristas.entitlements; sourceTree = "<group>"; };
+		8B3C18AB2EBB7C4C00A79F4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		9BAC468AB4E1CD52FCB9C93E /* Usuarios.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Usuarios.swift; sourceTree = "<group>"; };
 		B37169C5882B84647CD11061 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B8A732EC743392F7A645A642 /* Grupos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grupos.swift; sourceTree = "<group>"; };
@@ -61,6 +62,7 @@
 		B900D1D38A3323E836C2951B /* OsVigaristas */ = {
 			isa = PBXGroup;
 			children = (
+				8B3C18AB2EBB7C4C00A79F4F /* Info.plist */,
 				B37169C5882B84647CD11061 /* Assets.xcassets */,
 				85D8F3D2B2FC1A8FC8DBBBF6 /* OsVigaristas.entitlements */,
 				BEAEDCA77589FFDE88D3143C /* OsVigaristasApp.swift */,
@@ -171,14 +173,15 @@
 				CODE_SIGN_ENTITLEMENTS = OsVigaristas/OsVigaristas.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = LF52FBNMZB;
+				DEVELOPMENT_TEAM = J6WURQU382;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = OsVigaristas/Info.plist;
 				INFO_PLIST_FILE = OsVigaristas/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = gabrielAmaral.OsVigaristas;
+				PRODUCT_BUNDLE_IDENTIFIER = com.eumesmo.OsVigaristas;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -254,14 +257,15 @@
 				CODE_SIGN_ENTITLEMENTS = OsVigaristas/OsVigaristas.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = LF52FBNMZB;
+				DEVELOPMENT_TEAM = J6WURQU382;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = OsVigaristas/Info.plist;
 				INFO_PLIST_FILE = OsVigaristas/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = gabrielAmaral.OsVigaristas;
+				PRODUCT_BUNDLE_IDENTIFIER = com.eumesmo.OsVigaristas;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

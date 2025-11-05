@@ -7,21 +7,45 @@
 
 import SwiftData
 import Foundation
+import CloudKit
+import AuthenticationServices
 
 @Model
-final class Usuarios {
+final class Usuarios: Identifiable {
+    // MARK: Variables
+    //@Attribute(.unique)
+    var id: String = UUID().uuidString
     var nome: String?
     var email: String?
-    var senha: String?
     var isProfessor: Bool = false
-    var desafios: [Desafio]? = []
-    var tarefas: [Tarefas]? = []
     
-    init(nome: String, email: String, senha: String, isProfessor: Bool) {
+    
+    // MARK: Relationships
+    @Relationship(deleteRule: .nullify)
+    var tarefas: [Tarefas]?
+    
+    @Relationship(deleteRule: .nullify)
+    var grupos: [Grupos]?
+    
+    @Relationship(deleteRule: .nullify)
+    var desafios: [Desafio]?
+    
+    
+    // MARK: Initializers
+    // Initializer for SwiftData
+    init(id: String, nome: String?, email: String?, isProfessor: Bool = false) {
+        self.id = id
         self.nome = nome
         self.email = email
-        self.senha = senha
         self.isProfessor = isProfessor
     }
     
+    // Convenience initializer that creates a user from Apple's sign-in credentials
+    convenience init?(credential: ASAuthorizationAppleIDCredential) {
+        // The userIdentifier is the unique ID for the user.
+        let userIdentifier = credential.user
+        let name = credential.fullName?.givenName
+        let email = credential.email
+        self.init(id: userIdentifier, nome: name, email: email)
+    }
 }

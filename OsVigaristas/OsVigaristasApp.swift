@@ -11,11 +11,17 @@ import SwiftData
 @main
 struct OsVigaristasApp: App {
     var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Usuarios.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
+        let schema = Schema([Usuarios.self,
+                             Grupos.self,
+                             Tarefas.self,
+                             Desafio.self])
+        
+        let modelConfiguration = ModelConfiguration(
+            schema: schema,
+            isStoredInMemoryOnly: false,
+            cloudKitDatabase: .private("iCloud.eumesmo.OsVigaristas")
+        )
+        
         do {
             return try ModelContainer(for: schema, configurations: [modelConfiguration])
         } catch {
@@ -25,8 +31,8 @@ struct OsVigaristasApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(authVM: AuthViewModel(modelContext: sharedModelContainer.mainContext))
+                .modelContainer(sharedModelContainer)
         }
-        .modelContainer(sharedModelContainer)
     }
 }

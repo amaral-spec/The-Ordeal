@@ -11,12 +11,16 @@ import SwiftUI
 
 @Model
 final class Tarefas {
-    var partitura: Data
+    var partitura: Data?
     
-    @Relationship(inverse: \Usuarios.tarefas)
-    var alunos: [Usuarios] = []
+    @Relationship(deleteRule: .nullify)
+    var aluno: Usuarios?
+    
+    @Relationship(deleteRule: .nullify)
+    var grupo: Grupos?
     
     init(partitura: Data, qtdAlunos: Int){
         self.partitura = partitura
+        self.aluno = nil
     }
 }
