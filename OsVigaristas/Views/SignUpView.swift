@@ -8,37 +8,52 @@
 import SwiftUI
 
 struct SignUpView: View {
+    @EnvironmentObject var authVM: AuthViewModel
     @State private var nome: String = ""
-    @State private var email: String = ""
     @State private var isProfessor: Bool = false
     @State private var mostrarTermos: Bool = false
     
     var body: some View {
         VStack {
-            Text("Sign Up")
-                .font(.headline)
+            ZStack {
+                Circle()
+                    .foregroundStyle(Color(red: 0.65, green: 0.13, blue: 0.29))
+                    .frame(height: 130)
+                    .padding()
+                
+                Image(systemName: "music.note")
+                    .font(.system(size: 70))
+                    .foregroundStyle(.white)
+            }
             
-            TextField("Nome", text: $nome)
+            Text("Sign Up")
+                .font(.system(size: 30))
+                .padding(.vertical, 30)
+            
+            TextField("Nome de usuário", text: $nome)
                 .padding()
                 .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.gray, lineWidth: 1)
+                    RoundedRectangle(cornerRadius: 50)
+                        .stroke(Color.gray)
                 )
                 .padding(.horizontal)
-            TextField("Email", text: $email)
-                .padding()
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.gray, lineWidth: 1)
-                )
-                .padding(.horizontal)
-            Toggle("Professor", isOn: $isProfessor)
-                .padding()
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.gray, lineWidth: 1)
-                )
-                .padding(.horizontal)
+          
+            HStack {
+                Text("Você é um professor?")
+                Spacer()
+                Picker ("", selection: $isProfessor){
+                    Text("Sim").tag(true)
+                    Text("Não").tag(false)
+                }
+                .pickerStyle(.menu)
+                .tint(.black)
+            }
+            .padding(10)
+            .overlay(
+                RoundedRectangle(cornerRadius: 50)
+                    .stroke(Color.gray)
+            )
+            .padding(.horizontal)
             
             Button(action: {
                 //tela de termos
@@ -49,9 +64,10 @@ struct SignUpView: View {
                     .padding()
                     .frame(maxWidth: .infinity)
                     .background(Color(red: 0.65, green: 0.13, blue: 0.29))
-                    .cornerRadius(10)
+                    .cornerRadius(50)
             }
             .padding()
+            .padding(.top, 70)
             
             Button(action: {
                 mostrarTermos = true

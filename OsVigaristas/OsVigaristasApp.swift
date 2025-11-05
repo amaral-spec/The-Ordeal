@@ -30,12 +30,19 @@ struct OsVigaristasApp: App {
 
     var body: some Scene {
         WindowGroup {
-            if authVM.logado {
-                ContentView()
-                    .environmentObject(authVM)
-            } else {
+            switch authVM.appState {
+            case .login:
                 LoginView()
                     .environmentObject(authVM)
+                    .preferredColorScheme(.light)
+            case .signUp:
+                SignUpView()
+                    .environmentObject(authVM)
+                    .preferredColorScheme(.light)
+            case .completed:
+                TabBarView()
+                    .environmentObject(authVM)
+                    .preferredColorScheme(.light)
             }
         }
         .modelContainer(sharedModelContainer)

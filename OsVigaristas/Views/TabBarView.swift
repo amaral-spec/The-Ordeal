@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct ContentView: View {
+struct TabBarView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var usuarios: [Usuarios]
     @State private var searchText: String = ""
@@ -45,7 +45,7 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    TabBarView()
         .modelContainer(for: Usuarios.self, inMemory: true)
         .environmentObject(AuthViewModel())
 }

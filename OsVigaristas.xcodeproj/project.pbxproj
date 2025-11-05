@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		16CBCBB6FA06A46E0B45F082 /* Tarefas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B6E1AC4C6EF24A759ECB023 /* Tarefas.swift */; };
 		287EE062C88140AF5BEF050D /* TermosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7782CB7CE5D7D5CA94FFB74D /* TermosView.swift */; };
-		316590D399C17B87F2CD0E2A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A361ACB059103A9440542DD /* ContentView.swift */; };
+		316590D399C17B87F2CD0E2A /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A361ACB059103A9440542DD /* TabBarView.swift */; };
 		3CED3AC6FEBBD9FA006E1120 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AE41C43219300A2DB9CAE0 /* SignUpView.swift */; };
 		64EBCD31A3CE2624A1A1ABD0 /* Grupos.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A732EC743392F7A645A642 /* Grupos.swift */; };
 		655060229DEB9782E50C25FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B37169C5882B84647CD11061 /* Assets.xcassets */; };
@@ -24,7 +24,7 @@
 		0B6E1AC4C6EF24A759ECB023 /* Tarefas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tarefas.swift; sourceTree = "<group>"; };
 		1E681E57894345C37F117F22 /* Desafio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Desafio.swift; sourceTree = "<group>"; };
 		27AE41C43219300A2DB9CAE0 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
-		2A361ACB059103A9440542DD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		2A361ACB059103A9440542DD /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 		4C17123365D33E1A85A0C93E /* OsVigaristas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OsVigaristas.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F7CC1A3B7BD4323FA008075 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		7782CB7CE5D7D5CA94FFB74D /* TermosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermosView.swift; sourceTree = "<group>"; };
@@ -40,7 +40,7 @@
 		76AE5E599D5F9873190EB20A /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				2A361ACB059103A9440542DD /* ContentView.swift */,
+				2A361ACB059103A9440542DD /* TabBarView.swift */,
 				9EEB326395948AB9FEEF1044 /* LoginView.swift */,
 				27AE41C43219300A2DB9CAE0 /* SignUpView.swift */,
 				7782CB7CE5D7D5CA94FFB74D /* TermosView.swift */,
@@ -161,7 +161,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9E2C1C17F747401BCF0522E7 /* AuthViewModel.swift in Sources */,
-				316590D399C17B87F2CD0E2A /* ContentView.swift in Sources */,
+				316590D399C17B87F2CD0E2A /* TabBarView.swift in Sources */,
 				E6128FF36FB4CAF7DDBAE4A2 /* Desafio.swift in Sources */,
 				64EBCD31A3CE2624A1A1ABD0 /* Grupos.swift in Sources */,
 				D4C055DE70B12443538A9302 /* LoginView.swift in Sources */,
