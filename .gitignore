@@ -75,3 +75,4 @@ Build/
 # Ignorar arquivos temporários
 *.xcuserdata
 /OsVigaristas.xcodeproj
+*.pbxproj

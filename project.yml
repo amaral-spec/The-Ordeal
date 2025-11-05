@@ -21,9 +21,11 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: gabrielAmaral.OsVigaristas
         CURRENT_PROJECT_VERSION: 1
         INFO_PLIST_FILE: OsVigaristas/Info.plist
+        
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UIRequiresFullScreen: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations: ["UIInterfaceOrientationPortrait"]
+
         TARGETED_DEVICE_FAMILY: "1" # iPhone only
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         GENERATE_INFOPLIST_FILE: YES
@@ -40,6 +42,7 @@ targets:
           - iCloud.eumesmo.OsVigaristas
         aps-environments: "development"
         com.apple.security.app-sandbox: true
+        com.apple.developer.ubiquity-kvstore-identifier: "$(TeamIdentifierPrefix)$(CFBundleIdentifier)"
         
     # Precisa melhorar para ter todos as capabilities necessarias
     capabilities:
@@ -54,3 +57,4 @@ targets:
         modes: ["remote-notification"]
       pushNotifications:
         enabled: true
+
