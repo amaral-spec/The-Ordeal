@@ -10,7 +10,7 @@ import SwiftData
 
 @main
 struct OsVigaristasApp: App {
-    @StateObject private var authVM = AuthViewModel()
+    @StateObject private var authService = AuthService.shared
     
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
@@ -30,13 +30,8 @@ struct OsVigaristasApp: App {
 
     var body: some Scene {
         WindowGroup {
-            if authVM.logado {
-                ContentView()
-                    .environmentObject(authVM)
-            } else {
-                LoginView()
-                    .environmentObject(authVM)
-            }
+            AppRootView()
+                .environmentObject(authService) // Compartilha o estado global de login
         }
         .modelContainer(sharedModelContainer)
     }

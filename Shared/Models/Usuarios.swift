@@ -10,9 +10,11 @@ import Foundation
 
 @Model
 final class Usuarios {
+    var userId: UUID = UUID()
     var isProfessor: Bool = false
     var nome: String
     var desafios: [Desafio] = []
+    var hasCompletedOnboarding: Bool = false
     
     @Relationship
     var tarefas: [Tarefas] = []
@@ -22,5 +24,4 @@ final class Usuarios {
         self.nome = nome
         self.desafios = desafios
     }
-    
 }

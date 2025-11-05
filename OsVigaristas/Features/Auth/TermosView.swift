@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct TermosView: View {
+    @EnvironmentObject private var viewModel: AuthViewModel
     @Environment(\.dismiss) private var dismiss
     @State private var aceite: Bool = false
     
@@ -27,26 +28,20 @@ struct TermosView: View {
                         .font(.system(size: 16, weight: .bold))
                 }
             }
-            .onTapGesture { aceite.toggle() }
-            
+            .onTapGesture {
+                aceite.toggle()
+            }
             Text("Aceito os termos")
                 .onTapGesture { aceite.toggle() }
+            
         }
         .padding()
         
-        Button(action: {
-            dismiss()
-        }) {
-            Text("Fechar")
-                .font(.headline)
-                .foregroundColor(.white)
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(Color(red: 0.65, green: 0.13, blue: 0.29))
-                .cornerRadius(10)
-            
+        if aceite {
+            Button("Entrar") {
+                viewModel.finishRegistration()
+            }
         }
-        .padding()
     }
 }
 

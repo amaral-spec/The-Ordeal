@@ -3,51 +3,26 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 63;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		16CBCBB6FA06A46E0B45F082 /* Tarefas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B6E1AC4C6EF24A759ECB023 /* Tarefas.swift */; };
-		287EE062C88140AF5BEF050D /* TermosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7782CB7CE5D7D5CA94FFB74D /* TermosView.swift */; };
-		316590D399C17B87F2CD0E2A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A361ACB059103A9440542DD /* ContentView.swift */; };
-		3CED3AC6FEBBD9FA006E1120 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AE41C43219300A2DB9CAE0 /* SignUpView.swift */; };
-		64EBCD31A3CE2624A1A1ABD0 /* Grupos.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A732EC743392F7A645A642 /* Grupos.swift */; };
 		655060229DEB9782E50C25FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B37169C5882B84647CD11061 /* Assets.xcassets */; };
-		99240E08EE39B345616E54F0 /* OsVigaristasApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEAEDCA77589FFDE88D3143C /* OsVigaristasApp.swift */; };
-		9E2C1C17F747401BCF0522E7 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7CC1A3B7BD4323FA008075 /* AuthViewModel.swift */; };
-		A83A0381DED23052DABFF27D /* Usuarios.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BAC468AB4E1CD52FCB9C93E /* Usuarios.swift */; };
-		D4C055DE70B12443538A9302 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEB326395948AB9FEEF1044 /* LoginView.swift */; };
-		E6128FF36FB4CAF7DDBAE4A2 /* Desafio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E681E57894345C37F117F22 /* Desafio.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0B6E1AC4C6EF24A759ECB023 /* Tarefas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tarefas.swift; sourceTree = "<group>"; };
-		1E681E57894345C37F117F22 /* Desafio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Desafio.swift; sourceTree = "<group>"; };
-		27AE41C43219300A2DB9CAE0 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
-		2A361ACB059103A9440542DD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		4C17123365D33E1A85A0C93E /* OsVigaristas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OsVigaristas.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		4F7CC1A3B7BD4323FA008075 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
-		7782CB7CE5D7D5CA94FFB74D /* TermosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermosView.swift; sourceTree = "<group>"; };
 		85D8F3D2B2FC1A8FC8DBBBF6 /* OsVigaristas.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OsVigaristas.entitlements; sourceTree = "<group>"; };
-		9BAC468AB4E1CD52FCB9C93E /* Usuarios.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Usuarios.swift; sourceTree = "<group>"; };
-		9EEB326395948AB9FEEF1044 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		B37169C5882B84647CD11061 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		B8A732EC743392F7A645A642 /* Grupos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grupos.swift; sourceTree = "<group>"; };
-		BEAEDCA77589FFDE88D3143C /* OsVigaristasApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsVigaristasApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		05B43FD52EBA73F400E88624 /* Shared */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Shared; sourceTree = "<group>"; };
+		05B43FD82EBA752400E88624 /* Features */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Features; sourceTree = "<group>"; };
+		05B43FD92EBA752C00E88624 /* Application */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Application; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXGroup section */
-		76AE5E599D5F9873190EB20A /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				2A361ACB059103A9440542DD /* ContentView.swift */,
-				9EEB326395948AB9FEEF1044 /* LoginView.swift */,
-				27AE41C43219300A2DB9CAE0 /* SignUpView.swift */,
-				7782CB7CE5D7D5CA94FFB74D /* TermosView.swift */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
 		917DA2FF0803A51B13A3DA7C /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -56,41 +31,21 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		934C320D0333FF787DADA6ED /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				1E681E57894345C37F117F22 /* Desafio.swift */,
-				B8A732EC743392F7A645A642 /* Grupos.swift */,
-				0B6E1AC4C6EF24A759ECB023 /* Tarefas.swift */,
-				9BAC468AB4E1CD52FCB9C93E /* Usuarios.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
 		B900D1D38A3323E836C2951B /* OsVigaristas */ = {
 			isa = PBXGroup;
 			children = (
+				05B43FD92EBA752C00E88624 /* Application */,
+				05B43FD82EBA752400E88624 /* Features */,
 				B37169C5882B84647CD11061 /* Assets.xcassets */,
 				85D8F3D2B2FC1A8FC8DBBBF6 /* OsVigaristas.entitlements */,
-				BEAEDCA77589FFDE88D3143C /* OsVigaristasApp.swift */,
-				934C320D0333FF787DADA6ED /* Models */,
-				D8F69247844B265250C0B163 /* ViewModel */,
-				76AE5E599D5F9873190EB20A /* Views */,
 			);
 			path = OsVigaristas;
-			sourceTree = "<group>";
-		};
-		D8F69247844B265250C0B163 /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-				4F7CC1A3B7BD4323FA008075 /* AuthViewModel.swift */,
-			);
-			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		F284E017050705A976399550 = {
 			isa = PBXGroup;
 			children = (
+				05B43FD52EBA73F400E88624 /* Shared */,
 				B900D1D38A3323E836C2951B /* OsVigaristas */,
 				917DA2FF0803A51B13A3DA7C /* Products */,
 			);
@@ -109,6 +64,11 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				05B43FD52EBA73F400E88624 /* Shared */,
+				05B43FD82EBA752400E88624 /* Features */,
+				05B43FD92EBA752C00E88624 /* Application */,
 			);
 			name = OsVigaristas;
 			packageProductDependencies = (
@@ -160,16 +120,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E2C1C17F747401BCF0522E7 /* AuthViewModel.swift in Sources */,
-				316590D399C17B87F2CD0E2A /* ContentView.swift in Sources */,
-				E6128FF36FB4CAF7DDBAE4A2 /* Desafio.swift in Sources */,
-				64EBCD31A3CE2624A1A1ABD0 /* Grupos.swift in Sources */,
-				D4C055DE70B12443538A9302 /* LoginView.swift in Sources */,
-				99240E08EE39B345616E54F0 /* OsVigaristasApp.swift in Sources */,
-				3CED3AC6FEBBD9FA006E1120 /* SignUpView.swift in Sources */,
-				16CBCBB6FA06A46E0B45F082 /* Tarefas.swift in Sources */,
-				287EE062C88140AF5BEF050D /* TermosView.swift in Sources */,
-				A83A0381DED23052DABFF27D /* Usuarios.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -184,7 +134,7 @@
 				CODE_SIGN_ENTITLEMENTS = OsVigaristas/OsVigaristas.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7N9YG996K2;
+				DEVELOPMENT_TEAM = LF52FBNMZB;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
@@ -194,7 +144,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = gabrielAmaral.OsVigaristas;
+				PRODUCT_BUNDLE_IDENTIFIER = ludivikdepaula.OsVigaristas;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -271,7 +221,7 @@
 				CODE_SIGN_ENTITLEMENTS = OsVigaristas/OsVigaristas.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7N9YG996K2;
+				DEVELOPMENT_TEAM = LF52FBNMZB;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
@@ -281,7 +231,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = gabrielAmaral.OsVigaristas;
+				PRODUCT_BUNDLE_IDENTIFIER = ludivikdepaula.OsVigaristas;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

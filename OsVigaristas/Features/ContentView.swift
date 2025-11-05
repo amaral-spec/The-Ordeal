@@ -47,5 +47,5 @@ struct ContentView: View {
 #Preview {
     ContentView()
         .modelContainer(for: Usuarios.self, inMemory: true)
-        .environmentObject(AuthViewModel())
+        .environmentObject(AuthViewModel(authService: AuthService.shared))
 }
