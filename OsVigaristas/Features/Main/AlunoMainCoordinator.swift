@@ -1,5 +1,5 @@
 //
-//  AlunoMainCoordinator.swift
+//  ProfessorMainCoordinator.swift
 //  OsVigaristas
 //
 //  Created by Ludivik de Paula on 04/11/25.
@@ -8,22 +8,34 @@
 import SwiftUI
 
 struct AlunoMainCoordinatorView: View {
+    @StateObject private var authVM: AuthViewModel
+    @State private var searchText: String = ""
     
     init() {
-        print("aluno")
+        print("Aluno")
+        _authVM = StateObject(wrappedValue: AuthViewModel(authService: AuthService.shared))
     }
-    
+
     var body: some View {
-        TabView {
-            DesafiosCoordinatorView(isProfessor: false)
-                .tabItem { Label("Desafios", systemImage: "music.quarternote.3") }
-
-//            TreinoCoordinatorView()
-//            EmptyView()
-//                .tabItem { Label("Treino", systemImage: "metronome") }
-
-            PerfilCoordinatorView(isProfessor: false)
-                .tabItem { Label("Perfil", systemImage: "person.circle") }
+        
+        TabView() {
+            Tab("Início", systemImage: "house") {
+                VStack {
+                    Text("Tela Principal (Logado)")
+                }
+            }
+            Tab("Treino", systemImage: "music.pages") {
+                Text("Treino View")
+            }
+            Tab("Perfil", systemImage: "person.crop.circle") {
+                PerfilCoordinatorView(isProfessor: false)
+                    .environmentObject(authVM)
+            }
+            Tab("Buscar", systemImage: "magnifyingglass", role: .search) {
+                Text("Buscar View")
+            }
         }
+        .tint(Color(red: 0.65, green: 0.13, blue: 0.29))
+        .searchable(text: $searchText)
     }
 }

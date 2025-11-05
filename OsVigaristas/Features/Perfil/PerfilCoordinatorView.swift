@@ -8,14 +8,21 @@
 import SwiftUI
 
 struct PerfilCoordinatorView: View {
+    @EnvironmentObject var authVM: AuthViewModel
     let isProfessor: Bool
 
     var body: some View {
         if isProfessor {
 //            ProfessorPerfilView(viewModel: PerfilViewModel(userType: .professor))
             Text("Perfil Professor")
+            Button("Logout") {
+                authVM.logout()
+            }
         } else {
             Text("Perfil Aluno")
+            Button("Logout") {
+                authVM.logout()
+            }
 //            AlunoPerfilView(viewModel: PerfilViewModel(userType: .aluno))
         }
     }

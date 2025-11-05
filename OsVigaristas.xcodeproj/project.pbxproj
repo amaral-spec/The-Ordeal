@@ -3,26 +3,139 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0585746B2EBB88E40046CA6F /* Grupos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058574632EBB88E40046CA6F /* Grupos.swift */; };
+		0585746C2EBB88E40046CA6F /* Usuarios.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058574652EBB88E40046CA6F /* Usuarios.swift */; };
+		0585746D2EBB88E40046CA6F /* Tarefas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058574642EBB88E40046CA6F /* Tarefas.swift */; };
+		0585746E2EBB88E40046CA6F /* Desafio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058574622EBB88E40046CA6F /* Desafio.swift */; };
+		0585746F2EBB88E40046CA6F /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058574672EBB88E40046CA6F /* AuthService.swift */; };
+		05E18D0541B464C2833FC442 /* ProfessorMainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45574DB161CF54674872153E /* ProfessorMainCoordinator.swift */; };
+		0838B1072C50E623B4EAEB5D /* PerfilCoordinatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADDB601B3FD9D293E7E5337 /* PerfilCoordinatorView.swift */; };
+		29DD2D4EB0A76F3C0CC5378B /* DesafiosCoordinatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D1EE2539B7EAF30F4966E3 /* DesafiosCoordinatorView.swift */; };
+		302E5EE537B4689CCFF15B70 /* AppRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6234A545129AA889EC8E72 /* AppRootView.swift */; };
+		37CAF6D068888D8A245D9C42 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7729C85E372DB483811725D9 /* AuthViewModel.swift */; };
+		3A09BE3526D1F473BDC80CED /* TermosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ADD1DAC1A9446E84144341 /* TermosView.swift */; };
+		59EFE0D141C8DEF0D26DD18F /* AlunoMainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0716B42A88667CB4E245A8AB /* AlunoMainCoordinator.swift */; };
 		655060229DEB9782E50C25FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B37169C5882B84647CD11061 /* Assets.xcassets */; };
+		663EEA2813E0A672D22531EF /* OsVigaristasApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEBE88EFC5238B94DF38126C /* OsVigaristasApp.swift */; };
+		8660758061F317E86479D202 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1F8F76C342BE07C331470F /* LoginView.swift */; };
+		B8409AF469A8ACEF7C1082D6 /* AuthCoordinatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89070C25CC012CF8EEDD7F1 /* AuthCoordinatorView.swift */; };
+		BA46058B07E9E367A31FC88E /* OnboardingCoordinatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08B799DF165AFDB84C5E3D4 /* OnboardingCoordinatorView.swift */; };
+		D4F2DEA9519B9D407B0B5226 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E4E9CCB3205B0DBA6135B0 /* SignUpView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		058574622EBB88E40046CA6F /* Desafio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Desafio.swift; sourceTree = "<group>"; };
+		058574632EBB88E40046CA6F /* Grupos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grupos.swift; sourceTree = "<group>"; };
+		058574642EBB88E40046CA6F /* Tarefas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tarefas.swift; sourceTree = "<group>"; };
+		058574652EBB88E40046CA6F /* Usuarios.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Usuarios.swift; sourceTree = "<group>"; };
+		058574672EBB88E40046CA6F /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		0716B42A88667CB4E245A8AB /* AlunoMainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlunoMainCoordinator.swift; sourceTree = "<group>"; };
+		0C1F8F76C342BE07C331470F /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		14D1EE2539B7EAF30F4966E3 /* DesafiosCoordinatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesafiosCoordinatorView.swift; sourceTree = "<group>"; };
+		1ADDB601B3FD9D293E7E5337 /* PerfilCoordinatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerfilCoordinatorView.swift; sourceTree = "<group>"; };
+		45574DB161CF54674872153E /* ProfessorMainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfessorMainCoordinator.swift; sourceTree = "<group>"; };
+		48ADD1DAC1A9446E84144341 /* TermosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermosView.swift; sourceTree = "<group>"; };
 		4C17123365D33E1A85A0C93E /* OsVigaristas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OsVigaristas.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7729C85E372DB483811725D9 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		85D8F3D2B2FC1A8FC8DBBBF6 /* OsVigaristas.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OsVigaristas.entitlements; sourceTree = "<group>"; };
+		A08B799DF165AFDB84C5E3D4 /* OnboardingCoordinatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCoordinatorView.swift; sourceTree = "<group>"; };
 		B37169C5882B84647CD11061 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BA6234A545129AA889EC8E72 /* AppRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRootView.swift; sourceTree = "<group>"; };
+		BEBE88EFC5238B94DF38126C /* OsVigaristasApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsVigaristasApp.swift; sourceTree = "<group>"; };
+		C89070C25CC012CF8EEDD7F1 /* AuthCoordinatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthCoordinatorView.swift; sourceTree = "<group>"; };
+		E8E4E9CCB3205B0DBA6135B0 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		05B43FD52EBA73F400E88624 /* Shared */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Shared; sourceTree = "<group>"; };
-		05B43FD82EBA752400E88624 /* Features */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Features; sourceTree = "<group>"; };
-		05B43FD92EBA752C00E88624 /* Application */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Application; sourceTree = "<group>"; };
-/* End PBXFileSystemSynchronizedRootGroup section */
-
 /* Begin PBXGroup section */
+		058574612EBB88E40046CA6F /* Componets */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Componets;
+			sourceTree = "<group>";
+		};
+		058574662EBB88E40046CA6F /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				058574622EBB88E40046CA6F /* Desafio.swift */,
+				058574632EBB88E40046CA6F /* Grupos.swift */,
+				058574642EBB88E40046CA6F /* Tarefas.swift */,
+				058574652EBB88E40046CA6F /* Usuarios.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		058574682EBB88E40046CA6F /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				058574672EBB88E40046CA6F /* AuthService.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		058574692EBB88E40046CA6F /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		0585746A2EBB88E40046CA6F /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				058574612EBB88E40046CA6F /* Componets */,
+				058574662EBB88E40046CA6F /* Models */,
+				058574682EBB88E40046CA6F /* Service */,
+				058574692EBB88E40046CA6F /* Utils */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		0FA051F5F75FC9F8B2ED00BA /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				C89070C25CC012CF8EEDD7F1 /* AuthCoordinatorView.swift */,
+				7729C85E372DB483811725D9 /* AuthViewModel.swift */,
+				0C1F8F76C342BE07C331470F /* LoginView.swift */,
+				E8E4E9CCB3205B0DBA6135B0 /* SignUpView.swift */,
+				48ADD1DAC1A9446E84144341 /* TermosView.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		49E2E19F605F717FC24CDC8C /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				0FA051F5F75FC9F8B2ED00BA /* Auth */,
+				DE8651DFD189648CC80D7DCF /* DesafiosTarefas */,
+				86FB7DE9B55BBEAC3D9C0788 /* Main */,
+				D38277B7030D8A60D9840F15 /* Onboarding */,
+				8D1BBA2403F23378411D9CDE /* Perfil */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		86FB7DE9B55BBEAC3D9C0788 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				0716B42A88667CB4E245A8AB /* AlunoMainCoordinator.swift */,
+				45574DB161CF54674872153E /* ProfessorMainCoordinator.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		8D1BBA2403F23378411D9CDE /* Perfil */ = {
+			isa = PBXGroup;
+			children = (
+				1ADDB601B3FD9D293E7E5337 /* PerfilCoordinatorView.swift */,
+			);
+			path = Perfil;
+			sourceTree = "<group>";
+		};
 		917DA2FF0803A51B13A3DA7C /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -34,18 +147,43 @@
 		B900D1D38A3323E836C2951B /* OsVigaristas */ = {
 			isa = PBXGroup;
 			children = (
-				05B43FD92EBA752C00E88624 /* Application */,
-				05B43FD82EBA752400E88624 /* Features */,
 				B37169C5882B84647CD11061 /* Assets.xcassets */,
 				85D8F3D2B2FC1A8FC8DBBBF6 /* OsVigaristas.entitlements */,
+				F1595681BE2E315865643C7E /* Application */,
+				49E2E19F605F717FC24CDC8C /* Features */,
 			);
 			path = OsVigaristas;
+			sourceTree = "<group>";
+		};
+		D38277B7030D8A60D9840F15 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				A08B799DF165AFDB84C5E3D4 /* OnboardingCoordinatorView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		DE8651DFD189648CC80D7DCF /* DesafiosTarefas */ = {
+			isa = PBXGroup;
+			children = (
+				14D1EE2539B7EAF30F4966E3 /* DesafiosCoordinatorView.swift */,
+			);
+			path = DesafiosTarefas;
+			sourceTree = "<group>";
+		};
+		F1595681BE2E315865643C7E /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				BA6234A545129AA889EC8E72 /* AppRootView.swift */,
+				BEBE88EFC5238B94DF38126C /* OsVigaristasApp.swift */,
+			);
+			path = Application;
 			sourceTree = "<group>";
 		};
 		F284E017050705A976399550 = {
 			isa = PBXGroup;
 			children = (
-				05B43FD52EBA73F400E88624 /* Shared */,
+				0585746A2EBB88E40046CA6F /* Shared */,
 				B900D1D38A3323E836C2951B /* OsVigaristas */,
 				917DA2FF0803A51B13A3DA7C /* Products */,
 			);
@@ -64,11 +202,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				05B43FD52EBA73F400E88624 /* Shared */,
-				05B43FD82EBA752400E88624 /* Features */,
-				05B43FD92EBA752C00E88624 /* Application */,
 			);
 			name = OsVigaristas;
 			packageProductDependencies = (
@@ -120,6 +253,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				59EFE0D141C8DEF0D26DD18F /* AlunoMainCoordinator.swift in Sources */,
+				302E5EE537B4689CCFF15B70 /* AppRootView.swift in Sources */,
+				B8409AF469A8ACEF7C1082D6 /* AuthCoordinatorView.swift in Sources */,
+				37CAF6D068888D8A245D9C42 /* AuthViewModel.swift in Sources */,
+				29DD2D4EB0A76F3C0CC5378B /* DesafiosCoordinatorView.swift in Sources */,
+				0585746B2EBB88E40046CA6F /* Grupos.swift in Sources */,
+				0585746C2EBB88E40046CA6F /* Usuarios.swift in Sources */,
+				0585746D2EBB88E40046CA6F /* Tarefas.swift in Sources */,
+				0585746E2EBB88E40046CA6F /* Desafio.swift in Sources */,
+				0585746F2EBB88E40046CA6F /* AuthService.swift in Sources */,
+				8660758061F317E86479D202 /* LoginView.swift in Sources */,
+				BA46058B07E9E367A31FC88E /* OnboardingCoordinatorView.swift in Sources */,
+				663EEA2813E0A672D22531EF /* OsVigaristasApp.swift in Sources */,
+				0838B1072C50E623B4EAEB5D /* PerfilCoordinatorView.swift in Sources */,
+				05E18D0541B464C2833FC442 /* ProfessorMainCoordinator.swift in Sources */,
+				D4F2DEA9519B9D407B0B5226 /* SignUpView.swift in Sources */,
+				3A09BE3526D1F473BDC80CED /* TermosView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

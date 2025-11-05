@@ -9,17 +9,17 @@ import SwiftUI
 
 struct AuthCoordinatorView: View {
     @State private var path: [AuthRoute] = []
-    @StateObject private var viewModel: AuthViewModel
+    @StateObject private var authVM: AuthViewModel
 
     init() {
-        _viewModel = StateObject(wrappedValue: AuthViewModel(authService: AuthService.shared))
+        _authVM = StateObject(wrappedValue: AuthViewModel(authService: AuthService.shared))
     }
     
     var body: some View {
         NavigationStack(path: $path) {
             LoginView()
-                .environmentObject(viewModel)
-                .onChange(of: viewModel.isNewUser ?? false) { _, newValue in
+                .environmentObject(authVM)
+                .onChange(of: authVM.isNewUser ?? false) { _, newValue in
                     if newValue {
                         path.append(.signUp)
                     }
@@ -30,9 +30,9 @@ struct AuthCoordinatorView: View {
                         SignUpView {
                             path.append(.terms)
                         }
-                        .environmentObject(viewModel)
+                        .environmentObject(authVM)
                         .onDisappear {
-                            viewModel.isNewUser = nil
+                            authVM.isNewUser = nil
                         }
 
                     case .terms:
@@ -40,13 +40,13 @@ struct AuthCoordinatorView: View {
                             .onDisappear {
                                 // Ao sair dos termos, pode finalizar o fluxo
                                 path.removeAll()
-                                viewModel.isNewUser = false
+                                authVM.isNewUser = false
                             }
-                            .environmentObject(viewModel)
+                            .environmentObject(authVM)
                     }
                 }
                 .onAppear() {
-                    viewModel.checkStatus()
+                    authVM.checkStatus()
                 }
         }
     }

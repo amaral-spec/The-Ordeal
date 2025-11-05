@@ -8,23 +8,34 @@
 import SwiftUI
 
 struct ProfessorMainCoordinatorView: View {
-
+    @StateObject private var authVM: AuthViewModel
+    @State private var searchText: String = ""
+    
     init() {
         print("professor")
+        _authVM = StateObject(wrappedValue: AuthViewModel(authService: AuthService.shared))
     }
-    
 
     var body: some View {
-        TabView {
-            DesafiosCoordinatorView(isProfessor: true)
-                .tabItem { Label("Desafios", systemImage: "music.note.list") }
-
-//            AlunosCoordinatorView()
-            EmptyView()
-                .tabItem { Label("Alunos", systemImage: "person.3") }
-
-            PerfilCoordinatorView(isProfessor: true)
-                .tabItem { Label("Perfil", systemImage: "person.crop.circle") }
+        
+        TabView() {
+            Tab("Início", systemImage: "house") {
+                VStack {
+                    Text("Tela Principal (Logado)")
+                }
+            }
+            Tab("Alunos", systemImage: "person.3") {
+                Text("Alunos View")
+            }
+            Tab("Perfil", systemImage: "person.crop.circle") {
+                PerfilCoordinatorView(isProfessor: true)
+                    .environmentObject(authVM)
+            }
+            Tab("Buscar", systemImage: "magnifyingglass", role: .search) {
+                Text("Buscar View")
+            }
         }
+        .tint(Color(red: 0.65, green: 0.13, blue: 0.29))
+        .searchable(text: $searchText)
     }
 }

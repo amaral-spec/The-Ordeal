@@ -15,7 +15,6 @@ struct AppRootView: View {
 //        print("OIIIIs")
     }
     
-    
     var body: some View {
         Group {
             if !authService.isLoggedIn {
