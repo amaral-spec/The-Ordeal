@@ -16,14 +16,21 @@ struct LoginView: View {
     @EnvironmentObject private var authVM: AuthViewModel
     
     var body: some View {
-        VStack {
-            Rectangle()
-                .foregroundStyle(Color(red: 0.65, green: 0.13, blue: 0.29))
-                .frame(height: 150)
+        VStack() {
+            ZStack {
+                Circle()
+                    .foregroundStyle(Color(red: 0.65, green: 0.13, blue: 0.29))
+                    .frame(height: 130)
+                    .padding()
+                
+                Image(systemName: "music.note")
+                    .font(.system(size: 70))
+                    .foregroundStyle(.white)
+            }
             
             Text("Login or sign up")
-                .font(.title2)
-                .padding(.bottom, 50)
+                .font(.system(size: 30))
+                .padding(.vertical, 90)
             
             SignInWithAppleButton(
                 .signIn,
@@ -32,13 +39,14 @@ struct LoginView: View {
                 },
                 onCompletion: { result in
                     authVM.handle(result)
+                    
                 }
             )
-            .frame(height: 45)
+            .cornerRadius(50)
+            .frame(height: 50)
             .padding()
             .signInWithAppleButtonStyle(.black)
             
-            Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .ignoresSafeArea()
