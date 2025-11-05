@@ -34,7 +34,7 @@ final class Usuarios: Identifiable {
     
     // MARK: Initializers
     // Initializer for SwiftData
-    init(id: String, nome: String?, email: String?, isProfessor: Bool = false) {
+    init(id: String, nome: String? = nil, email: String? = nil, isProfessor: Bool = false) {
         self.id = id
         self.nome = nome
         self.email = email
@@ -49,4 +49,6 @@ final class Usuarios: Identifiable {
         let email = credential.email
         self.init(id: userIdentifier, nome: name, email: email)
     }
+    
+    
 }

@@ -11,6 +11,7 @@ targets:
     type: application
     platform: iOS
     sources:
+      - path: Shared
       - path: OsVigaristas
     resources:
       - path: OsVigaristas/Assets.xcassets

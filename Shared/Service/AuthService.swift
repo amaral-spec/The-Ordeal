@@ -2,30 +2,39 @@
 //  AuthService.swift
 //  OsVigaristas
 //
-//  Created by Ludivik de Paula on 04/11/25.
+//  Created by G Ludivik de Paula on 05/11/25.
 //
 
 import Foundation
 import AuthenticationServices
 import Combine
+import SwiftData
 
 @MainActor
 final class AuthService: NSObject, ObservableObject {
     static let shared = AuthService()
     
+    // MARK: - Public properties
     @Published private(set) var isLoggedIn: Bool = false
     @Published private(set) var appleUserID: String = ""
-    @Published private(set) var currentUser: Usuarios = Usuarios(isProfessor: false, nome: "", desafios: [])
+    @Published private(set) var currentUser: Usuarios = Usuarios(id: "")
     
+    // MARK: - Private properties
     private let userDefaults = UserDefaults.standard
+    private var modelContext: ModelContext?
     
+    // MARK: - Init
     private override init() {
         super.init()
         loadSession()
     }
     
-    // MARK: - Sessão
+    // MARK: - Setup
+    func configure(context: ModelContext) {
+        self.modelContext = context
+    }
     
+    // MARK: - Sessão
     private func loadSession() {
         guard let userId = userDefaults.string(forKey: "appleUserID") else { return }
         appleUserID = userId
@@ -44,14 +53,12 @@ final class AuthService: NSObject, ObservableObject {
     func logout() {
         userDefaults.removeObject(forKey: "appleUserID")
         appleUserID = ""
-        currentUser.isProfessor = false
-        
+        currentUser = Usuarios(id: "")
         currentUser.hasCompletedOnboarding = false
         isLoggedIn = false
     }
     
     // MARK: - Apple Sign In
-    
     func handleAppleSignIn(result: Result<ASAuthorization, Error>) async throws -> LoginResult {
         switch result {
         case .success(let auth):
@@ -60,22 +67,27 @@ final class AuthService: NSObject, ObservableObject {
             }
             
             let userId = credential.user
+            let nome = credential.fullName?.givenName ?? "Usuário Apple"
+            let email = credential.email
             
             if isUserRegistered(userId: userId) {
+                // Usuário local existente
                 loadUser(userId: userId)
                 isLoggedIn = true
+                
+                // Garante que também exista no CloudKit
+                await syncWithCloudKit(userId: userId, nome: currentUser.nome ?? "", email: email)
                 return .existingUser
+                
             } else {
                 // Novo usuário
-                let nome = credential.fullName?.givenName ?? "Novo Usuário"
-                currentUser = Usuarios(
-                    isProfessor: false,
-                    nome: nome,
-                    desafios: []
-                )
+                currentUser = Usuarios(id: "")
                 currentUser.hasCompletedOnboarding = false
-                
                 appleUserID = userId
+                
+                // Cria também no CloudKit
+                await syncWithCloudKit(userId: userId, nome: nome, email: email)
+                
                 return .newUser
             }
             
@@ -86,7 +98,6 @@ final class AuthService: NSObject, ObservableObject {
     }
     
     // MARK: - Estado de login
-    
     func checkAppleSignInStatus() {
         guard !appleUserID.isEmpty else {
             isLoggedIn = false
@@ -114,7 +125,6 @@ final class AuthService: NSObject, ObservableObject {
     }
     
     // MARK: - Usuário local
-    
     private func isUserRegistered(userId: String) -> Bool {
         return userDefaults.bool(forKey: "user_\(userId)_exists")
     }
@@ -124,16 +134,11 @@ final class AuthService: NSObject, ObservableObject {
         let nome = userDefaults.string(forKey: "user_\(userId)_nome") ?? "Usuário Apple"
         let hasCompletedOnboarding = userDefaults.bool(forKey: "user_\(userId)_hasCompletedOnboarding")
         
-        currentUser = Usuarios(
-            isProfessor: isProfessor,
-            nome: nome,
-            desafios: []
-        )
+        currentUser = Usuarios(id: userId,nome: nome, isProfessor: isProfessor)
         currentUser.hasCompletedOnboarding = hasCompletedOnboarding
     }
     
-    // MARK: - Registration
-    
+    // MARK: - Registro
     func makeRegistration(isProfessor: Bool, nome: String? = nil) {
         guard !appleUserID.isEmpty else { return }
         
@@ -146,6 +151,10 @@ final class AuthService: NSObject, ObservableObject {
         
         saveSession(for: appleUserID)
         isLoggedIn = true
+        
+        Task {
+            await syncWithCloudKit(userId: appleUserID, nome: currentUser.nome ?? "", email: nil)
+        }
     }
     
     func markOnboardingComplete() {
@@ -153,8 +162,35 @@ final class AuthService: NSObject, ObservableObject {
         currentUser.hasCompletedOnboarding = true
         userDefaults.set(true, forKey: "user_\(appleUserID)_hasCompletedOnboarding")
     }
+    
+    // MARK: - iCloud / SwiftData
+    private func syncWithCloudKit(userId: String, nome: String, email: String?) async {
+        guard let modelContext else {
+            print("ModelContext não configurado. Chame configure(context:) antes de logar.")
+            return
+        }
+        
+        let descriptor = FetchDescriptor<Usuarios>(predicate: #Predicate { $0.id == userId })
+        
+        do {
+            let existing = try modelContext.fetch(descriptor)
+            
+            if existing.isEmpty {
+                let newUser = Usuarios(id: userId, nome: nome, email: email)
+                modelContext.insert(newUser)
+                try modelContext.save()
+                print("✅ Usuário salvo no iCloud (CloudKit).")
+            } else {
+                print("☁️ Usuário já existente no CloudKit.")
+            }
+            
+        } catch {
+            print("❌ Erro ao sincronizar com CloudKit:", error.localizedDescription)
+        }
+    }
 }
 
+// MARK: - Enums
 enum LoginResult {
     case newUser
     case existingUser
