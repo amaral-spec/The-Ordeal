@@ -41,7 +41,7 @@ targets:
         aps-environments: "development"
         com.apple.security.app-sandbox: true
         
-
+    # Precisa melhorar para ter todos as capabilities necessarias
     capabilities:
       signInWithApple:
         enabled: true
