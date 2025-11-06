@@ -12,6 +12,7 @@ targets:
     platform: iOS
     sources:
       - path: OsVigaristas
+      - path: Shared
     resources:
       - path: OsVigaristas/Assets.xcassets
 
@@ -34,22 +35,21 @@ targets:
       properties:
         com.apple.developer.applesignin:
           - Default
-        com.apple.developer.icloud-services:
-          - CloudKit
-        com.apple.developer.icloud-container-identifiers:
-          - iCloud.eumesmo.OsVigaristas
-        aps-environments: "development"
-        com.apple.security.app-sandbox: true
+#        com.apple.developer.icloud-services:
+#          - CloudKit
+#        com.apple.developer.icloud-container-identifiers:
+#          - iCloud.eumesmo.OsVigaristas
+#        aps-environments: "development"
+#        com.apple.security.app-sandbox: true
         
 
     capabilities:
       signInWithApple:
         enabled: true
-      iCloud:
-        enabled: true
-        services: ["CloudKit"]
-
-        containers: ["iCloud.eumesmo.OsVigaristas"]
+#      iCloud:
+#        enabled: true
+#        services: ["CloudKit"]
+#        containers: ["iCloud.eumesmo.OsVigaristas"]
       backgroundModes:
         modes: ["remote-notification"]
       pushNotifications:

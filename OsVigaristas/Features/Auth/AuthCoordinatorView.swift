@@ -39,7 +39,7 @@ struct AuthCoordinatorView: View {
                         TermosView()
                             .onDisappear {
                                 // Ao sair dos termos, pode finalizar o fluxo
-                                path.removeAll()
+                                path.append(.signUp)
                                 authVM.isNewUser = false
                             }
                             .environmentObject(authVM)
