@@ -14,7 +14,6 @@
 		2F90EE494683479DC478813E /* Usuarios.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6216B338DAB9478F79AA74AC /* Usuarios.swift */; };
 		302E5EE537B4689CCFF15B70 /* AppRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6234A545129AA889EC8E72 /* AppRootView.swift */; };
 		37CAF6D068888D8A245D9C42 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7729C85E372DB483811725D9 /* AuthViewModel.swift */; };
-		38C76DC62EBCD458007B6CBC /* AlunosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38C76DC52EBCD458007B6CBC /* AlunosView.swift */; };
 		3A09BE3526D1F473BDC80CED /* TermosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ADD1DAC1A9446E84144341 /* TermosView.swift */; };
 		59EFE0D141C8DEF0D26DD18F /* AlunoMainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0716B42A88667CB4E245A8AB /* AlunoMainCoordinator.swift */; };
 		655060229DEB9782E50C25FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B37169C5882B84647CD11061 /* Assets.xcassets */; };
@@ -23,6 +22,7 @@
 		9BE0C479F82BE68A2E7BB3B0 /* Desafio.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DA2CCE62269F80FFCED0A1 /* Desafio.swift */; };
 		B8409AF469A8ACEF7C1082D6 /* AuthCoordinatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89070C25CC012CF8EEDD7F1 /* AuthCoordinatorView.swift */; };
 		BA46058B07E9E367A31FC88E /* OnboardingCoordinatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08B799DF165AFDB84C5E3D4 /* OnboardingCoordinatorView.swift */; };
+		C1BE24B9B60B13717D6CF43D /* AlunosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519C050992A97DA65A042228 /* AlunosView.swift */; };
 		D4F2DEA9519B9D407B0B5226 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E4E9CCB3205B0DBA6135B0 /* SignUpView.swift */; };
 		DAC088554BC49DA689E941F6 /* Tarefas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7402F132B893774E7CF954 /* Tarefas.swift */; };
 		DC6A676212B9168BF38E4494 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72993A2267B69D23BA21D1A7 /* AuthService.swift */; };
@@ -33,10 +33,11 @@
 		0C1F8F76C342BE07C331470F /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		14D1EE2539B7EAF30F4966E3 /* DesafiosCoordinatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesafiosCoordinatorView.swift; sourceTree = "<group>"; };
 		1ADDB601B3FD9D293E7E5337 /* PerfilCoordinatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerfilCoordinatorView.swift; sourceTree = "<group>"; };
-		38C76DC52EBCD458007B6CBC /* AlunosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlunosView.swift; sourceTree = "<group>"; };
+		2FBDF60CBE2F8E8DB6DF3B54 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		45574DB161CF54674872153E /* ProfessorMainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfessorMainCoordinator.swift; sourceTree = "<group>"; };
 		48ADD1DAC1A9446E84144341 /* TermosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermosView.swift; sourceTree = "<group>"; };
 		4C17123365D33E1A85A0C93E /* OsVigaristas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OsVigaristas.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		519C050992A97DA65A042228 /* AlunosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlunosView.swift; sourceTree = "<group>"; };
 		6216B338DAB9478F79AA74AC /* Usuarios.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Usuarios.swift; sourceTree = "<group>"; };
 		72993A2267B69D23BA21D1A7 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		7729C85E372DB483811725D9 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
@@ -53,6 +54,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		01FCA93B473DA2BFB267D8D9 /* Alunos */ = {
+			isa = PBXGroup;
+			children = (
+				519C050992A97DA65A042228 /* AlunosView.swift */,
+			);
+			path = Alunos;
+			sourceTree = "<group>";
+		};
 		0708AA5402F3FC549129DE11 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
@@ -74,18 +83,10 @@
 			path = Auth;
 			sourceTree = "<group>";
 		};
-		38C76DC32EBCD32E007B6CBC /* Alunos */ = {
-			isa = PBXGroup;
-			children = (
-				38C76DC52EBCD458007B6CBC /* AlunosView.swift */,
-			);
-			path = Alunos;
-			sourceTree = "<group>";
-		};
 		49E2E19F605F717FC24CDC8C /* Features */ = {
 			isa = PBXGroup;
 			children = (
-				38C76DC32EBCD32E007B6CBC /* Alunos */,
+				01FCA93B473DA2BFB267D8D9 /* Alunos */,
 				0FA051F5F75FC9F8B2ED00BA /* Auth */,
 				DE8651DFD189648CC80D7DCF /* DesafiosTarefas */,
 				86FB7DE9B55BBEAC3D9C0788 /* Main */,
@@ -132,6 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				B37169C5882B84647CD11061 /* Assets.xcassets */,
+				2FBDF60CBE2F8E8DB6DF3B54 /* Info.plist */,
 				85D8F3D2B2FC1A8FC8DBBBF6 /* OsVigaristas.entitlements */,
 				F1595681BE2E315865643C7E /* Application */,
 				49E2E19F605F717FC24CDC8C /* Features */,
@@ -249,8 +251,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				59EFE0D141C8DEF0D26DD18F /* AlunoMainCoordinator.swift in Sources */,
+				C1BE24B9B60B13717D6CF43D /* AlunosView.swift in Sources */,
 				302E5EE537B4689CCFF15B70 /* AppRootView.swift in Sources */,
-				38C76DC62EBCD458007B6CBC /* AlunosView.swift in Sources */,
 				B8409AF469A8ACEF7C1082D6 /* AuthCoordinatorView.swift in Sources */,
 				DC6A676212B9168BF38E4494 /* AuthService.swift in Sources */,
 				37CAF6D068888D8A245D9C42 /* AuthViewModel.swift in Sources */,
@@ -282,6 +284,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7N9YG996K2;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = OsVigaristas/Info.plist;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -369,6 +372,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7N9YG996K2;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = OsVigaristas/Info.plist;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
