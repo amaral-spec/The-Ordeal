@@ -20,11 +20,11 @@ struct HomeView: View {
                 ForEach(Mode.allCases, id: \.self) { mode in Text(mode.rawValue) }
             }
             .pickerStyle(.segmented)
-            .frame(width: 350, height: 100, alignment: .top)
-            Spacer(minLength: 100)
+            .frame(width: 350, height: 30, alignment: .center)
             VStack (spacing: -15){
                 if Mode.Desafio == selectedMode {
                     if isChallengeEmpty {
+                        Spacer(minLength: 100)
                         ZStack {
                             Image(systemName: "flag.pattern.checkered.2.crossed")
                                 .foregroundColor(Color.accentColor)
@@ -33,8 +33,8 @@ struct HomeView: View {
                                 .opacity(0.3)
                                 .frame(width: 50, height: 50, alignment: .center)
                                 .padding()
-                        }
-                        VStack (spacing: -15){
+                                                }
+                            VStack (spacing: -15){
                             Text("Sem Desafios")
                                 .font(.title3)
                                 .foregroundColor(.primary)
@@ -47,14 +47,43 @@ struct HomeView: View {
                         }
                         Spacer()
                         
-                        Button("Novo Desafio") {
-                            
-                        }
-                        .frame(height: 50)
-                        .buttonStyle(.glassProminent)
+                        Button {
+                        isChallengeEmpty = false
+                    } label: {
+                        Text("Novo Desafio")
+                            .frame(width: 350, height: 30)
+                    }
+                    .frame(maxWidth: .infinity, minHeight: 70)
+                    .padding(.horizontal)
+                    .buttonStyle(.glassProminent)
+                    } else {
+//                        ScrollView {
+//                            VStack{
+//                                Form {
+////                                    LabeledContent("") {
+//                                        Image("violao")
+//                                        .resizable()
+//                                        .frame(width: 380, height: 200)
+//                                        
+////                                    }
+//                                }
+//                                .frame(width: 380, height: 300)
+//                                Form {
+//                                    LabeledContent("Desafio 1") {
+//                                                                    
+//                                    }
+//                                }
+//                                Form {
+//                                    LabeledContent("Desafio 1") {
+//                                        
+//                                    }
+//                                }
+//                            }
+//                        }
                     }
                 } else {
                     if isTaskEmpty {
+                        Spacer(minLength: 100)
                         ZStack {
                             Image(systemName: "checklist.checked")
                                 .foregroundColor(Color.accentColor)
@@ -77,10 +106,14 @@ struct HomeView: View {
                         
                         Spacer()
                         
-                        Button("Nova Tarefa") {
-                            
+                        Button {
+                            isTaskEmpty = false
+                        } label: {
+                            Text("Nova Tarefa")
+                                .frame(width: 350, height: 30)
                         }
-                        .frame(height: 50)
+                        .frame(maxWidth: .infinity, minHeight: 70)
+                        .padding(.horizontal)
                         .buttonStyle(.glassProminent)
                     }
                 }
