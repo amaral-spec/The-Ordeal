@@ -10,6 +10,7 @@ import SwiftUI
 
 struct AppRootView: View {
     @EnvironmentObject var authService: AuthService
+    @Environment(\.modelContext) var modelContext
 
     init() {
 //        print("OIIIIs")
