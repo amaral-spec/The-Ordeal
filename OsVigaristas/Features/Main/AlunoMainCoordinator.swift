@@ -19,7 +19,7 @@ struct AlunoMainCoordinatorView: View {
     var body: some View {
         
         TabView() {
-            Tab("Início", systemImage: "house") {
+            Tab("Início", systemImage: "music.note.house.fill") {
                 VStack {
                     Text("Tela Principal (Logado)")
                 }
@@ -27,7 +27,7 @@ struct AlunoMainCoordinatorView: View {
             Tab("Treino", systemImage: "music.pages") {
                 Text("Treino View")
             }
-            Tab("Perfil", systemImage: "person.crop.circle") {
+            Tab("Perfil", systemImage: "person.fill") {
                 PerfilCoordinatorView(isProfessor: false)
                     .environmentObject(authVM)
             }
