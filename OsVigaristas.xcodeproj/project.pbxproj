@@ -26,6 +26,8 @@
 		D4F2DEA9519B9D407B0B5226 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E4E9CCB3205B0DBA6135B0 /* SignUpView.swift */; };
 		DAC088554BC49DA689E941F6 /* Tarefas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7402F132B893774E7CF954 /* Tarefas.swift */; };
 		DC6A676212B9168BF38E4494 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72993A2267B69D23BA21D1A7 /* AuthService.swift */; };
+		E59760E82EC22B9000CFE783 /* CriarDesafioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59760E72EC22B9000CFE783 /* CriarDesafioView.swift */; };
+		E59760EA2EC22FF100CFE783 /* CriarTarefaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59760E92EC22FF100CFE783 /* CriarTarefaView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +52,8 @@
 		BEBE88EFC5238B94DF38126C /* OsVigaristasApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsVigaristasApp.swift; sourceTree = "<group>"; };
 		C89070C25CC012CF8EEDD7F1 /* AuthCoordinatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthCoordinatorView.swift; sourceTree = "<group>"; };
 		CA1633F418EF547D02AF9177 /* Grupos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grupos.swift; sourceTree = "<group>"; };
+		E59760E72EC22B9000CFE783 /* CriarDesafioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CriarDesafioView.swift; sourceTree = "<group>"; };
+		E59760E92EC22FF100CFE783 /* CriarTarefaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CriarTarefaView.swift; sourceTree = "<group>"; };
 		E8E4E9CCB3205B0DBA6135B0 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -144,9 +148,6 @@
 		BDFB47CC62CE04D596C0A2BE /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				4F7CC1A3B7BD4323FA008075 /* AuthViewModel.swift */,
-				E57071B42EBA438300FCE94C /* TabbarView.swift */,
-				E57071B22EBA42A500FCE94C /* HomeView.swift */,
 				A0DA2CCE62269F80FFCED0A1 /* Desafio.swift */,
 				CA1633F418EF547D02AF9177 /* Grupos.swift */,
 				7A7402F132B893774E7CF954 /* Tarefas.swift */,
@@ -167,6 +168,8 @@
 			isa = PBXGroup;
 			children = (
 				14D1EE2539B7EAF30F4966E3 /* DesafiosCoordinatorView.swift */,
+				E59760E72EC22B9000CFE783 /* CriarDesafioView.swift */,
+				E59760E92EC22FF100CFE783 /* CriarTarefaView.swift */,
 			);
 			path = DesafiosTarefas;
 			sourceTree = "<group>";
@@ -253,20 +256,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E2C1C17F747401BCF0522E7 /* AuthViewModel.swift in Sources */,
-				316590D399C17B87F2CD0E2A /* ContentView.swift in Sources */,
-				E6128FF36FB4CAF7DDBAE4A2 /* Desafio.swift in Sources */,
-				E57071B32EBA42A500FCE94C /* HomeView.swift in Sources */,
-				64EBCD31A3CE2624A1A1ABD0 /* Grupos.swift in Sources */,
-				D4C055DE70B12443538A9302 /* LoginView.swift in Sources */,
-				99240E08EE39B345616E54F0 /* OsVigaristasApp.swift in Sources */,
-				3CED3AC6FEBBD9FA006E1120 /* SignUpView.swift in Sources */,
-				16CBCBB6FA06A46E0B45F082 /* Tarefas.swift in Sources */,
-				287EE062C88140AF5BEF050D /* TermosView.swift in Sources */,
-				E57071B52EBA438300FCE94C /* TabbarView.swift in Sources */,
-				A83A0381DED23052DABFF27D /* Usuarios.swift in Sources */,
 				59EFE0D141C8DEF0D26DD18F /* AlunoMainCoordinator.swift in Sources */,
 				C1BE24B9B60B13717D6CF43D /* AlunosView.swift in Sources */,
+				E59760E82EC22B9000CFE783 /* CriarDesafioView.swift in Sources */,
 				302E5EE537B4689CCFF15B70 /* AppRootView.swift in Sources */,
 				B8409AF469A8ACEF7C1082D6 /* AuthCoordinatorView.swift in Sources */,
 				DC6A676212B9168BF38E4494 /* AuthService.swift in Sources */,
@@ -276,6 +268,7 @@
 				02B557F83DFE2A142318BA27 /* Grupos.swift in Sources */,
 				8660758061F317E86479D202 /* LoginView.swift in Sources */,
 				BA46058B07E9E367A31FC88E /* OnboardingCoordinatorView.swift in Sources */,
+				E59760EA2EC22FF100CFE783 /* CriarTarefaView.swift in Sources */,
 				663EEA2813E0A672D22531EF /* OsVigaristasApp.swift in Sources */,
 				0838B1072C50E623B4EAEB5D /* PerfilCoordinatorView.swift in Sources */,
 				05E18D0541B464C2833FC442 /* ProfessorMainCoordinator.swift in Sources */,

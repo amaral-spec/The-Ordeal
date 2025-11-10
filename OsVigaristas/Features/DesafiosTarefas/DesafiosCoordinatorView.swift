@@ -20,8 +20,11 @@ struct Card: View {
 }
 
 struct HomeView: View {
+    @State private var criarDesafio = false
+    @State private var criarTarefa = false
     @State private var numChallenge: Int = 0
     @State private var numTask: Int = 0
+    
     enum Mode: String, CaseIterable {
         case Desafio, Tarefa
     }
@@ -60,7 +63,8 @@ struct HomeView: View {
                         Spacer()
                         
                         Button {
-                            numChallenge += 1
+                            criarDesafio = true
+//                            numChallenge += 1
                         } label: {
                             Text("Novo Desafio")
                                 .frame(maxWidth: 320, maxHeight: 30)
@@ -105,7 +109,8 @@ struct HomeView: View {
                         Spacer()
                         
                         Button {
-                            numTask += 1
+                            criarTarefa = true
+//                            numTask += 1
                         } label: {
                             Text("Nova Tarefa")
                                 .frame(maxWidth: 320, maxHeight: 30)
@@ -132,13 +137,21 @@ struct HomeView: View {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Adicionar", systemImage: "plus") {
                         if selectedMode == Mode.Desafio {
-                            numChallenge += 1
+                            criarDesafio = true
+//                            numChallenge += 1
                         } else {
-                            numTask += 1
+                            criarTarefa = true
+//                            numTask += 1
                         }
                     }
                 }
             }
+        }
+        .sheet(isPresented: $criarDesafio) {
+            CriarDesafioView(numChallenge: $numChallenge)
+        }
+        .sheet(isPresented: $criarTarefa) {
+            CriarTarefaView(numTask: $numTask)
         }
     }
 }

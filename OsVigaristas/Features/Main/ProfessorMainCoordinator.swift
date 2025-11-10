@@ -20,9 +20,7 @@ struct ProfessorMainCoordinatorView: View {
         
         TabView() {
             Tab("Início", systemImage: "house") {
-                VStack {
-                    Text("Tela Principal (Logado)")
-                }
+                HomeView()
             }
             Tab("Alunos", systemImage: "person.3") {
                 Text("Alunos View")
