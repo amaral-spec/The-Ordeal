@@ -11,6 +11,12 @@ enum Mode: String, CaseIterable {
     case Alunos, Grupos
 }
 
+let columns: [GridItem] = [
+    GridItem(.flexible()),
+    GridItem(.flexible()),
+    GridItem(.flexible())
+]
+
 struct AlunosView: View {
     @State private var isStudentsEmpty = true
     @State private var isGroupsEmpty = true
@@ -36,7 +42,7 @@ struct AlunosView: View {
                             Image(systemName: "person.3.fill")
                                 .foregroundColor(Color(red: 0.65, green: 0.13, blue: 0.29))
                             Circle()
-                                .fill(Color.accentColor)
+                                .fill(Color(red: 0.65, green: 0.13, blue: 0.29))
                                 .opacity(0.3)
                                 .frame(width: 50, height: 50, alignment: .center)
                                 .padding()
@@ -67,6 +73,22 @@ struct AlunosView: View {
                         }
                         .frame(maxWidth: .infinity, minHeight: 70)
                         .padding()
+                    } else {
+                        ScrollView {
+                            LazyVGrid(columns: columns, spacing: 10) {
+                                ZStack {
+                                    //colocar um for each para buscar os alunos
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .fill(.white)
+                                    VStack {
+                                        //colocar foto do aluno
+                                        Text("Nome do aluno")
+                                    }
+                                    
+                                }
+                            }
+                            .padding()
+                        }
                     }
                 } else {
                     if isGroupsEmpty {
@@ -75,7 +97,7 @@ struct AlunosView: View {
                             Image(systemName: "person.3.fill")
                                 .foregroundColor(Color(red: 0.65, green: 0.13, blue: 0.29))
                             Circle()
-                                .fill(Color.accentColor)
+                                .fill(Color(red: 0.65, green: 0.13, blue: 0.29))
                                 .opacity(0.3)
                                 .frame(width: 50, height: 50, alignment: .center)
                                 .padding()
@@ -92,6 +114,18 @@ struct AlunosView: View {
                                 .fontWeight(.medium)
                         }
                         Spacer()
+                    } else {
+                        VStack {
+                            //for each de cada grupo
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 10)
+                                //foto do grupo
+                                HStack {
+                                    //nome do grupo
+                                    //quantidade de alunos
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -99,11 +133,26 @@ struct AlunosView: View {
             .toolbarTitleDisplayMode(.inlineLarge)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Adicionar", systemImage: "person.2.badge.plus.fill") {
-                        
+                    Button(action: {
+                        // funcao para o botao
+                    }) {
+                        Image(systemName: "person.2.badge.plus.fill")
+                            .foregroundStyle(Color(red: 0.65, green: 0.13, blue: 0.29))
+                            .background(Color.white)
                     }
-                    .tint(Color(red: 0.65, green: 0.13, blue: 0.29))
                 }
+                
+                ToolbarItem(placement: .confirmationAction) {
+                    
+                    Button(action: {
+                        // funcao para o botao
+                    }) {
+                        Image(systemName: "person.fill.checkmark.and.xmark")
+                            .foregroundStyle(Color(red: 0.65, green: 0.13, blue: 0.29))
+                            .background(Color.white)
+                    }
+                }
+                
             }
         }
     }
