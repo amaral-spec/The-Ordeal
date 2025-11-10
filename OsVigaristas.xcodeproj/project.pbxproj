@@ -15,6 +15,7 @@
 		302E5EE537B4689CCFF15B70 /* AppRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6234A545129AA889EC8E72 /* AppRootView.swift */; };
 		37CAF6D068888D8A245D9C42 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7729C85E372DB483811725D9 /* AuthViewModel.swift */; };
 		3884989E2EC20F6A0084B2DF /* CriarGrupoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3884989D2EC20F6A0084B2DF /* CriarGrupoView.swift */; };
+		38E8F7192EC23316007FC087 /* BuscarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38E8F7182EC23315007FC087 /* BuscarView.swift */; };
 		3A09BE3526D1F473BDC80CED /* TermosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ADD1DAC1A9446E84144341 /* TermosView.swift */; };
 		59EFE0D141C8DEF0D26DD18F /* AlunoMainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0716B42A88667CB4E245A8AB /* AlunoMainCoordinator.swift */; };
 		655060229DEB9782E50C25FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B37169C5882B84647CD11061 /* Assets.xcassets */; };
@@ -24,7 +25,7 @@
 		9BE0C479F82BE68A2E7BB3B0 /* Desafio.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DA2CCE62269F80FFCED0A1 /* Desafio.swift */; };
 		B8409AF469A8ACEF7C1082D6 /* AuthCoordinatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89070C25CC012CF8EEDD7F1 /* AuthCoordinatorView.swift */; };
 		BA46058B07E9E367A31FC88E /* OnboardingCoordinatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08B799DF165AFDB84C5E3D4 /* OnboardingCoordinatorView.swift */; };
-		C1BE24B9B60B13717D6CF43D /* AlunosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519C050992A97DA65A042228 /* AlunosView.swift */; };
+		C1BE24B9B60B13717D6CF43D /* Alunos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519C050992A97DA65A042228 /* Alunos.swift */; };
 		D4F2DEA9519B9D407B0B5226 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E4E9CCB3205B0DBA6135B0 /* SignUpView.swift */; };
 		DAC088554BC49DA689E941F6 /* Tarefas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7402F132B893774E7CF954 /* Tarefas.swift */; };
 		DC6A676212B9168BF38E4494 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72993A2267B69D23BA21D1A7 /* AuthService.swift */; };
@@ -37,10 +38,11 @@
 		1ADDB601B3FD9D293E7E5337 /* PerfilCoordinatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerfilCoordinatorView.swift; sourceTree = "<group>"; };
 		2FBDF60CBE2F8E8DB6DF3B54 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		3884989D2EC20F6A0084B2DF /* CriarGrupoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CriarGrupoView.swift; sourceTree = "<group>"; };
+		38E8F7182EC23315007FC087 /* BuscarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuscarView.swift; sourceTree = "<group>"; };
 		45574DB161CF54674872153E /* ProfessorMainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfessorMainCoordinator.swift; sourceTree = "<group>"; };
 		48ADD1DAC1A9446E84144341 /* TermosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermosView.swift; sourceTree = "<group>"; };
 		4C17123365D33E1A85A0C93E /* OsVigaristas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OsVigaristas.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		519C050992A97DA65A042228 /* AlunosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlunosView.swift; sourceTree = "<group>"; };
+		519C050992A97DA65A042228 /* Alunos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alunos.swift; sourceTree = "<group>"; };
 		6216B338DAB9478F79AA74AC /* Usuarios.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Usuarios.swift; sourceTree = "<group>"; };
 		72993A2267B69D23BA21D1A7 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		7729C85E372DB483811725D9 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
@@ -58,13 +60,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
-		01FCA93B473DA2BFB267D8D9 /* Alunos */ = {
+		01FCA93B473DA2BFB267D8D9 /* AlunosEGrupos */ = {
 			isa = PBXGroup;
 			children = (
-				519C050992A97DA65A042228 /* AlunosView.swift */,
+				519C050992A97DA65A042228 /* Alunos.swift */,
 				3884989D2EC20F6A0084B2DF /* CriarGrupoView.swift */,
 			);
-			path = Alunos;
+			path = AlunosEGrupos;
 			sourceTree = "<group>";
 		};
 		0708AA5402F3FC549129DE11 /* Shared */ = {
@@ -88,10 +90,19 @@
 			path = Auth;
 			sourceTree = "<group>";
 		};
+		38E8F71A2EC2331E007FC087 /* Buscar */ = {
+			isa = PBXGroup;
+			children = (
+				38E8F7182EC23315007FC087 /* BuscarView.swift */,
+			);
+			path = Buscar;
+			sourceTree = "<group>";
+		};
 		49E2E19F605F717FC24CDC8C /* Features */ = {
 			isa = PBXGroup;
 			children = (
-				01FCA93B473DA2BFB267D8D9 /* Alunos */,
+				38E8F71A2EC2331E007FC087 /* Buscar */,
+				01FCA93B473DA2BFB267D8D9 /* AlunosEGrupos */,
 				0FA051F5F75FC9F8B2ED00BA /* Auth */,
 				DE8651DFD189648CC80D7DCF /* DesafiosTarefas */,
 				86FB7DE9B55BBEAC3D9C0788 /* Main */,
@@ -265,7 +276,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				59EFE0D141C8DEF0D26DD18F /* AlunoMainCoordinator.swift in Sources */,
-				C1BE24B9B60B13717D6CF43D /* AlunosView.swift in Sources */,
+				C1BE24B9B60B13717D6CF43D /* Alunos.swift in Sources */,
 				302E5EE537B4689CCFF15B70 /* AppRootView.swift in Sources */,
 				B8409AF469A8ACEF7C1082D6 /* AuthCoordinatorView.swift in Sources */,
 				3884989E2EC20F6A0084B2DF /* CriarGrupoView.swift in Sources */,
@@ -278,6 +289,7 @@
 				8660758061F317E86479D202 /* LoginView.swift in Sources */,
 				BA46058B07E9E367A31FC88E /* OnboardingCoordinatorView.swift in Sources */,
 				663EEA2813E0A672D22531EF /* OsVigaristasApp.swift in Sources */,
+				38E8F7192EC23316007FC087 /* BuscarView.swift in Sources */,
 				0838B1072C50E623B4EAEB5D /* PerfilCoordinatorView.swift in Sources */,
 				05E18D0541B464C2833FC442 /* ProfessorMainCoordinator.swift in Sources */,
 				D4F2DEA9519B9D407B0B5226 /* SignUpView.swift in Sources */,
