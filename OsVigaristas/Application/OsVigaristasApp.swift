@@ -12,6 +12,7 @@ import SwiftData
 struct OsVigaristasApp: App {
     @StateObject private var authService = AuthService.shared
     
+    
     var sharedModelContainer: ModelContainer = {
 
         let schema = Schema([Usuarios.self,
@@ -39,6 +40,9 @@ struct OsVigaristasApp: App {
                 // TODO: rever isso aq mno parece ser iCloud
                 .modelContainer(sharedModelContainer)
                 .preferredColorScheme(.light)
+                .task {
+                    self.authService.configure(context: sharedModelContainer.mainContext)
+                }
             // ContentView(authVM: AuthViewModel(modelContext: sharedModelContainer.mainContext))
         }
     }

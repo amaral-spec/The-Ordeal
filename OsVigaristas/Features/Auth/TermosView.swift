@@ -52,9 +52,10 @@ struct TermosView: View {
         .padding()
         
         Button(action: {
+            // Fazer esse finishregistration alterar dados para icloud, salvar la apenas depois dessa funcao ser chamada
             viewModel.finishRegistration()
         }) {
-            Text("Entrar")
+            Text("Entrar no app")
                 .font(.headline)
                 .foregroundColor(.white)
                 .padding()
