@@ -21,6 +21,7 @@ struct AlunosView: View {
     @State private var isStudentsEmpty = true
     @State private var isGroupsEmpty = true
     @State private var selectedMode = Mode.Alunos
+    @State private var criarGrupo = false
     
     enum Mode: String, CaseIterable {
         case Alunos, Grupos
@@ -134,7 +135,7 @@ struct AlunosView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button(action: {
-                        // funcao para o botao
+                        criarGrupo = true
                     }) {
                         Image(systemName: "person.2.badge.plus.fill")
                             .foregroundStyle(Color(red: 0.65, green: 0.13, blue: 0.29))
@@ -145,7 +146,7 @@ struct AlunosView: View {
                 ToolbarItem(placement: .confirmationAction) {
                     
                     Button(action: {
-                        // funcao para o botao
+                        
                     }) {
                         Image(systemName: "person.fill.checkmark.and.xmark")
                             .foregroundStyle(Color(red: 0.65, green: 0.13, blue: 0.29))
@@ -154,6 +155,9 @@ struct AlunosView: View {
                 }
                 
             }
+        }
+        .sheet(isPresented: $criarGrupo) {
+            CriarGrupoView()
         }
     }
 }

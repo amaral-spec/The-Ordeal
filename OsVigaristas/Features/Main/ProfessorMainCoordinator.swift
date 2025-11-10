@@ -19,15 +19,15 @@ struct ProfessorMainCoordinatorView: View {
     var body: some View {
         
         TabView() {
-            Tab("Início", systemImage: "house") {
+            Tab("Início", systemImage: "music.note.house.fill") {
                 VStack {
                     Text("Tela Principal (Logado)")
                 }
             }
             Tab("Alunos", systemImage: "person.3") {
-                Text("Alunos View")
+                AlunosView()
             }
-            Tab("Perfil", systemImage: "person.crop.circle") {
+            Tab("Perfil", systemImage: "person.fill") {
                 PerfilCoordinatorView(isProfessor: true)
                     .environmentObject(authVM)
             }
