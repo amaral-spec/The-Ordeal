@@ -1,21 +1,23 @@
 //
-//  ContentView.swift
+//  ProfessorMainCoordinator.swift
 //  OsVigaristas
 //
-//  Created by Gabriel Amaral on 27/10/25.
+//  Created by Ludivik de Paula on 04/11/25.
 //
 
 import SwiftUI
-import SwiftData
 
-struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var usuarios: [Usuarios]
+struct ProfessorMainCoordinatorView: View {
+    @StateObject private var authVM: AuthViewModel
     @State private var searchText: String = ""
     
-    @EnvironmentObject private var authVM: AuthViewModel
-    
+    init() {
+        print("professor")
+        _authVM = StateObject(wrappedValue: AuthViewModel(authService: AuthService.shared))
+    }
+
     var body: some View {
+        
         TabView() {
             Tab("Início", systemImage: "house") {
                 VStack {
@@ -26,14 +28,8 @@ struct ContentView: View {
                 Text("Alunos View")
             }
             Tab("Perfil", systemImage: "person.crop.circle") {
-                VStack {
-                    Text("Perfil View")
-                    Button("Logout") {
-                        authVM.logout()
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .tint(.red)
-                }
+                PerfilCoordinatorView(isProfessor: true)
+                    .environmentObject(authVM)
             }
             Tab("Buscar", systemImage: "magnifyingglass", role: .search) {
                 Text("Buscar View")
@@ -42,10 +38,4 @@ struct ContentView: View {
         .tint(Color(red: 0.65, green: 0.13, blue: 0.29))
         .searchable(text: $searchText)
     }
-}
-
-#Preview {
-    ContentView()
-        .modelContainer(for: Usuarios.self, inMemory: true)
-        .environmentObject(AuthViewModel())
 }

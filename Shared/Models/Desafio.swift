@@ -10,10 +10,17 @@ import SwiftData
 
 @Model
 final class Desafio {
-    var musica: URL
-    var alunos: [Usuarios] = []
+    var musica: URL?
+    
+    @Relationship(deleteRule: .nullify)
+    var alunos: [Usuarios]?
+    
+    @Relationship(deleteRule: .nullify)
+    var grupo: Grupos?
     
     init(musica: URL, qtdAlunos: Int) {
         self.musica = musica
+        self.alunos = []
+        self.grupo = nil
     }
 }

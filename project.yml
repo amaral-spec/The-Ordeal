@@ -11,7 +11,9 @@ targets:
     type: application
     platform: iOS
     sources:
+      - path: Shared
       - path: OsVigaristas
+      - path: Shared
     resources:
       - path: OsVigaristas/Assets.xcassets
 
@@ -21,9 +23,11 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: gabrielAmaral.OsVigaristas
         CURRENT_PROJECT_VERSION: 1
         INFO_PLIST_FILE: OsVigaristas/Info.plist
+        
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UIRequiresFullScreen: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations: ["UIInterfaceOrientationPortrait"]
+
         TARGETED_DEVICE_FAMILY: "1" # iPhone only
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         GENERATE_INFOPLIST_FILE: YES
@@ -34,7 +38,21 @@ targets:
       properties:
         com.apple.developer.applesignin:
           - Default
-
+        com.apple.developer.icloud-services:
+          - CloudKit
+#        com.apple.developer.icloud-container-identifiers:
+#          - iCloud.eumesmo.OsVigaristas
+#        aps-environment: "development"
+#        com.apple.security.app-sandbox: true
+#        com.apple.developer.ubiquity-kvstore-identifier: "$(TeamIdentifierPrefix)$(CFBundleIdentifier)"
+    
+# Capabilities só dependem dos entitlemnts.
+#    Precisa melhorar para ter todos as capabilities necessarias
     capabilities:
+      pushNotifications:
       signInWithApple:
-        enabled: true
+      iCloud:
+        services: ["CloudKit"]
+        containers: ["iCloud.eumesmo.OsVigaristas"]
+      backgroundModes:
+        modes: ["remote-notification"]

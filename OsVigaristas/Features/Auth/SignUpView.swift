@@ -1,0 +1,77 @@
+import SwiftUI
+
+struct SignUpView: View {
+    var onContinue: (() -> Void)? = nil
+    
+    @EnvironmentObject var authVM: AuthViewModel
+    @State private var nomeDeUsuario: String = ""
+    @State private var isProfessor: Bool = false
+    @State private var mostrarTermos: Bool = false
+    
+    var body: some View {
+        ScrollView {
+            VStack {
+                ZStack {
+                    Circle()
+                        .foregroundStyle(Color(red: 0.65, green: 0.13, blue: 0.29))
+                        .frame(height: 130)
+                        .padding()
+                    
+                    Image(systemName: "music.note")
+                        .font(.system(size: 70))
+                        .foregroundStyle(.white)
+                }
+                
+                Text("Sing up")
+                    .font(.system(size: 30))
+                    .padding(.bottom, 50)
+                
+                TextField("Nome de usuário", text: $nomeDeUsuario)
+                    .padding()
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 50)
+                            .stroke(Color.gray)
+                    )
+                    .padding(.horizontal)
+                
+                HStack {
+                    Text("Você é um professor?")
+                    Spacer()
+                    Picker ("", selection: $isProfessor){
+                        Text("Sim").tag(true)
+                        Text("Não").tag(false)
+                    }
+                    .pickerStyle(.menu)
+                    .tint(.black)
+                }
+                .padding(10)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 50)
+                        .stroke(Color.gray)
+                )
+                .padding(.horizontal)
+                
+                
+                Button(action: {
+                    authVM.makeRegistration(isProfessor: isProfessor, nome: nomeDeUsuario)
+                    onContinue?()
+                }) {
+                    Text("Seguir para termos")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color(red: 0.65, green: 0.13, blue: 0.29))
+                        .cornerRadius(50)
+                }
+                .padding(.horizontal)
+                .padding(.top, 60)
+            }
+            .padding(.bottom, 60)
+        }
+    }
+}
+
+#Preview {
+    SignUpView()
+}
