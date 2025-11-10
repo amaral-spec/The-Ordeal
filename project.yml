@@ -38,8 +38,8 @@ targets:
       properties:
         com.apple.developer.applesignin:
           - Default
-#        com.apple.developer.icloud-services:
-#          - CloudKit
+        com.apple.developer.icloud-services:
+          - CloudKit
 #        com.apple.developer.icloud-container-identifiers:
 #          - iCloud.eumesmo.OsVigaristas
 #        aps-environment: "development"
@@ -48,11 +48,11 @@ targets:
     
 # Capabilities só dependem dos entitlemnts.
 #    Precisa melhorar para ter todos as capabilities necessarias
-#    capabilities:
-#      pushNotifications:
-#      signInWithApple:
-#      iCloud:
-#        services: ["CloudKit"]
-#        containers: ["iCloud.eumesmo.OsVigaristas"]
-#      backgroundModes:
-#        modes: ["remote-notification"]
+    capabilities:
+      pushNotifications:
+      signInWithApple:
+      iCloud:
+        services: ["CloudKit"]
+        containers: ["iCloud.eumesmo.OsVigaristas"]
+      backgroundModes:
+        modes: ["remote-notification"]
