@@ -6,17 +6,15 @@
 //
 
 import Foundation
-import SwiftData
+import CloudKit
 
-@Model
-final class Desafio {
-    var musica: URL?
-    
-    @Relationship(deleteRule: .nullify)
-    var alunos: [Usuarios]?
-    
-    @Relationship(deleteRule: .nullify)
-    var grupo: Grupos?
+
+@MainActor
+final class DesafioModel: Identifiable {
+    var id: CKRecord.ID
+    var musica: URL
+    var alunos: CKRecord.Reference?
+    var grupo: CKRecord.Reference
     
     init(musica: URL, qtdAlunos: Int) {
         self.musica = musica

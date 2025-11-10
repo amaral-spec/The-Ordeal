@@ -6,17 +6,15 @@
 //
 
 import Foundation
-import SwiftData
+import CloudKit
 
-@Model
-final class Tarefas {
-    var partitura: Data?
-    
-    @Relationship(deleteRule: .nullify)
-    var aluno: Usuarios?
-    
-    @Relationship(deleteRule: .nullify)
-    var grupo: Grupos?
+
+@MainActor
+final class TarefasModel: Identifiable {
+    var id: CKRecord.ID
+    var partitura: Data
+    var aluno: CKRecord.Reference?
+    var grupo: CKRecord.Reference
     
     init(partitura: Data, qtdAlunos: Int){
         self.partitura = partitura
