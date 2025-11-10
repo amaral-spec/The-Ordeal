@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State private var isChallengeEmpty = true
-    @State private var isTaskEmpty = true
+    @State private var numChallenge: Int = 0
+    @State private var numTask: Int = 0
     enum Mode: String, CaseIterable {
         case Desafio, Tarefa
     }
@@ -23,7 +23,7 @@ struct HomeView: View {
             .frame(width: 350, height: 30, alignment: .center)
             VStack (spacing: -15){
                 if Mode.Desafio == selectedMode {
-                    if isChallengeEmpty {
+                    if numChallenge == 0 {
                         Spacer(minLength: 100)
                         ZStack {
                             Image(systemName: "flag.pattern.checkered.2.crossed")
@@ -48,41 +48,37 @@ struct HomeView: View {
                         Spacer()
                         
                         Button {
-                        isChallengeEmpty = false
-                    } label: {
-                        Text("Novo Desafio")
-                            .frame(width: 350, height: 30)
-                    }
-                    .frame(maxWidth: .infinity, minHeight: 70)
-                    .padding(.horizontal)
-                    .buttonStyle(.glassProminent)
+                            numChallenge += 1
+                        } label: {
+                            Text("Novo Desafio")
+                                .frame(maxWidth: 320, maxHeight: 30)
+                        }
+                        .frame(minWidth: 350, minHeight: 70)
+                        .padding(.horizontal)
+                        .buttonStyle(.glassProminent)
                     } else {
-//                        ScrollView {
-//                            VStack{
-//                                Form {
-////                                    LabeledContent("") {
-//                                        Image("violao")
-//                                        .resizable()
-//                                        .frame(width: 380, height: 200)
-//                                        
-////                                    }
-//                                }
-//                                .frame(width: 380, height: 300)
-//                                Form {
-//                                    LabeledContent("Desafio 1") {
-//                                                                    
-//                                    }
-//                                }
-//                                Form {
-//                                    LabeledContent("Desafio 1") {
-//                                        
-//                                    }
-//                                }
-//                            }
-//                        }
+//                        ForEach(0..<10)
+                        ScrollView{
+                        VStack {
+                            Spacer()
+                            ZStack {
+                                Image("violao")
+                                    .resizable()
+                            }
+                            .frame(width: 370, height: 190)
+                            .cornerRadius(30)
+                            }
+                            Spacer(minLength: 20)
+                            ZStack {
+                                Image("violao")
+                                    .resizable()
+                            }
+                            .frame(width: 370, height: 190)
+                            .cornerRadius(30)
+                        }
                     }
                 } else {
-                    if isTaskEmpty {
+                    if numTask == 0 {
                         Spacer(minLength: 100)
                         ZStack {
                             Image(systemName: "checklist.checked")
@@ -107,14 +103,26 @@ struct HomeView: View {
                         Spacer()
                         
                         Button {
-                            isTaskEmpty = false
+                            numTask += 1
                         } label: {
                             Text("Nova Tarefa")
-                                .frame(width: 350, height: 30)
+                                .frame(maxWidth: 320, maxHeight: 30)
                         }
-                        .frame(maxWidth: .infinity, minHeight: 70)
+                        .frame(maxWidth: 350, minHeight: 70)
                         .padding(.horizontal)
                         .buttonStyle(.glassProminent)
+                    } else {
+                        ScrollView{
+                            VStack (spacing: 20) {
+                                Spacer()
+                                ZStack {
+                                    Image("violao")
+                                        .resizable()
+                                }
+                                .frame(width: 370, height: 190)
+                                .cornerRadius(30)
+                            }
+                        }
                     }
                 }
             }
@@ -132,6 +140,5 @@ struct HomeView: View {
 }
 
 #Preview {
-//    HomeView()
     TabbarView()
 }
