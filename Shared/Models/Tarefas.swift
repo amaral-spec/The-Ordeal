@@ -6,20 +6,29 @@
 //
 
 import Foundation
-import SwiftData
+import CloudKit
 
-@Model
-final class Tarefas {
-    var partitura: Data?
+
+@MainActor
+final class TarefaModel: Identifiable {
+    var id: CKRecord.ID
+    var audioAluno: [URL]
+    var aluno: CKRecord.Reference
+    var titulo: String
+    var descricao: String
+    var recompensa: Int
+    var inicio: Date
+    var fim: Date
     
-    @Relationship(deleteRule: .nullify)
-    var aluno: Usuarios?
     
-    @Relationship(deleteRule: .nullify)
-    var grupo: Grupos?
-    
-    init(partitura: Data, qtdAlunos: Int){
-        self.partitura = partitura
-        self.aluno = nil
+    init(titulo: String, descricao: String, aluno: CKRecord.Reference, inicio: Date, fim: Date){
+        self.id = CKRecord.ID(recordName: UUID().uuidString)
+        self.audioAluno = []
+        self.aluno = aluno
+        self.titulo = titulo
+        self.descricao = descricao
+        self.recompensa = 0
+        self.inicio = inicio
+        self.fim = fim
     }
 }
