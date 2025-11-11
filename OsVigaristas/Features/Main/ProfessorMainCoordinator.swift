@@ -16,6 +16,8 @@ struct ProfessorMainCoordinatorView: View {
     @State private var selectedTab: professorTabs = .inicio
     @State private var searchText: String = ""
     
+    @StateObject private var dataVM = DataViewModel()
+    
     init() {
         print("professor")
         _authVM = StateObject(wrappedValue: AuthViewModel(authService: AuthService.shared))
@@ -38,14 +40,13 @@ struct ProfessorMainCoordinatorView: View {
             }
             Tab("Buscar", systemImage: "magnifyingglass", value: .buscar, role: .search) {
                 NavigationStack {
-                    List {
                         BuscarView()
+                            .environmentObject(dataVM)
+                            .navigationTitle("Buscar")
+                            .toolbarTitleDisplayMode(.inlineLarge)
                     }
-                    .navigationTitle("Buscar")
-                    .toolbarTitleDisplayMode(.inlineLarge)
                     .searchable(text: $searchText)
                 }
-            }
         }
         .tint(Color(red: 0.65, green: 0.13, blue: 0.29))
     }

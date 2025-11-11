@@ -8,11 +8,28 @@
 import SwiftUI
 
 struct BuscarView: View {
+    @EnvironmentObject var dataVM: DataViewModel
+    
     var body: some View {
-        Text("Buscar view")
+        NavigationStack {
+            List {
+                Section("Alunos") {
+                    ForEach(dataVM.alunos) { aluno in
+                        Text(aluno.nome)
+                    }
+                }
+                
+                Section("Grupos") {
+                    ForEach(dataVM.grupos) { grupo in
+                        Text(grupo.nome)
+                    }
+                }
+            }
+        }
     }
 }
 
 #Preview {
     BuscarView()
+        .environmentObject(DataViewModel())
 }

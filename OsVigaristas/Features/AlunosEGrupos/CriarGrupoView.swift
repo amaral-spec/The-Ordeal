@@ -24,7 +24,7 @@ struct CriarGrupoView: View {
                 
                 Spacer()
             }
-            .navigationTitle("Criar gripo")
+            .navigationTitle("Criar grupo")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

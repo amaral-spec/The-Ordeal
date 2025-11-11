@@ -11,6 +11,7 @@ import SwiftUI
 struct AppRootView: View {
     @EnvironmentObject var authService: AuthService
     @Environment(\.modelContext) var modelContext
+    @StateObject private var dataVM = DataViewModel()
 
     init() {
 //        print("OIIIIs")
@@ -24,6 +25,7 @@ struct AppRootView: View {
                 OnboardingCoordinatorView()
             } else if (authService.currentUser.isProfessor) {
                 ProfessorMainCoordinatorView()
+                    .environmentObject(dataVM)
             } else {
                 AlunoMainCoordinatorView()
             }
