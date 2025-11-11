@@ -7,9 +7,16 @@
 
 import SwiftUI
 
+enum professorTabs {
+    case inicio, alunos, perfil, buscar
+}
+
 struct ProfessorMainCoordinatorView: View {
     @StateObject private var authVM: AuthViewModel
+    @State private var selectedTab: professorTabs = .inicio
     @State private var searchText: String = ""
+    
+    @StateObject private var dataVM = DataViewModel()
     
     init() {
         print("professor")
@@ -18,24 +25,29 @@ struct ProfessorMainCoordinatorView: View {
 
     var body: some View {
         
-        TabView() {
-            Tab("Início", systemImage: "music.note.house.fill") {
+        TabView(selection: $selectedTab) {
+            Tab("Início", systemImage: "music.note.house.fill", value: .inicio) {
                 VStack {
                     Text("Tela Principal (Logado)")
                 }
             }
-            Tab("Alunos", systemImage: "person.3") {
+            Tab("Alunos", systemImage: "person.3", value: .alunos) {
                 AlunosView()
             }
-            Tab("Perfil", systemImage: "person.fill") {
+            Tab("Perfil", systemImage: "person.fill", value: .perfil) {
                 PerfilCoordinatorView(isProfessor: true)
                     .environmentObject(authVM)
             }
-            Tab("Buscar", systemImage: "magnifyingglass", role: .search) {
-                Text("Buscar View")
-            }
+            Tab("Buscar", systemImage: "magnifyingglass", value: .buscar, role: .search) {
+                NavigationStack {
+                        BuscarView()
+                            .environmentObject(dataVM)
+                            .navigationTitle("Buscar")
+                            .toolbarTitleDisplayMode(.inlineLarge)
+                    }
+                    .searchable(text: $searchText)
+                }
         }
         .tint(Color(red: 0.65, green: 0.13, blue: 0.29))
-        .searchable(text: $searchText)
     }
 }

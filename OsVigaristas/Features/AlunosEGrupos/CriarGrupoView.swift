@@ -24,22 +24,17 @@ struct CriarGrupoView: View {
                 
                 Spacer()
             }
-            .navigationTitle("Criar gripo")
+            .navigationTitle("Criar grupo")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(action: {
+                    Button("Cancelar", systemImage: "xmark") {
                         dismiss()
-                    }) {
-                        Image(systemName: "xmark")
-                    }.foregroundStyle(Color.accentColor)
-                    
+                    }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(action: {
-                        //funcao para crar grupo no ck
-                    }) {
-                        Image(systemName: "arrow.up")
+                    Button("Adicionar", systemImage: "checkmark") {
+                        //funcao para adicionar o grupo
                     }
                 }
             }
