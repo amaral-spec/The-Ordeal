@@ -11,17 +11,16 @@ import CloudKit
 @MainActor
 class GrupoViewModel: ObservableObject {
     
-    func createGrupo(_ grupo: GruposModel) async throws {
+    func createGrupo(_ grupo: GrupoModel) async throws {
         let record = CKRecord(recordType: "Grupos", recordID: grupo.id)
         record["nome"] = grupo.nome as CKRecordValue
-        record["descricao"] = grupo.descricao as CKRecordValue
         record["qtdAlunos"] = grupo.qtdAlunos as CKRecordValue
         record["membros"] = grupo.membros as CKRecordValue
         
         try await CKContainer.default().publicCloudDatabase.save(record)
     }
 
-    func fetchGrupo(recordID: CKRecord.ID) async throws -> GruposModel {
+    func fetchGrupo(recordID: CKRecord.ID) async throws -> GrupoModel {
         let record = try await CKContainer.default().publicCloudDatabase.record(for: recordID)
 
         let nome = record["nome"] as? String ?? ""
@@ -29,13 +28,13 @@ class GrupoViewModel: ObservableObject {
         let qtdAlunos = record["qtdAlunos"] as? Int ?? 0
         let refs = record["membros"] as? [CKRecord.Reference] ?? []
 
-        let grupo = GruposModel(nome: nome, descricao: descricao, qtdAlunos: qtdAlunos)
+        let grupo = GrupoModel(nome: nome, descricao: descricao, qtdAlunos: qtdAlunos)
         grupo.id = record.recordID
         grupo.membros = refs
         return grupo
     }
 
-    func addMember(to grupo: GruposModel, usuario: UsuariosModel) async throws {
+    func addMember(to grupo: GrupoModel, usuario: UsuarioModel) async throws {
         let db = CKContainer.default().publicCloudDatabase
         let record = try await db.record(for: grupo.id)
 
@@ -52,7 +51,7 @@ class GrupoViewModel: ObservableObject {
         }
     }
 
-    func removeMember(from grupo: GruposModel, usuario: UsuariosModel) async throws {
+    func removeMember(from grupo: GrupoModel, usuario: UsuarioModel) async throws {
         let db = CKContainer.default().publicCloudDatabase
         let record = try await db.record(for: grupo.id)
 
