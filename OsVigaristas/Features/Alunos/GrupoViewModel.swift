@@ -16,7 +16,6 @@ class GrupoViewModel: ObservableObject {
     func createGrupo(_ grupo: GrupoModel) async throws {
         let record = CKRecord(recordType: "Grupo", recordID: grupo.id)
         record["nome"] = grupo.nome as CKRecordValue
-        record["qtdAlunos"] = grupo.qtdAlunos as CKRecordValue
         record["membros"] = grupo.membros as CKRecordValue
         
         let db = CKContainer.default().publicCloudDatabase
@@ -73,7 +72,7 @@ class GrupoViewModel: ObservableObject {
         let qtdAlunos = record["qtdAlunos"] as? Int ?? 0
         let refs = record["membros"] as? [CKRecord.Reference] ?? []
 
-        let grupo = GrupoModel(nome: nome, descricao: descricao, qtdAlunos: qtdAlunos)
+        let grupo = GrupoModel(nome: nome)
         grupo.id = record.recordID
         grupo.membros = refs
         return grupo
