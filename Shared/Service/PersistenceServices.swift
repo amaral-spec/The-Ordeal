@@ -9,10 +9,10 @@ import CloudKit
 
 
 @MainActor
-class GrupoViewModel: ObservableObject {
+class PersistenceServices: ObservableObject {
+
     
-    
-    // MARK: Create, delete, fetch
+    // MARK: Group: create, delete, fetch
     func createGrupo(_ grupo: GrupoModel) async throws {
         let record = CKRecord(recordType: "Grupo", recordID: grupo.id)
         record["nome"] = grupo.nome as CKRecordValue
@@ -78,7 +78,7 @@ class GrupoViewModel: ObservableObject {
         return grupo
     }
 
-    // MARK: Add member, remove member
+    // MARK: Group: members
     func addMember(to grupo: GrupoModel, usuario: UsuarioModel) async throws {
         let db = CKContainer.default().publicCloudDatabase
         let record = try await db.record(for: grupo.id)
