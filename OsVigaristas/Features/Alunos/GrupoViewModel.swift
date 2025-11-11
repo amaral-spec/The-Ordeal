@@ -11,13 +11,58 @@ import CloudKit
 @MainActor
 class GrupoViewModel: ObservableObject {
     
+    
+    // MARK: Create, delete, fetch
     func createGrupo(_ grupo: GrupoModel) async throws {
-        let record = CKRecord(recordType: "Grupos", recordID: grupo.id)
+        let record = CKRecord(recordType: "Grupo", recordID: grupo.id)
         record["nome"] = grupo.nome as CKRecordValue
         record["qtdAlunos"] = grupo.qtdAlunos as CKRecordValue
         record["membros"] = grupo.membros as CKRecordValue
         
-        try await CKContainer.default().publicCloudDatabase.save(record)
+        let db = CKContainer.default().publicCloudDatabase
+        
+        do {
+            try await db.save(record)
+            print("Group created successfully: \(grupo.id)")
+        } catch {
+            print("Failed to create group: \(error.localizedDescription)")
+        }
+    }
+    
+    func deleteGrupo(_ grupo: GrupoModel) async throws {
+        let db = CKContainer.default().publicCloudDatabase
+
+        // Creates references and predicates for the group
+        let gruporef = CKRecord.Reference(recordID: grupo.id, action: .none)
+        let predicate = NSPredicate(format: "grupo == %@", gruporef)
+        
+        // Creates queries for tarefa and desafio
+        let queryTarefa = CKQuery(recordType: "Tarefa", predicate: predicate)
+        let queryDesafio = CKQuery(recordType: "Desafio", predicate: predicate)
+        
+        // Performs queries
+        let (resultsTarefa, _) = try await db.records(matching: queryTarefa)
+        let (resultsDesafio, _) = try await db.records(matching: queryDesafio)
+        
+        // Deletes related tarefas
+        for (_, result) in resultsTarefa {
+            if case .success(let record) = result {
+                try await db.deleteRecord(withID: record.recordID)
+                print("Deleted tarefa: \(record.recordID.recordName)")
+            }
+        }
+        
+        // Deletes related desafios
+        for (_, result) in resultsDesafio {
+            if case .success(let record) = result {
+                try await db.deleteRecord(withID: record.recordID)
+                print("Deleted desafio: \(record.recordID.recordName)")
+            }
+        }
+        
+        // Deletes group
+        try await db.deleteRecord(withID: grupo.id)
+        print("Group deleted successfully: \(grupo.id.recordName)")
     }
 
     func fetchGrupo(recordID: CKRecord.ID) async throws -> GrupoModel {
@@ -34,6 +79,7 @@ class GrupoViewModel: ObservableObject {
         return grupo
     }
 
+    // MARK: Add member, remove member
     func addMember(to grupo: GrupoModel, usuario: UsuarioModel) async throws {
         let db = CKContainer.default().publicCloudDatabase
         let record = try await db.record(for: grupo.id)
@@ -63,5 +109,4 @@ class GrupoViewModel: ObservableObject {
 
         try await db.save(record)
     }
-
 }

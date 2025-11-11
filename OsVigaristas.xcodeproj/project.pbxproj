@@ -153,10 +153,10 @@
 		BDFB47CC62CE04D596C0A2BE /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				A0DA2CCE62269F80FFCED0A1 /* Desafio.swift */,
-				CA1633F418EF547D02AF9177 /* Grupos.swift */,
-				7A7402F132B893774E7CF954 /* Tarefas.swift */,
 				6216B338DAB9478F79AA74AC /* Usuarios.swift */,
+				CA1633F418EF547D02AF9177 /* Grupos.swift */,
+				A0DA2CCE62269F80FFCED0A1 /* Desafio.swift */,
+				7A7402F132B893774E7CF954 /* Tarefas.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";

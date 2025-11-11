@@ -28,8 +28,14 @@ final class UsuarioModel: Identifiable {
         // The userIdentifier is the unique ID for the user.
         let userIdentifier = credential.user
         self.id = CKRecord.ID(recordName: userIdentifier)
+        self.dataCriacao = Date()
         self.nome = credential.fullName?.givenName ?? ""
         self.email = credential.email ?? ""
+        self.isTeacher = false
+        self.streak = 0
+        self.pontos = 0
+        self.ultimaTarefa = nil
+        self.ultimoDesafio = nil
     }
 }
 
