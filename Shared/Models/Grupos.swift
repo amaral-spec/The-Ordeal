@@ -13,13 +13,11 @@ import CloudKit
 final class GrupoModel: Identifiable {
     var id: CKRecord.ID
     var nome: String
-    var qtdAlunos: Int
     var membros: [CKRecord.Reference]
     
-    init(nome: String, descricao: String, qtdAlunos: Int) {
+    init(nome: String) {
         self.id = CKRecord.ID(recordName: UUID().uuidString)
         self.nome = nome
-        self.qtdAlunos = qtdAlunos
         self.membros = []
     }
 }

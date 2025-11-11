@@ -13,9 +13,8 @@ import CloudKit
 final class DesafioModel: Identifiable {
     var id: CKRecord.ID
     var audioAlunos: [URL]
-    var audioGeral: URL
-    var alunos: CKRecord.Reference?
-    var grupo: CKRecord.Reference
+    var audioGeral: URL?
+    var grupo: CKRecord.Reference?
     var titulo: String
     var descricao: String
     var tipoDesafio: Int // ver se vale a pena colocar nome
@@ -24,8 +23,16 @@ final class DesafioModel: Identifiable {
     var fim: Date
     
     
-    init(musica: URL, qtdAlunos: Int) {
-        self.alunos = []
-        self.grupo = nil
+    init(tipoDesafio: Int, titulo: String, descricao: String, grupo: CKRecord.Reference, recompensa: Int, inicio: Date, fim: Date) {
+        self.id = CKRecord.ID(recordName: UUID().uuidString)
+        self.audioAlunos = []
+        self.audioGeral = nil
+        self.grupo = grupo
+        self.titulo = titulo
+        self.descricao = descricao
+        self.tipoDesafio = tipoDesafio
+        self.recompensa = recompensa
+        self.inicio = inicio
+        self.fim = fim
     }
 }
