@@ -12,7 +12,23 @@ import CloudKit
 class PersistenceServices: ObservableObject {
     let db = CKContainer.default().publicCloudDatabase
     
-// MARK: CRUD: Usuarios
+    // MARK: CRUD: Usuarios
+    func editUser(recordID: CKRecord.ID, newName: String, newEmail: String, isTeacher: Bool) async throws {
+        let record = try await db.record(for: recordID)
+        
+        record["name"] = newName as CKRecordValue
+        record["email"] = newEmail as CKRecordValue
+        record["isTeacher"] = isTeacher as CKRecordValue
+        
+        do {
+            try await db.save(record)
+            print("User edited successfully")
+        } catch {
+            print("Failed to update user")
+            throw error
+        }
+    }
+    
     func deleteUser(_ usuario: UserModel) async throws {
         try await db.deleteRecord(withID: usuario.id)
         print("User deleted successfully: \(usuario.id.recordName)")
@@ -20,7 +36,7 @@ class PersistenceServices: ObservableObject {
     
     func fetchUser(recordID: CKRecord.ID) async throws -> UserModel {
         let record = try await db.record(for: recordID)
-
+        
         let name = record["name"] as? String ?? ""
         let email = record["email"] as? String ?? ""
         let isTeacher = record["isTeacher"] as? Bool ?? false
@@ -43,8 +59,8 @@ class PersistenceServices: ObservableObject {
     }
     
     
-// MARK: CRUD: Grupo
-    func createGrupo(_ grupo: GroupModel) async throws {
+    // MARK: CRUD: Grupo
+    func createGroup(_ grupo: GroupModel) async throws {
         let record = CKRecord(recordType: "Grupo", recordID: grupo.id)
         record["name"] = grupo.name as CKRecordValue
         record["members"] = grupo.members as CKRecordValue
@@ -57,7 +73,7 @@ class PersistenceServices: ObservableObject {
         }
     }
     
-    func deleteGrupo(_ grupo: GroupModel) async throws {
+    func deleteGroup(_ grupo: GroupModel) async throws {
         // Creates references and predicates for the group
         let gruporef = CKRecord.Reference(recordID: grupo.id, action: .none)
         let predicate = NSPredicate(format: "grupo == %@", gruporef)
@@ -90,8 +106,8 @@ class PersistenceServices: ObservableObject {
         try await db.deleteRecord(withID: grupo.id)
         print("Group deleted successfully: \(grupo.id.recordName)")
     }
-
-    func editGrupo(recordID: CKRecord.ID, newName: String, newDescricao: String, newQtdAlunos: Int, newMembers: [CKRecord.Reference]) async throws {
+    
+    func editGroup(recordID: CKRecord.ID, newName: String, newDescricao: String, newQtdAlunos: Int, newMembers: [CKRecord.Reference]) async throws {
         // Note to development team: when implementing this function, you first need
         // to call fetchGrupo to populate the fields, and then pass this function
         
@@ -111,61 +127,80 @@ class PersistenceServices: ObservableObject {
         }
     }
     
-    func fetchGrupo(recordID: CKRecord.ID) async throws -> GroupModel {
+    func fetchGroup(recordID: CKRecord.ID) async throws -> GroupModel {
         let record = try await db.record(for: recordID)
-
+        
         let name = record["name"] as? String ?? ""
         let refs = record["members"] as? [CKRecord.Reference] ?? []
-
+        
         let grupo = GroupModel(name: name)
         grupo.id = record.recordID
         grupo.members = refs
         return grupo
     }
-
+    
     // MARK: Grupo - members
     func addMember(to grupo: GroupModel, usuario: UserModel) async throws {
         let record = try await db.record(for: grupo.id)
-
+        
         var members = record["members"] as? [CKRecord.Reference] ?? []
         let newRef = CKRecord.Reference(recordID: usuario.id, action: .none)
-
+        
         // Avoid duplicates
         if !members.contains(where: { $0.recordID == newRef.recordID }) {
             members.append(newRef)
             record["members"] = members
             record["qtdAlunos"] = members.count
-
+            
             try await db.save(record)
         }
     }
-
+    
     func removeMember(from grupo: GroupModel, usuario: UserModel) async throws {
         let record = try await db.record(for: grupo.id)
-
+        
         var members = record["members"] as? [CKRecord.Reference] ?? []
         members.removeAll { $0.recordID == usuario.id }
-
+        
         record["members"] = members
         record["qtdAlunos"] = members.count
-
+        
         try await db.save(record)
     }
-}
-
-
-// MARK: CRUD: Desafio
-
-
-
-
-
-
-
-// MARK: CRUD: Tarefa
-
-
-
+    
+    
+    
+    // MARK: CRUD: Desafio
+    func createChallenge(_ challenge: ChallengeModel) async throws {
+        let record = CKRecord(recordType: "Challenge", recordID: challenge.id)
+        
+        if let groupRef = challenge.group {
+            record["group"] = groupRef
+        }
+        record["title"] = challenge.title as CKRecordValue
+        record["description"] = challenge.description as CKRecordValue
+        record["whichChallenge"] = challenge.whichChallenge as CKRecordValue
+        record["reward"] = challenge.reward as CKRecordValue
+        record["startDate"] = challenge.startDate as CKRecordValue
+        record["endDate"] = challenge.endDate as CKRecordValue
+        
+        do {
+            try await db.save(record)
+            print("Challenge created successfully: \(challenge.id.recordName)")
+        } catch {
+            print("Failed to create challenge: \(error.localizedDescription)")
+        }
+    }
+    
+    
+    
+    
+    
+    
+    // MARK: CRUD: Tarefa
+    
+    
+    
     func fetchLatestTask(for userRecordID: CKRecord.ID, in db: CKDatabase) async throws -> TaskModel? {
         let predicate = NSPredicate(format: "student == %@", CKRecord.Reference(recordID: userRecordID, action: .none))
         let taskQuery = CKQuery(recordType: "Task", predicate: predicate)
@@ -177,7 +212,7 @@ class PersistenceServices: ObservableObject {
         let validRecords: [CKRecord] = resultsTask.compactMap { (_, result) in
             try? result.get()  // Converts Result<CKRecord, Error> into CKRecord or nil
         }
-
+        
         // Filter out records that don't have an endDate or are in the future
         let pastTasks = validRecords.compactMap { record -> (CKRecord, Date)? in
             guard let endDate = record["endDate"] as? Date,
@@ -186,16 +221,16 @@ class PersistenceServices: ObservableObject {
             }
             return (record, endDate)
         }
-
+        
         // Sort descending by endDate
         let sortedTasks = pastTasks.sorted { $0.1 > $1.1 }
-
+        
         // Pick the first (most recent) one
         guard let (latestRecord, _) = sortedTasks.first else {
             print("No past tasks found")
             return nil
         }
-   
+        
         return await TaskModel(
             title: latestRecord["title"] as? String ?? "",
             description: latestRecord["description"] as? String ?? "",
@@ -204,6 +239,7 @@ class PersistenceServices: ObservableObject {
             endDate: latestRecord["endDate"] as? Date ?? Date()
         )
     }
-
-
-
+    
+    
+    
+}
