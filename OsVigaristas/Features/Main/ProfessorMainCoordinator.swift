@@ -22,12 +22,9 @@ struct ProfessorMainCoordinatorView: View {
     }
 
     var body: some View {
-        
         TabView(selection: $selectedTab) {
             Tab("Início", systemImage: "music.note.house.fill", value: .inicio) {
-                VStack {
-                    Text("Tela Principal (Logado)")
-                }
+                HomeView()
             }
             Tab("Alunos", systemImage: "person.3", value: .alunos) {
                 AlunosView()
@@ -46,5 +43,7 @@ struct ProfessorMainCoordinatorView: View {
                 }
         }
         .tint(Color(red: 0.65, green: 0.13, blue: 0.29))
+//        .searchable(text: $searchText)
+
     }
 }
