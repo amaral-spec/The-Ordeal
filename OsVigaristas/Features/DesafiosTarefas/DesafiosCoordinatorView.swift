@@ -6,19 +6,6 @@
 
 import SwiftUI
 
-struct Card: View {
-    let index: Int
-    
-    var body: some View {
-        ZStack {
-            Image("violao")
-                .resizable()
-        }
-        .frame(width: 370, height: 190)
-        .cornerRadius(30)
-    }
-}
-
 struct HomeView: View {
     @State private var criarDesafio = false
     @State private var criarTarefa = false
@@ -119,12 +106,16 @@ struct HomeView: View {
                         .padding(.horizontal)
                         .buttonStyle(.glassProminent)
                     } else {
-                        ScrollView{
-                            VStack {
-                                Spacer()
-                                ForEach(0..<numTask, id: \.self) {
-                                    i in Card(index: i)
-                                    Spacer(minLength: 20)
+                        NavigationStack {
+                            ScrollView{
+                                VStack {
+                                    Spacer()
+                                    ForEach(0..<numTask, id: \.self) { i in
+                                        NavigationLink(destination: DetalhesTarefasView()) {
+                                            Card(index: i)
+                                            Spacer(minLength: 20)
+                                        }
+                                    }
                                 }
                             }
                         }

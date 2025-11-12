@@ -36,6 +36,6 @@ struct AlunoMainCoordinatorView: View {
             }
         }
         .tint(Color(red: 0.65, green: 0.13, blue: 0.29))
-        .searchable(text: $searchText)
+//        .searchable(text: $searchText)
     }
 }
