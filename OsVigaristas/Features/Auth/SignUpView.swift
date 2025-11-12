@@ -5,7 +5,7 @@ struct SignUpView: View {
     
     @EnvironmentObject var authVM: AuthViewModel
     @State private var nomeDeUsuario: String = ""
-    @State private var isProfessor: Bool = false
+    @State private var isTeacher: Bool = false
     @State private var mostrarTermos: Bool = false
     
     var body: some View {
@@ -37,7 +37,7 @@ struct SignUpView: View {
                 HStack {
                     Text("Você é um professor?")
                     Spacer()
-                    Picker ("", selection: $isProfessor){
+                    Picker ("", selection: $isTeacher){
                         Text("Sim").tag(true)
                         Text("Não").tag(false)
                     }
@@ -53,7 +53,7 @@ struct SignUpView: View {
                 
                 
                 Button(action: {
-                    authVM.makeRegistration(isProfessor: isProfessor, nome: nomeDeUsuario)
+                    authVM.makeRegistration(isTeacher: isTeacher, name: nomeDeUsuario)
                     onContinue?()
                 }) {
                     Text("Seguir para termos")

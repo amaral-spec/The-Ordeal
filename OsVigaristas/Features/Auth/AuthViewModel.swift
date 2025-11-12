@@ -36,8 +36,8 @@ final class AuthViewModel: ObservableObject {
         authService.finishRegistration()
     }
     
-    func makeRegistration(isProfessor: Bool, nome: String) {
-        authService.makeRegistration(isProfessor: isProfessor, nome: nome)
+    func makeRegistration(isTeacher: Bool, name: String) {
+        authService.makeRegistration(isTeacher: isTeacher, name: name)
     }
 
     func logout() {

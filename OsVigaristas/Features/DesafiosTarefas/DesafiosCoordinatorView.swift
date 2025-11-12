@@ -6,6 +6,7 @@
 
 import SwiftUI
 
+<<<<<<< HEAD
 struct HomeView: View {
     @State private var criarDesafio = false
     @State private var criarTarefa = false
@@ -14,6 +15,12 @@ struct HomeView: View {
     
     enum Mode: String, CaseIterable {
         case Desafio, Tarefa
+=======
+struct DesafiosCoordinatorView: View {
+    enum Route: Hashable {
+        case list
+//        case detalhe(ChallengeModel)
+>>>>>>> develop
     }
     @State private var selectedMode = Mode.Desafio
     var body: some View {

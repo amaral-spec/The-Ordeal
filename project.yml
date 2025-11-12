@@ -1,6 +1,6 @@
 name: OsVigaristas
 options:
-  bundleIdPrefix: gabrielAmaral
+  bundleIdPrefix: eumesmo
   deploymentTarget:
     iOS: "18.0"
   productName: Os Vigaristas
@@ -20,7 +20,7 @@ targets:
     settings:
       base:
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
-        PRODUCT_BUNDLE_IDENTIFIER: gabrielAmaral.OsVigaristas
+        PRODUCT_BUNDLE_IDENTIFIER: eumesmo.OsVigaristas
         CURRENT_PROJECT_VERSION: 1
         INFO_PLIST_FILE: OsVigaristas/Info.plist
         
@@ -40,11 +40,11 @@ targets:
           - Default
         com.apple.developer.icloud-services:
           - CloudKit
-#        com.apple.developer.icloud-container-identifiers:
-#          - iCloud.eumesmo.OsVigaristas
-#        aps-environment: "development"
-#        com.apple.security.app-sandbox: true
-#        com.apple.developer.ubiquity-kvstore-identifier: "$(TeamIdentifierPrefix)$(CFBundleIdentifier)"
+        com.apple.developer.icloud-container-identifiers:
+          - iCloud.eumesmo.OsVigaristas
+        aps-environment: "development"
+        com.apple.security.app-sandbox: true
+        com.apple.developer.ubiquity-kvstore-identifier: "$(TeamIdentifierPrefix)$(CFBundleIdentifier)"
     
 # Capabilities só dependem dos entitlemnts.
 #    Precisa melhorar para ter todos as capabilities necessarias

@@ -21,10 +21,9 @@ struct AlunosView: View {
     @State private var isStudentsEmpty = true
     @State private var isGroupsEmpty = true
     @State private var selectedMode = Mode.Alunos
+    @State private var criarGrupo = false
     
-    enum Mode: String, CaseIterable {
-        case Alunos, Grupos
-    }
+    //mock com os jsons
     
     var body: some View {
         NavigationStack {
@@ -59,36 +58,31 @@ struct AlunosView: View {
                                 .fontWeight(.medium)
                         }
                         Spacer()
-                        
-                        Button {
-                            //func para copiar o codigo?
-                        } label: {
-                            Text("Seu código: 1234")
-                                .font(.headline)
-                                .foregroundColor(.white)
-                                .padding()
-                                .frame(maxWidth: 350, maxHeight: 52)
-                                .background(Color(red: 0.65, green: 0.13, blue: 0.29))
-                                .cornerRadius(50)
-                        }
-                        .frame(maxWidth: .infinity, minHeight: 70)
-                        .padding()
+
                     } else {
                         ScrollView {
                             LazyVGrid(columns: columns, spacing: 10) {
-                                ZStack {
-                                    //colocar um for each para buscar os alunos
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .fill(.white)
-                                    VStack {
-                                        //colocar foto do aluno
-                                        Text("Nome do aluno")
-                                    }
-                                    
-                                }
+                                // MARK: - Puxar do CloudKit
+//                                ForEach([]) { aluno in
+//                                    VStack {
+//                                        Image(aluno.foto)
+//                                            .resizable()
+//                                            .scaledToFill()
+//                                            .frame(width: 90, height: 90)
+//                                            .clipShape(Circle())
+//                                        
+//                                        Text(aluno.nome)
+//                                            .font(.caption)
+//                                            .foregroundColor(.primary)
+//                                    }
+//                                    .padding(6)
+//                                    .background(.white)
+//                                    .cornerRadius(10)
+//                                    .shadow(radius: 1)
+//                                }
                             }
-                            .padding()
                         }
+                        .padding()
                     }
                 } else {
                     if isGroupsEmpty {
@@ -115,16 +109,39 @@ struct AlunosView: View {
                         }
                         Spacer()
                     } else {
-                        VStack {
-                            //for each de cada grupo
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 10)
-                                //foto do grupo
-                                HStack {
-                                    //nome do grupo
-                                    //quantidade de alunos
-                                }
+                        ScrollView {
+                            VStack(spacing: 10) {
+                                // MARK: - Puxar do CloudKit
+//                                ForEach(dataVM.grupos) { grupo in
+//                                    NavigationLink(destination: DetalheGrupoView(grupo: grupo)) {
+//                                        HStack {
+//                                            Image(grupo.foto)
+//                                                .resizable()
+//                                                .scaledToFill()
+//                                                .frame(width: 60, height: 60)
+//                                                .clipShape(RoundedRectangle(cornerRadius: 10))
+//                                            
+//                                            VStack(alignment: .leading) {
+//                                                Text(grupo.nome)
+//                                                    .font(.headline)
+//                                                
+//                                                Text("\(grupo.quantidadeAlunos) alunos")
+//                                                    .font(.subheadline)
+//                                                    .foregroundColor(.secondary)
+//                                            }
+//                                            
+//                                            Spacer()
+//                                        }
+//                                        .padding()
+//                                        .background(.white)
+//                                        .cornerRadius(12)
+//                                        .shadow(color: .black.opacity(0.08), radius: 4, x: 0, y: 2)
+//                                    }
+//                                    .buttonStyle(.plain) // <-- opcional, remove highlight azul
+//                                    
+//                                }
                             }
+                            .padding()
                         }
                     }
                 }
@@ -134,26 +151,17 @@ struct AlunosView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button(action: {
-                        // funcao para o botao
+                        criarGrupo = true
                     }) {
                         Image(systemName: "person.2.badge.plus.fill")
                             .foregroundStyle(Color(red: 0.65, green: 0.13, blue: 0.29))
                             .background(Color.white)
                     }
                 }
-                
-                ToolbarItem(placement: .confirmationAction) {
-                    
-                    Button(action: {
-                        // funcao para o botao
-                    }) {
-                        Image(systemName: "person.fill.checkmark.and.xmark")
-                            .foregroundStyle(Color(red: 0.65, green: 0.13, blue: 0.29))
-                            .background(Color.white)
-                    }
-                }
-                
             }
+        }
+        .sheet(isPresented: $criarGrupo) {
+            CriarGrupoView()
         }
     }
 }
