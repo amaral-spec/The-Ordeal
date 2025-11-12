@@ -28,6 +28,7 @@
 		DC6A676212B9168BF38E4494 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72993A2267B69D23BA21D1A7 /* AuthService.swift */; };
 		E59760E82EC22B9000CFE783 /* CriarDesafioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59760E72EC22B9000CFE783 /* CriarDesafioView.swift */; };
 		E59760EA2EC22FF100CFE783 /* CriarTarefaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59760E92EC22FF100CFE783 /* CriarTarefaView.swift */; };
+		E5A6FAF52EC4CEBD00A8A430 /* AddGruposView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A6FAF42EC4CEBD00A8A430 /* AddGruposView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +55,7 @@
 		CA1633F418EF547D02AF9177 /* Grupos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grupos.swift; sourceTree = "<group>"; };
 		E59760E72EC22B9000CFE783 /* CriarDesafioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CriarDesafioView.swift; sourceTree = "<group>"; };
 		E59760E92EC22FF100CFE783 /* CriarTarefaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CriarTarefaView.swift; sourceTree = "<group>"; };
+		E5A6FAF42EC4CEBD00A8A430 /* AddGruposView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGruposView.swift; sourceTree = "<group>"; };
 		E8E4E9CCB3205B0DBA6135B0 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -169,6 +171,7 @@
 			children = (
 				14D1EE2539B7EAF30F4966E3 /* DesafiosCoordinatorView.swift */,
 				E59760E72EC22B9000CFE783 /* CriarDesafioView.swift */,
+				E5A6FAF42EC4CEBD00A8A430 /* AddGruposView.swift */,
 				E59760E92EC22FF100CFE783 /* CriarTarefaView.swift */,
 			);
 			path = DesafiosTarefas;
@@ -272,6 +275,7 @@
 				663EEA2813E0A672D22531EF /* OsVigaristasApp.swift in Sources */,
 				0838B1072C50E623B4EAEB5D /* PerfilCoordinatorView.swift in Sources */,
 				05E18D0541B464C2833FC442 /* ProfessorMainCoordinator.swift in Sources */,
+				E5A6FAF52EC4CEBD00A8A430 /* AddGruposView.swift in Sources */,
 				D4F2DEA9519B9D407B0B5226 /* SignUpView.swift in Sources */,
 				DAC088554BC49DA689E941F6 /* Tarefas.swift in Sources */,
 				3A09BE3526D1F473BDC80CED /* TermosView.swift in Sources */,
