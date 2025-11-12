@@ -10,25 +10,25 @@ import CloudKit
 
 
 @MainActor
-final class TarefaModel: Identifiable {
+final class TaskModel: Identifiable {
     var id: CKRecord.ID
-    var audioAluno: [URL]
-    var aluno: CKRecord.Reference
-    var titulo: String
-    var descricao: String
-    var recompensa: Int
-    var inicio: Date
-    var fim: Date
+    var studentAudio: [URL]
+    var student: CKRecord.Reference
+    var title: String
+    var description: String
+    var reward: Int
+    var startDate: Date
+    var endDate: Date
     
     
-    init(titulo: String, descricao: String, aluno: CKRecord.Reference, inicio: Date, fim: Date){
+    init(title: String, description: String, student: CKRecord.Reference, startDate: Date, endDate: Date){
         self.id = CKRecord.ID(recordName: UUID().uuidString)
-        self.audioAluno = []
-        self.aluno = aluno
-        self.titulo = titulo
-        self.descricao = descricao
-        self.recompensa = 0
-        self.inicio = inicio
-        self.fim = fim
+        self.studentAudio = []
+        self.student = student
+        self.title = title
+        self.description = description
+        self.reward = 0
+        self.startDate = startDate
+        self.endDate = endDate
     }
 }

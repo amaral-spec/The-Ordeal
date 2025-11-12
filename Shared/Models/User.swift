@@ -11,16 +11,16 @@ import AuthenticationServices
 
 
 @MainActor
-final class UsuarioModel: Identifiable {
+final class UserModel: Identifiable {
     var id: CKRecord.ID
-    var dataCriacao: Date
-    var nome: String
+    var creationDate: Date
+    var name: String
     var email: String
     var isTeacher: Bool = false
     var streak: Int
-    var pontos: Int
-    var ultimaTarefa: TarefaModel?
-    var ultimoDesafio: DesafioModel?
+    var points: Int
+    var lastTask: TaskModel?
+    var lastChallenge: ChallengeModel?
     
     
     // Initializer that creates a user from Apple's sign-in credentials
@@ -28,15 +28,20 @@ final class UsuarioModel: Identifiable {
         // The userIdentifier is the unique ID for the user.
         let userIdentifier = credential.user
         self.id = CKRecord.ID(recordName: userIdentifier)
-        self.dataCriacao = Date()
-        self.nome = credential.fullName?.givenName ?? ""
+        self.creationDate = Date()
+        self.name = credential.fullName?.givenName ?? ""
         self.email = credential.email ?? ""
         self.isTeacher = false
         self.streak = 0
-        self.pontos = 0
-        self.ultimaTarefa = nil
-        self.ultimoDesafio = nil
+        self.points = 0
+        self.lastTask = nil
+        self.lastChallenge = nil
     }
+    
+    init(id: CKRecord.ID) {
+        self.id = id
+    }
+    
 }
 
 

@@ -10,15 +10,18 @@ import CloudKit
 
 @MainActor
 class PersistenceServices: ObservableObject {
-
+    let db = CKContainer.default().publicCloudDatabase
     
-    // MARK: Group: create, delete, fetch
+    
+// MARK: CRUD: Usuarios
+    
+    
+    
+// MARK: CRUD: Grupo
     func createGrupo(_ grupo: GrupoModel) async throws {
         let record = CKRecord(recordType: "Grupo", recordID: grupo.id)
         record["nome"] = grupo.nome as CKRecordValue
         record["membros"] = grupo.membros as CKRecordValue
-        
-        let db = CKContainer.default().publicCloudDatabase
         
         do {
             try await db.save(record)
@@ -29,8 +32,6 @@ class PersistenceServices: ObservableObject {
     }
     
     func deleteGrupo(_ grupo: GrupoModel) async throws {
-        let db = CKContainer.default().publicCloudDatabase
-
         // Creates references and predicates for the group
         let gruporef = CKRecord.Reference(recordID: grupo.id, action: .none)
         let predicate = NSPredicate(format: "grupo == %@", gruporef)
@@ -78,9 +79,8 @@ class PersistenceServices: ObservableObject {
         return grupo
     }
 
-    // MARK: Group: members
+    // MARK: Grupo - Membros
     func addMember(to grupo: GrupoModel, usuario: UsuarioModel) async throws {
-        let db = CKContainer.default().publicCloudDatabase
         let record = try await db.record(for: grupo.id)
 
         var members = record["membros"] as? [CKRecord.Reference] ?? []
@@ -97,7 +97,6 @@ class PersistenceServices: ObservableObject {
     }
 
     func removeMember(from grupo: GrupoModel, usuario: UsuarioModel) async throws {
-        let db = CKContainer.default().publicCloudDatabase
         let record = try await db.record(for: grupo.id)
 
         var members = record["membros"] as? [CKRecord.Reference] ?? []
@@ -109,3 +108,14 @@ class PersistenceServices: ObservableObject {
         try await db.save(record)
     }
 }
+
+
+// MARK: CRUD: Desafio
+
+
+
+
+
+
+
+// MARK: CRUD: Tarefa

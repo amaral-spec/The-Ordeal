@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		02B557F83DFE2A142318BA27 /* Grupos.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1633F418EF547D02AF9177 /* Grupos.swift */; };
+		02B557F83DFE2A142318BA27 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1633F418EF547D02AF9177 /* Group.swift */; };
 		05E18D0541B464C2833FC442 /* ProfessorMainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45574DB161CF54674872153E /* ProfessorMainCoordinator.swift */; };
 		0838B1072C50E623B4EAEB5D /* PerfilCoordinatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADDB601B3FD9D293E7E5337 /* PerfilCoordinatorView.swift */; };
 		29DD2D4EB0A76F3C0CC5378B /* DesafiosCoordinatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D1EE2539B7EAF30F4966E3 /* DesafiosCoordinatorView.swift */; };
-		2F90EE494683479DC478813E /* Usuarios.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6216B338DAB9478F79AA74AC /* Usuarios.swift */; };
+		2F90EE494683479DC478813E /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6216B338DAB9478F79AA74AC /* User.swift */; };
 		302E5EE537B4689CCFF15B70 /* AppRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6234A545129AA889EC8E72 /* AppRootView.swift */; };
 		37CAF6D068888D8A245D9C42 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7729C85E372DB483811725D9 /* AuthViewModel.swift */; };
 		385825D62EC35E62004FC1C6 /* alunos.json in Resources */ = {isa = PBXBuildFile; fileRef = 385825D52EC35E62004FC1C6 /* alunos.json */; };
@@ -28,7 +28,7 @@
 		663EEA2813E0A672D22531EF /* OsVigaristasApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEBE88EFC5238B94DF38126C /* OsVigaristasApp.swift */; };
 		8660758061F317E86479D202 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1F8F76C342BE07C331470F /* LoginView.swift */; };
 		8BC0BDC42EC227A5009D7CE3 /* PersistenceServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC0BDC32EC227A1009D7CE3 /* PersistenceServices.swift */; };
-		9BE0C479F82BE68A2E7BB3B0 /* Desafio.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DA2CCE62269F80FFCED0A1 /* Desafio.swift */; };
+		9BE0C479F82BE68A2E7BB3B0 /* Challenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DA2CCE62269F80FFCED0A1 /* Challenge.swift */; };
 		B8409AF469A8ACEF7C1082D6 /* AuthCoordinatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89070C25CC012CF8EEDD7F1 /* AuthCoordinatorView.swift */; };
 		BA46058B07E9E367A31FC88E /* OnboardingCoordinatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08B799DF165AFDB84C5E3D4 /* OnboardingCoordinatorView.swift */; };
 		C1BE24B9B60B13717D6CF43D /* AlunosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519C050992A97DA65A042228 /* AlunosView.swift */; };
@@ -55,19 +55,19 @@
 		48ADD1DAC1A9446E84144341 /* TermosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermosView.swift; sourceTree = "<group>"; };
 		4C17123365D33E1A85A0C93E /* OsVigaristas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OsVigaristas.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		519C050992A97DA65A042228 /* AlunosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlunosView.swift; sourceTree = "<group>"; };
-		6216B338DAB9478F79AA74AC /* Usuarios.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Usuarios.swift; sourceTree = "<group>"; };
+		6216B338DAB9478F79AA74AC /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		72993A2267B69D23BA21D1A7 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		7729C85E372DB483811725D9 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		7A7402F132B893774E7CF954 /* Tarefas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tarefas.swift; sourceTree = "<group>"; };
 		85D8F3D2B2FC1A8FC8DBBBF6 /* OsVigaristas.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OsVigaristas.entitlements; sourceTree = "<group>"; };
 		8BC0BDC32EC227A1009D7CE3 /* PersistenceServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceServices.swift; sourceTree = "<group>"; };
 		A08B799DF165AFDB84C5E3D4 /* OnboardingCoordinatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCoordinatorView.swift; sourceTree = "<group>"; };
-		A0DA2CCE62269F80FFCED0A1 /* Desafio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Desafio.swift; sourceTree = "<group>"; };
+		A0DA2CCE62269F80FFCED0A1 /* Challenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Challenge.swift; sourceTree = "<group>"; };
 		B37169C5882B84647CD11061 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BA6234A545129AA889EC8E72 /* AppRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRootView.swift; sourceTree = "<group>"; };
 		BEBE88EFC5238B94DF38126C /* OsVigaristasApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsVigaristasApp.swift; sourceTree = "<group>"; };
 		C89070C25CC012CF8EEDD7F1 /* AuthCoordinatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthCoordinatorView.swift; sourceTree = "<group>"; };
-		CA1633F418EF547D02AF9177 /* Grupos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grupos.swift; sourceTree = "<group>"; };
+		CA1633F418EF547D02AF9177 /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
 		E8E4E9CCB3205B0DBA6135B0 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -195,9 +195,9 @@
 		BDFB47CC62CE04D596C0A2BE /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				6216B338DAB9478F79AA74AC /* Usuarios.swift */,
-				CA1633F418EF547D02AF9177 /* Grupos.swift */,
-				A0DA2CCE62269F80FFCED0A1 /* Desafio.swift */,
+				6216B338DAB9478F79AA74AC /* User.swift */,
+				CA1633F418EF547D02AF9177 /* Group.swift */,
+				A0DA2CCE62269F80FFCED0A1 /* Challenge.swift */,
 				7A7402F132B893774E7CF954 /* Tarefas.swift */,
 			);
 			path = Models;
@@ -311,9 +311,9 @@
 				385825DD2EC35ED3004FC1C6 /* DataService.swift in Sources */,
 				DC6A676212B9168BF38E4494 /* AuthService.swift in Sources */,
 				37CAF6D068888D8A245D9C42 /* AuthViewModel.swift in Sources */,
-				9BE0C479F82BE68A2E7BB3B0 /* Desafio.swift in Sources */,
+				9BE0C479F82BE68A2E7BB3B0 /* Challenge.swift in Sources */,
 				29DD2D4EB0A76F3C0CC5378B /* DesafiosCoordinatorView.swift in Sources */,
-				02B557F83DFE2A142318BA27 /* Grupos.swift in Sources */,
+				02B557F83DFE2A142318BA27 /* Group.swift in Sources */,
 				8660758061F317E86479D202 /* LoginView.swift in Sources */,
 				BA46058B07E9E367A31FC88E /* OnboardingCoordinatorView.swift in Sources */,
 				385825DF2EC36876004FC1C6 /* DetalheGrupoView.swift in Sources */,
@@ -326,7 +326,7 @@
 				D4F2DEA9519B9D407B0B5226 /* SignUpView.swift in Sources */,
 				DAC088554BC49DA689E941F6 /* Tarefas.swift in Sources */,
 				3A09BE3526D1F473BDC80CED /* TermosView.swift in Sources */,
-				2F90EE494683479DC478813E /* Usuarios.swift in Sources */,
+				2F90EE494683479DC478813E /* User.swift in Sources */,
 				385825E12EC37751004FC1C6 /* DataViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

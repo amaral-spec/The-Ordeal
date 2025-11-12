@@ -17,7 +17,7 @@ final class AuthService: NSObject, ObservableObject {
     // MARK: - Public properties
     @Published private(set) var isLoggedIn: Bool = false
     @Published private(set) var appleUserID: String = ""
-    @Published private(set) var currentUser: Usuarios = Usuarios(id: "")
+    @Published private(set) var currentUser: UserModel //= UserModel(id: "")
     
     // MARK: - Private properties
     private let userDefaults = UserDefaults.standard
@@ -44,17 +44,15 @@ final class AuthService: NSObject, ObservableObject {
     
     private func saveSession(for userId: String) {
         userDefaults.set(userId, forKey: "appleUserID")
-        userDefaults.set(currentUser.isProfessor, forKey: "user_\(userId)_isProfessor")
-        userDefaults.set(currentUser.nome, forKey: "user_\(userId)_nome")
-        userDefaults.set(currentUser.hasCompletedOnboarding, forKey: "user_\(userId)_hasCompletedOnboarding")
+        userDefaults.set(currentUser.isTeacher, forKey: "user_\(userId)_isTeacher")
+        userDefaults.set(currentUser.name, forKey: "user_\(userId)_name")
         userDefaults.set(true, forKey: "user_\(userId)_exists")
     }
     
     func logout() {
         userDefaults.removeObject(forKey: "appleUserID")
         appleUserID = ""
-        currentUser = Usuarios(id: "")
-        currentUser.hasCompletedOnboarding = false
+        currentUser = UserModel(id: "")
         isLoggedIn = false
     }
     
@@ -67,7 +65,7 @@ final class AuthService: NSObject, ObservableObject {
             }
             
             let userId = credential.user
-            let nome = credential.fullName?.givenName ?? "Usuário Apple"
+            let name = credential.fullName?.givenName ?? "Usuário Apple"
             let email = credential.email
             
             if isUserRegistered(userId: userId) {
@@ -76,17 +74,16 @@ final class AuthService: NSObject, ObservableObject {
                 isLoggedIn = true
                 
                 // Garante que também exista no CloudKit
-                await syncWithCloudKit(userId: userId, nome: currentUser.nome ?? "", email: email)
+                await syncWithCloudKit(userId: userId, name: currentUser.name ?? "", email: email)
                 return .existingUser
                 
             } else {
                 // Novo usuário
-                currentUser = Usuarios(id: "")
-                currentUser.hasCompletedOnboarding = false
+                currentUser = UserModel(id: "")
                 appleUserID = userId
                 
                 // Cria também no CloudKit
-                await syncWithCloudKit(userId: userId, nome: nome, email: email)
+                await syncWithCloudKit(userId: userId, name: name, email: email)
                 
                 return .newUser
             }
@@ -130,20 +127,18 @@ final class AuthService: NSObject, ObservableObject {
     }
     
     private func loadUser(userId: String) {
-        let isProfessor = userDefaults.bool(forKey: "user_\(userId)_isProfessor")
-        let nome = userDefaults.string(forKey: "user_\(userId)_nome") ?? "Usuário Apple"
-        let hasCompletedOnboarding = userDefaults.bool(forKey: "user_\(userId)_hasCompletedOnboarding")
+        let isTeacher = userDefaults.bool(forKey: "user_\(userId)_isTeacher")
+        let name = userDefaults.string(forKey: "user_\(userId)_name") ?? "Usuário Apple"
         
-        currentUser = Usuarios(id: userId,nome: nome, isProfessor: isProfessor)
-        currentUser.hasCompletedOnboarding = hasCompletedOnboarding
+        currentUser = UserModel(id: userId,name: name, isTeacher: isTeacher)
     }
     
     // MARK: - Registro
-    func makeRegistration(isProfessor: Bool, nome: String? = nil) {
+    func makeRegistration(isTeacher: Bool, name: String? = nil) {
         guard !appleUserID.isEmpty else { return }
         
-        currentUser.isProfessor = isProfessor
-        if let nome = nome { currentUser.nome = nome }
+        currentUser.isTeacher = isTeacher
+        if let name = name { currentUser.name = name }
     }
     
     func finishRegistration() {
@@ -153,30 +148,23 @@ final class AuthService: NSObject, ObservableObject {
         isLoggedIn = true
         
         Task {
-            await syncWithCloudKit(userId: appleUserID, nome: currentUser.nome ?? "", email: nil)
+            await syncWithCloudKit(userId: appleUserID, name: currentUser.name ?? "", email: nil)
         }
     }
     
-    func markOnboardingComplete() {
-        guard !appleUserID.isEmpty else { return }
-        currentUser.hasCompletedOnboarding = true
-        userDefaults.set(true, forKey: "user_\(appleUserID)_hasCompletedOnboarding")
-    }
-    
-    // MARK: - iCloud / SwiftData
-    private func syncWithCloudKit(userId: String, nome: String, email: String?) async {
+    private func syncWithCloudKit(userId: String, name: String, email: String?) async {
         guard let modelContext else {
             print("ModelContext não configurado. Chame configure(context:) antes de logar.")
             return
         }
         
-        let descriptor = FetchDescriptor<Usuarios>(predicate: #Predicate { $0.id == userId })
+        let descriptor = FetchDescriptor<UserModel>(predicate: #Predicate { $0.id == userId })
         
         do {
             let existing = try modelContext.fetch(descriptor)
             
             if existing.isEmpty {
-                let newUser = Usuarios(id: userId, nome: nome, email: email)
+                let newUser = UserModel(id: userId, name: name, email: email)
                 modelContext.insert(newUser)
                 try modelContext.save()
                 print("✅ Usuário salvo no iCloud (CloudKit).")

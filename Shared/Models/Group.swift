@@ -10,14 +10,14 @@ import CloudKit
 
 
 @MainActor
-final class GrupoModel: Identifiable {
+final class GroupModel: Identifiable {
     var id: CKRecord.ID
-    var nome: String
-    var membros: [CKRecord.Reference]
+    var name: String
+    var members: [CKRecord.Reference]
     
-    init(nome: String) {
+    init(name: String) {
         self.id = CKRecord.ID(recordName: UUID().uuidString)
-        self.nome = nome
-        self.membros = []
+        self.name = name
+        self.members = []
     }
 }
