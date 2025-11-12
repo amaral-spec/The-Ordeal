@@ -24,7 +24,6 @@ struct AlunosView: View {
     @State private var criarGrupo = false
     
     //mock com os jsons
-    @EnvironmentObject var dataVM: DataViewModel
     
     var body: some View {
         NavigationStack {
@@ -63,23 +62,24 @@ struct AlunosView: View {
                     } else {
                         ScrollView {
                             LazyVGrid(columns: columns, spacing: 10) {
-                                ForEach(dataVM.alunos) { aluno in
-                                    VStack {
-                                        Image(aluno.foto)
-                                            .resizable()
-                                            .scaledToFill()
-                                            .frame(width: 90, height: 90)
-                                            .clipShape(Circle())
-                                        
-                                        Text(aluno.nome)
-                                            .font(.caption)
-                                            .foregroundColor(.primary)
-                                    }
-                                    .padding(6)
-                                    .background(.white)
-                                    .cornerRadius(10)
-                                    .shadow(radius: 1)
-                                }
+                                // MARK: - Puxar do CloudKit
+//                                ForEach([]) { aluno in
+//                                    VStack {
+//                                        Image(aluno.foto)
+//                                            .resizable()
+//                                            .scaledToFill()
+//                                            .frame(width: 90, height: 90)
+//                                            .clipShape(Circle())
+//                                        
+//                                        Text(aluno.nome)
+//                                            .font(.caption)
+//                                            .foregroundColor(.primary)
+//                                    }
+//                                    .padding(6)
+//                                    .background(.white)
+//                                    .cornerRadius(10)
+//                                    .shadow(radius: 1)
+//                                }
                             }
                         }
                         .padding()
@@ -111,34 +111,35 @@ struct AlunosView: View {
                     } else {
                         ScrollView {
                             VStack(spacing: 10) {
-                                ForEach(dataVM.grupos) { grupo in
-                                    NavigationLink(destination: DetalheGrupoView(grupo: grupo)) {
-                                        HStack {
-                                            Image(grupo.foto)
-                                                .resizable()
-                                                .scaledToFill()
-                                                .frame(width: 60, height: 60)
-                                                .clipShape(RoundedRectangle(cornerRadius: 10))
-                                            
-                                            VStack(alignment: .leading) {
-                                                Text(grupo.nome)
-                                                    .font(.headline)
-                                                
-                                                Text("\(grupo.quantidadeAlunos) alunos")
-                                                    .font(.subheadline)
-                                                    .foregroundColor(.secondary)
-                                            }
-                                            
-                                            Spacer()
-                                        }
-                                        .padding()
-                                        .background(.white)
-                                        .cornerRadius(12)
-                                        .shadow(color: .black.opacity(0.08), radius: 4, x: 0, y: 2)
-                                    }
-                                    .buttonStyle(.plain) // <-- opcional, remove highlight azul
-                                    
-                                }
+                                // MARK: - Puxar do CloudKit
+//                                ForEach(dataVM.grupos) { grupo in
+//                                    NavigationLink(destination: DetalheGrupoView(grupo: grupo)) {
+//                                        HStack {
+//                                            Image(grupo.foto)
+//                                                .resizable()
+//                                                .scaledToFill()
+//                                                .frame(width: 60, height: 60)
+//                                                .clipShape(RoundedRectangle(cornerRadius: 10))
+//                                            
+//                                            VStack(alignment: .leading) {
+//                                                Text(grupo.nome)
+//                                                    .font(.headline)
+//                                                
+//                                                Text("\(grupo.quantidadeAlunos) alunos")
+//                                                    .font(.subheadline)
+//                                                    .foregroundColor(.secondary)
+//                                            }
+//                                            
+//                                            Spacer()
+//                                        }
+//                                        .padding()
+//                                        .background(.white)
+//                                        .cornerRadius(12)
+//                                        .shadow(color: .black.opacity(0.08), radius: 4, x: 0, y: 2)
+//                                    }
+//                                    .buttonStyle(.plain) // <-- opcional, remove highlight azul
+//                                    
+//                                }
                             }
                             .padding()
                         }

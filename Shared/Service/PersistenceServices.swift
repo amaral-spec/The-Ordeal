@@ -18,10 +18,10 @@ class PersistenceServices: ObservableObject {
     
     
 // MARK: CRUD: Grupo
-    func createGrupo(_ grupo: GrupoModel) async throws {
+    func createGrupo(_ grupo: GroupModel) async throws {
         let record = CKRecord(recordType: "Grupo", recordID: grupo.id)
-        record["nome"] = grupo.nome as CKRecordValue
-        record["membros"] = grupo.membros as CKRecordValue
+        record["name"] = grupo.name as CKRecordValue
+        record["members"] = grupo.members as CKRecordValue
         
         do {
             try await db.save(record)
@@ -31,7 +31,7 @@ class PersistenceServices: ObservableObject {
         }
     }
     
-    func deleteGrupo(_ grupo: GrupoModel) async throws {
+    func deleteGrupo(_ grupo: GroupModel) async throws {
         // Creates references and predicates for the group
         let gruporef = CKRecord.Reference(recordID: grupo.id, action: .none)
         let predicate = NSPredicate(format: "grupo == %@", gruporef)
@@ -65,44 +65,44 @@ class PersistenceServices: ObservableObject {
         print("Group deleted successfully: \(grupo.id.recordName)")
     }
 
-    func fetchGrupo(recordID: CKRecord.ID) async throws -> GrupoModel {
+    func fetchGrupo(recordID: CKRecord.ID) async throws -> GroupModel {
         let record = try await CKContainer.default().publicCloudDatabase.record(for: recordID)
 
-        let nome = record["nome"] as? String ?? ""
+        let name = record["name"] as? String ?? ""
         let descricao = record["descricao"] as? String ?? ""
         let qtdAlunos = record["qtdAlunos"] as? Int ?? 0
-        let refs = record["membros"] as? [CKRecord.Reference] ?? []
+        let refs = record["members"] as? [CKRecord.Reference] ?? []
 
-        let grupo = GrupoModel(nome: nome)
+        let grupo = GroupModel(name: name)
         grupo.id = record.recordID
-        grupo.membros = refs
+        grupo.members = refs
         return grupo
     }
 
-    // MARK: Grupo - Membros
-    func addMember(to grupo: GrupoModel, usuario: UsuarioModel) async throws {
+    // MARK: Grupo - members
+    func addMember(to grupo: GroupModel, usuario: UserModel) async throws {
         let record = try await db.record(for: grupo.id)
 
-        var members = record["membros"] as? [CKRecord.Reference] ?? []
+        var members = record["members"] as? [CKRecord.Reference] ?? []
         let newRef = CKRecord.Reference(recordID: usuario.id, action: .none)
 
         // Avoid duplicates
         if !members.contains(where: { $0.recordID == newRef.recordID }) {
             members.append(newRef)
-            record["membros"] = members
+            record["members"] = members
             record["qtdAlunos"] = members.count
 
             try await db.save(record)
         }
     }
 
-    func removeMember(from grupo: GrupoModel, usuario: UsuarioModel) async throws {
+    func removeMember(from grupo: GroupModel, usuario: UserModel) async throws {
         let record = try await db.record(for: grupo.id)
 
-        var members = record["membros"] as? [CKRecord.Reference] ?? []
+        var members = record["members"] as? [CKRecord.Reference] ?? []
         members.removeAll { $0.recordID == usuario.id }
 
-        record["membros"] = members
+        record["members"] = members
         record["qtdAlunos"] = members.count
 
         try await db.save(record)

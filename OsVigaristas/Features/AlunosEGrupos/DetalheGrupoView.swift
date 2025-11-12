@@ -8,24 +8,24 @@
 import SwiftUI
 
 struct DetalheGrupoView: View {
-    let grupo: Grupo
+    let grupo: GroupModel
     
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
                 
-                Image(grupo.foto)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 140, height: 140)
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
-                    .shadow(radius: 5)
+//                Image(uiImage: (grupo.image ?? UIImage(systemName: "waveform"))
+//                    .resizable()
+//                    .scaledToFill()
+//                    .frame(width: 140, height: 140)
+//                    .clipShape(RoundedRectangle(cornerRadius: 20))
+//                    .shadow(radius: 5)
                 
-                Text(grupo.nome)
+                Text(grupo.name)
                     .font(.largeTitle)
                     .fontWeight(.bold)
                 
-                Text("\(grupo.quantidadeAlunos) alunos no grupo")
+                Text("\(grupo.members.count) alunos no grupo")
                     .font(.headline)
                     .foregroundStyle(.secondary)
                 

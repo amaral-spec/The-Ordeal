@@ -16,7 +16,7 @@ class DataViewModel: ObservableObject {
     }
     
     func loadData() {
-        alunos = DataService.load("alunos")
-        grupos = DataService.load("grupos")
+//        alunos = DataService.load("alunos")
+//        grupos = DataService.load("grupos")
     }
 }

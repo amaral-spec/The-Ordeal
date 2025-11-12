@@ -10,7 +10,7 @@ import SwiftUI
 struct DesafiosCoordinatorView: View {
     enum Route: Hashable {
         case list
-        case detalhe(Desafio)
+//        case detalhe(ChallengeModel)
     }
 
     @State private var path = [Route]()
