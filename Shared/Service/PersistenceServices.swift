@@ -13,27 +13,6 @@ class PersistenceServices: ObservableObject {
     let db = CKContainer.default().publicCloudDatabase
     
     // MARK: CRUD: Usuarios
-    func editUser(recordID: CKRecord.ID, newName: String, newEmail: String, isTeacher: Bool) async throws {
-        let record = try await db.record(for: recordID)
-        
-        record["name"] = newName as CKRecordValue
-        record["email"] = newEmail as CKRecordValue
-        record["isTeacher"] = isTeacher as CKRecordValue
-        
-        do {
-            try await db.save(record)
-            print("User edited successfully")
-        } catch {
-            print("Failed to update user")
-            throw error
-        }
-    }
-    
-    func deleteUser(_ usuario: UserModel) async throws {
-        try await db.deleteRecord(withID: usuario.id)
-        print("User deleted successfully: \(usuario.id.recordName)")
-    }
-    
     func fetchUser(recordID: CKRecord.ID) async throws -> UserModel {
         let record = try await db.record(for: recordID)
         
@@ -58,6 +37,26 @@ class PersistenceServices: ObservableObject {
         return usuario
     }
     
+    func editUser(recordID: CKRecord.ID, newName: String, newEmail: String, isTeacher: Bool) async throws {
+        let record = try await db.record(for: recordID)
+        
+        record["name"] = newName as CKRecordValue
+        record["email"] = newEmail as CKRecordValue
+        record["isTeacher"] = isTeacher as CKRecordValue
+        
+        do {
+            try await db.save(record)
+            print("User edited successfully")
+        } catch {
+            print("Failed to update user")
+            throw error
+        }
+    }
+    
+    func deleteUser(_ usuario: UserModel) async throws {
+        try await db.deleteRecord(withID: usuario.id)
+        print("User deleted successfully: \(usuario.id.recordName)")
+    }
     
     // MARK: CRUD: Grupo
     func createGroup(_ grupo: GroupModel) async throws {
@@ -70,6 +69,38 @@ class PersistenceServices: ObservableObject {
             print("Group created successfully: \(grupo.id)")
         } catch {
             print("Failed to create group: \(error.localizedDescription)")
+        }
+    }
+    
+    func fetchGroup(recordID: CKRecord.ID) async throws -> GroupModel {
+        let record = try await db.record(for: recordID)
+        
+        let name = record["name"] as? String ?? ""
+        let refs = record["members"] as? [CKRecord.Reference] ?? []
+        
+        let grupo = GroupModel(name: name)
+        grupo.id = record.recordID
+        grupo.members = refs
+        return grupo
+    }
+    
+    func editGroup(recordID: CKRecord.ID, newName: String, newDescricao: String, newQtdAlunos: Int, newMembers: [CKRecord.Reference]) async throws {
+        // Note to development team: when implementing this function, you first need
+        // to call fetchGrupo to populate the fields, and then pass this function
+        
+        let record = try await db.record(for: recordID)
+        
+        record["name"] = newName as CKRecordValue
+        record["descricao"] = newDescricao as CKRecordValue
+        record["qtdAlunos"] = newQtdAlunos as CKRecordValue
+        record["members"] = newMembers as CKRecordValue
+        
+        do {
+            try await db.save(record)
+            print("Grupo editado com sucesso")
+        } catch {
+            print("Falha ao editar grupo")
+            throw error
         }
     }
     
@@ -107,38 +138,6 @@ class PersistenceServices: ObservableObject {
         print("Group deleted successfully: \(grupo.id.recordName)")
     }
     
-    func editGroup(recordID: CKRecord.ID, newName: String, newDescricao: String, newQtdAlunos: Int, newMembers: [CKRecord.Reference]) async throws {
-        // Note to development team: when implementing this function, you first need
-        // to call fetchGrupo to populate the fields, and then pass this function
-        
-        let record = try await db.record(for: recordID)
-        
-        record["name"] = newName as CKRecordValue
-        record["descricao"] = newDescricao as CKRecordValue
-        record["qtdAlunos"] = newQtdAlunos as CKRecordValue
-        record["members"] = newMembers as CKRecordValue
-        
-        do {
-            try await db.save(record)
-            print("Grupo editado com sucesso")
-        } catch {
-            print("Falha ao editar grupo")
-            throw error
-        }
-    }
-    
-    func fetchGroup(recordID: CKRecord.ID) async throws -> GroupModel {
-        let record = try await db.record(for: recordID)
-        
-        let name = record["name"] as? String ?? ""
-        let refs = record["members"] as? [CKRecord.Reference] ?? []
-        
-        let grupo = GroupModel(name: name)
-        grupo.id = record.recordID
-        grupo.members = refs
-        return grupo
-    }
-    
     // MARK: Grupo - members
     func addMember(to grupo: GroupModel, usuario: UserModel) async throws {
         let record = try await db.record(for: grupo.id)
@@ -169,7 +168,6 @@ class PersistenceServices: ObservableObject {
     }
     
     
-    
     // MARK: CRUD: Desafio
     func createChallenge(_ challenge: ChallengeModel) async throws {
         let record = CKRecord(recordType: "Challenge", recordID: challenge.id)
@@ -192,15 +190,76 @@ class PersistenceServices: ObservableObject {
         }
     }
     
+    // Fetching challenges from teacher's view screen
+    func fetchAllChallenges(for userRecordID: CKRecord.ID) async throws -> [ChallengeModel] {
+        // Finding all groups the user belongs to
+        let userRef = CKRecord.Reference(recordID: userRecordID, action: .none)
+        let groupPredicate = NSPredicate(format: "members CONTAINS %@", userRef)
+        let groupQuery = CKQuery(recordType: "Grupo", predicate: groupPredicate)
+
+        let (groupResults, _) = try await db.records(matching: groupQuery)
+        let groupRecords = groupResults.compactMap { try? $0.1.get() }
+
+        // Extracting group references to use in challenge query
+        let groupRefs = groupRecords.map { CKRecord.Reference(recordID: $0.recordID, action: .none) }
+
+        // Fetching challenges for those groups
+        var allChallenges: [ChallengeModel] = []
+
+        for groupRef in groupRefs {
+            let challengePredicate = NSPredicate(format: "group == %@", groupRef)
+            let challengeQuery = CKQuery(recordType: "Challenge", predicate: challengePredicate)
+
+            let (challengeResults, _) = try await db.records(matching: challengeQuery)
+            let challengeRecords = challengeResults.compactMap { try? $0.1.get() }
+
+            // Convert each CKRecord into a ChallengeModel
+            let challenges = challengeRecords.map { ChallengeModel(from: $0) }
+            allChallenges.append(contentsOf: challenges)
+        }
+
+        return allChallenges.sorted { $0.endDate > $1.endDate }
+    }
     
+    // Fetching a single challenge from recordID
+    func fetchChallenge(recordID: CKRecord.ID) async throws -> ChallengeModel {
+        let record = try await db.record(for: recordID)
+        return ChallengeModel(from: record)
+    }
     
-    
-    
+    func editChallenge(recordID: CKRecord.ID, newTitle: String, newDescription: String, newReward: Int, newStartDate: Date, newEndDate: Date) async throws {
+        // Note to development team: when implementing this function, you first need
+        // to call fetchChallenge to populate the fields, and then pass this function
+        let record = try await db.record(for: recordID)
+        
+        record["title"] = newTitle as CKRecordValue
+        record["descricao"] = newDescription as CKRecordValue
+        record["recompensa"] = newReward as CKRecordValue
+        record["dataInicio"] = newStartDate as CKRecordValue
+        record["dataFim"] = newEndDate as CKRecordValue
+        
+        do {
+            try await db.save(record)
+            print("Challenge editado com sucesso")
+        } catch {
+            print("Falha ao editar challenge")
+            throw error
+        }
+    }
+
+    func deleteChallenge(_ challenge: ChallengeModel) async throws {
+        try await db.deleteRecord(withID: challenge.id)
+        print("Challenge deleted successfully: \(challenge.title)")
+    }
     
     // MARK: CRUD: Tarefa
     
     
     
+    
+    
+    
+    // MARK: Auxiliary functions
     func fetchLatestTask(for userRecordID: CKRecord.ID, in db: CKDatabase) async throws -> TaskModel? {
         let predicate = NSPredicate(format: "student == %@", CKRecord.Reference(recordID: userRecordID, action: .none))
         let taskQuery = CKQuery(recordType: "Task", predicate: predicate)
@@ -231,7 +290,7 @@ class PersistenceServices: ObservableObject {
             return nil
         }
         
-        return await TaskModel(
+        return TaskModel(
             title: latestRecord["title"] as? String ?? "",
             description: latestRecord["description"] as? String ?? "",
             student: latestRecord["student"] as! CKRecord.Reference,
@@ -239,7 +298,4 @@ class PersistenceServices: ObservableObject {
             endDate: latestRecord["endDate"] as? Date ?? Date()
         )
     }
-    
-    
-    
 }
