@@ -20,9 +20,7 @@ struct AppRootView: View {
         Group {
             if !authService.isLoggedIn {
                 AuthCoordinatorView()   // fluxo de login/cadastro
-            } else if (!(authService.currentUser.hasCompletedOnboarding)) {
-                OnboardingCoordinatorView()
-            } else if (authService.currentUser.isProfessor) {
+            } else if (authService.currentUser!.isTeacher) {
                 ProfessorMainCoordinatorView()
             } else {
                 AlunoMainCoordinatorView()
