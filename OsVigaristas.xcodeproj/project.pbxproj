@@ -7,73 +7,73 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		02B557F83DFE2A142318BA27 /* Grupos.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1633F418EF547D02AF9177 /* Grupos.swift */; };
 		05E18D0541B464C2833FC442 /* ProfessorMainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45574DB161CF54674872153E /* ProfessorMainCoordinator.swift */; };
 		0838B1072C50E623B4EAEB5D /* PerfilCoordinatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADDB601B3FD9D293E7E5337 /* PerfilCoordinatorView.swift */; };
 		29DD2D4EB0A76F3C0CC5378B /* DesafiosCoordinatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D1EE2539B7EAF30F4966E3 /* DesafiosCoordinatorView.swift */; };
-		2F90EE494683479DC478813E /* Usuarios.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6216B338DAB9478F79AA74AC /* Usuarios.swift */; };
+		2C2B346CE6FF3551DB71BEDD /* CriarGrupoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2113984C9A1DBB0ED4F865F4 /* CriarGrupoView.swift */; };
 		302E5EE537B4689CCFF15B70 /* AppRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6234A545129AA889EC8E72 /* AppRootView.swift */; };
 		37CAF6D068888D8A245D9C42 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7729C85E372DB483811725D9 /* AuthViewModel.swift */; };
-		3897D9B32EC4B4B600A922EF /* DetalhesTarefasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3897D9B22EC4B4B600A922EF /* DetalhesTarefasView.swift */; };
-		3897D9B62EC4B4DB00A922EF /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3897D9B42EC4B4DB00A922EF /* Card.swift */; };
 		3A09BE3526D1F473BDC80CED /* TermosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ADD1DAC1A9446E84144341 /* TermosView.swift */; };
+		48FCEBF409AD323557D5AB76 /* Challenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9135DECAB3AE7DFB2493B59A /* Challenge.swift */; };
+		53711492586EFCA56C9DCFD4 /* CriarTarefaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AE37418276AF973BEAD028 /* CriarTarefaView.swift */; };
+		55A63393BCC2AA668D2BF729 /* DetalheGrupoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AFD8807FB7B902D39E210 /* DetalheGrupoView.swift */; };
 		59EFE0D141C8DEF0D26DD18F /* AlunoMainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0716B42A88667CB4E245A8AB /* AlunoMainCoordinator.swift */; };
 		655060229DEB9782E50C25FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B37169C5882B84647CD11061 /* Assets.xcassets */; };
 		663EEA2813E0A672D22531EF /* OsVigaristasApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEBE88EFC5238B94DF38126C /* OsVigaristasApp.swift */; };
+		80C7C15FCAFE71A768B9C6AC /* CriarDesafioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9585E57024555B72D7D65BD2 /* CriarDesafioView.swift */; };
 		8660758061F317E86479D202 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1F8F76C342BE07C331470F /* LoginView.swift */; };
-		9BE0C479F82BE68A2E7BB3B0 /* Desafio.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DA2CCE62269F80FFCED0A1 /* Desafio.swift */; };
+		88495354DB8A991028531769 /* DetalhesTarefasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9B763F0E243A0323B8807B /* DetalhesTarefasView.swift */; };
+		8E3A195313585CE9626E0060 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842FD508C83F3AF28D4A7395 /* Card.swift */; };
+		8FD891DA1F43C155D3FFD744 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = C989C426F5ED3A1C7FF4E832 /* Group.swift */; };
+		90C9701DA4A19111102CF602 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE12C21B52305A0A8472A83 /* User.swift */; };
+		AD3C485639C5A0027554920A /* AlunosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F8BAAAF553C0E39AA5EFC1 /* AlunosView.swift */; };
 		B8409AF469A8ACEF7C1082D6 /* AuthCoordinatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89070C25CC012CF8EEDD7F1 /* AuthCoordinatorView.swift */; };
 		BA46058B07E9E367A31FC88E /* OnboardingCoordinatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08B799DF165AFDB84C5E3D4 /* OnboardingCoordinatorView.swift */; };
-		C1BE24B9B60B13717D6CF43D /* AlunosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519C050992A97DA65A042228 /* AlunosView.swift */; };
 		D4F2DEA9519B9D407B0B5226 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E4E9CCB3205B0DBA6135B0 /* SignUpView.swift */; };
 		DAC088554BC49DA689E941F6 /* Tarefas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7402F132B893774E7CF954 /* Tarefas.swift */; };
 		DC6A676212B9168BF38E4494 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72993A2267B69D23BA21D1A7 /* AuthService.swift */; };
-		E59760E82EC22B9000CFE783 /* CriarDesafioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59760E72EC22B9000CFE783 /* CriarDesafioView.swift */; };
-		E59760EA2EC22FF100CFE783 /* CriarTarefaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59760E92EC22FF100CFE783 /* CriarTarefaView.swift */; };
+		E6DA55DF0EB632930CDB1882 /* PersistenceServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C02039F298E97F99831B42 /* PersistenceServices.swift */; };
+		FBE5433E88E6F6418E89AC7D /* BuscarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56AF3EAE0551450C3DB2E877 /* BuscarView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0716B42A88667CB4E245A8AB /* AlunoMainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlunoMainCoordinator.swift; sourceTree = "<group>"; };
+		09F8BAAAF553C0E39AA5EFC1 /* AlunosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlunosView.swift; sourceTree = "<group>"; };
 		0C1F8F76C342BE07C331470F /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		14D1EE2539B7EAF30F4966E3 /* DesafiosCoordinatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesafiosCoordinatorView.swift; sourceTree = "<group>"; };
 		1ADDB601B3FD9D293E7E5337 /* PerfilCoordinatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerfilCoordinatorView.swift; sourceTree = "<group>"; };
+		2113984C9A1DBB0ED4F865F4 /* CriarGrupoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CriarGrupoView.swift; sourceTree = "<group>"; };
 		2FBDF60CBE2F8E8DB6DF3B54 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		3897D9B22EC4B4B600A922EF /* DetalhesTarefasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetalhesTarefasView.swift; sourceTree = "<group>"; };
-		3897D9B42EC4B4DB00A922EF /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		3F9B763F0E243A0323B8807B /* DetalhesTarefasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetalhesTarefasView.swift; sourceTree = "<group>"; };
 		45574DB161CF54674872153E /* ProfessorMainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfessorMainCoordinator.swift; sourceTree = "<group>"; };
 		48ADD1DAC1A9446E84144341 /* TermosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermosView.swift; sourceTree = "<group>"; };
 		4C17123365D33E1A85A0C93E /* OsVigaristas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OsVigaristas.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		519C050992A97DA65A042228 /* AlunosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlunosView.swift; sourceTree = "<group>"; };
-		6216B338DAB9478F79AA74AC /* Usuarios.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Usuarios.swift; sourceTree = "<group>"; };
+		56AF3EAE0551450C3DB2E877 /* BuscarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuscarView.swift; sourceTree = "<group>"; };
+		69AE37418276AF973BEAD028 /* CriarTarefaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CriarTarefaView.swift; sourceTree = "<group>"; };
+		6EE12C21B52305A0A8472A83 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		72993A2267B69D23BA21D1A7 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		7729C85E372DB483811725D9 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		7A7402F132B893774E7CF954 /* Tarefas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tarefas.swift; sourceTree = "<group>"; };
+		842FD508C83F3AF28D4A7395 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		85D8F3D2B2FC1A8FC8DBBBF6 /* OsVigaristas.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OsVigaristas.entitlements; sourceTree = "<group>"; };
+		9135DECAB3AE7DFB2493B59A /* Challenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Challenge.swift; sourceTree = "<group>"; };
+		9585E57024555B72D7D65BD2 /* CriarDesafioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CriarDesafioView.swift; sourceTree = "<group>"; };
 		A08B799DF165AFDB84C5E3D4 /* OnboardingCoordinatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCoordinatorView.swift; sourceTree = "<group>"; };
-		A0DA2CCE62269F80FFCED0A1 /* Desafio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Desafio.swift; sourceTree = "<group>"; };
+		A8C02039F298E97F99831B42 /* PersistenceServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceServices.swift; sourceTree = "<group>"; };
 		B37169C5882B84647CD11061 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BA6234A545129AA889EC8E72 /* AppRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRootView.swift; sourceTree = "<group>"; };
 		BEBE88EFC5238B94DF38126C /* OsVigaristasApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsVigaristasApp.swift; sourceTree = "<group>"; };
 		C89070C25CC012CF8EEDD7F1 /* AuthCoordinatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthCoordinatorView.swift; sourceTree = "<group>"; };
-		CA1633F418EF547D02AF9177 /* Grupos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grupos.swift; sourceTree = "<group>"; };
-		E59760E72EC22B9000CFE783 /* CriarDesafioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CriarDesafioView.swift; sourceTree = "<group>"; };
-		E59760E92EC22FF100CFE783 /* CriarTarefaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CriarTarefaView.swift; sourceTree = "<group>"; };
+		C989C426F5ED3A1C7FF4E832 /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
+		D20AFD8807FB7B902D39E210 /* DetalheGrupoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetalheGrupoView.swift; sourceTree = "<group>"; };
 		E8E4E9CCB3205B0DBA6135B0 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
-		01FCA93B473DA2BFB267D8D9 /* Alunos */ = {
-			isa = PBXGroup;
-			children = (
-				519C050992A97DA65A042228 /* AlunosView.swift */,
-			);
-			path = Alunos;
-			sourceTree = "<group>";
-		};
 		0708AA5402F3FC549129DE11 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				3897D9B52EC4B4DB00A922EF /* Components */,
+				40988DC6FDF8F4D3787A2DA9 /* Components */,
 				BDFB47CC62CE04D596C0A2BE /* Models */,
 				4F1EACEEA26F88007C6C6E0F /* Service */,
 			);
@@ -92,10 +92,18 @@
 			path = Auth;
 			sourceTree = "<group>";
 		};
-		3897D9B52EC4B4DB00A922EF /* Components */ = {
+		29E2BDB952424D84E753DB61 /* Buscar */ = {
 			isa = PBXGroup;
 			children = (
-				3897D9B42EC4B4DB00A922EF /* Card.swift */,
+				56AF3EAE0551450C3DB2E877 /* BuscarView.swift */,
+			);
+			path = Buscar;
+			sourceTree = "<group>";
+		};
+		40988DC6FDF8F4D3787A2DA9 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				842FD508C83F3AF28D4A7395 /* Card.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -103,8 +111,9 @@
 		49E2E19F605F717FC24CDC8C /* Features */ = {
 			isa = PBXGroup;
 			children = (
-				01FCA93B473DA2BFB267D8D9 /* Alunos */,
+				E4C2BABF7CF5E0BD64094C7C /* AlunosEGrupos */,
 				0FA051F5F75FC9F8B2ED00BA /* Auth */,
+				29E2BDB952424D84E753DB61 /* Buscar */,
 				DE8651DFD189648CC80D7DCF /* DesafiosTarefas */,
 				86FB7DE9B55BBEAC3D9C0788 /* Main */,
 				D38277B7030D8A60D9840F15 /* Onboarding */,
@@ -117,6 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				72993A2267B69D23BA21D1A7 /* AuthService.swift */,
+				A8C02039F298E97F99831B42 /* PersistenceServices.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -161,10 +171,10 @@
 		BDFB47CC62CE04D596C0A2BE /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				A0DA2CCE62269F80FFCED0A1 /* Desafio.swift */,
-				CA1633F418EF547D02AF9177 /* Grupos.swift */,
+				9135DECAB3AE7DFB2493B59A /* Challenge.swift */,
+				C989C426F5ED3A1C7FF4E832 /* Group.swift */,
 				7A7402F132B893774E7CF954 /* Tarefas.swift */,
-				6216B338DAB9478F79AA74AC /* Usuarios.swift */,
+				6EE12C21B52305A0A8472A83 /* User.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -180,12 +190,22 @@
 		DE8651DFD189648CC80D7DCF /* DesafiosTarefas */ = {
 			isa = PBXGroup;
 			children = (
+				9585E57024555B72D7D65BD2 /* CriarDesafioView.swift */,
+				69AE37418276AF973BEAD028 /* CriarTarefaView.swift */,
 				14D1EE2539B7EAF30F4966E3 /* DesafiosCoordinatorView.swift */,
-				E59760E72EC22B9000CFE783 /* CriarDesafioView.swift */,
-				E59760E92EC22FF100CFE783 /* CriarTarefaView.swift */,
-				3897D9B22EC4B4B600A922EF /* DetalhesTarefasView.swift */,
+				3F9B763F0E243A0323B8807B /* DetalhesTarefasView.swift */,
 			);
 			path = DesafiosTarefas;
+			sourceTree = "<group>";
+		};
+		E4C2BABF7CF5E0BD64094C7C /* AlunosEGrupos */ = {
+			isa = PBXGroup;
+			children = (
+				09F8BAAAF553C0E39AA5EFC1 /* AlunosView.swift */,
+				2113984C9A1DBB0ED4F865F4 /* CriarGrupoView.swift */,
+				D20AFD8807FB7B902D39E210 /* DetalheGrupoView.swift */,
+			);
+			path = AlunosEGrupos;
 			sourceTree = "<group>";
 		};
 		F1595681BE2E315865643C7E /* Application */ = {
@@ -271,27 +291,31 @@
 			buildActionMask = 2147483647;
 			files = (
 				59EFE0D141C8DEF0D26DD18F /* AlunoMainCoordinator.swift in Sources */,
-				C1BE24B9B60B13717D6CF43D /* AlunosView.swift in Sources */,
-				E59760E82EC22B9000CFE783 /* CriarDesafioView.swift in Sources */,
+				AD3C485639C5A0027554920A /* AlunosView.swift in Sources */,
 				302E5EE537B4689CCFF15B70 /* AppRootView.swift in Sources */,
 				B8409AF469A8ACEF7C1082D6 /* AuthCoordinatorView.swift in Sources */,
 				DC6A676212B9168BF38E4494 /* AuthService.swift in Sources */,
-				3897D9B32EC4B4B600A922EF /* DetalhesTarefasView.swift in Sources */,
 				37CAF6D068888D8A245D9C42 /* AuthViewModel.swift in Sources */,
-				9BE0C479F82BE68A2E7BB3B0 /* Desafio.swift in Sources */,
+				FBE5433E88E6F6418E89AC7D /* BuscarView.swift in Sources */,
+				8E3A195313585CE9626E0060 /* Card.swift in Sources */,
+				48FCEBF409AD323557D5AB76 /* Challenge.swift in Sources */,
+				80C7C15FCAFE71A768B9C6AC /* CriarDesafioView.swift in Sources */,
+				2C2B346CE6FF3551DB71BEDD /* CriarGrupoView.swift in Sources */,
+				53711492586EFCA56C9DCFD4 /* CriarTarefaView.swift in Sources */,
 				29DD2D4EB0A76F3C0CC5378B /* DesafiosCoordinatorView.swift in Sources */,
-				02B557F83DFE2A142318BA27 /* Grupos.swift in Sources */,
+				55A63393BCC2AA668D2BF729 /* DetalheGrupoView.swift in Sources */,
+				88495354DB8A991028531769 /* DetalhesTarefasView.swift in Sources */,
+				8FD891DA1F43C155D3FFD744 /* Group.swift in Sources */,
 				8660758061F317E86479D202 /* LoginView.swift in Sources */,
 				BA46058B07E9E367A31FC88E /* OnboardingCoordinatorView.swift in Sources */,
-				E59760EA2EC22FF100CFE783 /* CriarTarefaView.swift in Sources */,
 				663EEA2813E0A672D22531EF /* OsVigaristasApp.swift in Sources */,
 				0838B1072C50E623B4EAEB5D /* PerfilCoordinatorView.swift in Sources */,
+				E6DA55DF0EB632930CDB1882 /* PersistenceServices.swift in Sources */,
 				05E18D0541B464C2833FC442 /* ProfessorMainCoordinator.swift in Sources */,
 				D4F2DEA9519B9D407B0B5226 /* SignUpView.swift in Sources */,
 				DAC088554BC49DA689E941F6 /* Tarefas.swift in Sources */,
 				3A09BE3526D1F473BDC80CED /* TermosView.swift in Sources */,
-				2F90EE494683479DC478813E /* Usuarios.swift in Sources */,
-				3897D9B62EC4B4DB00A922EF /* Card.swift in Sources */,
+				90C9701DA4A19111102CF602 /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -306,19 +330,18 @@
 				CODE_SIGN_ENTITLEMENTS = OsVigaristas/OsVigaristas.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = TUC4R5H9Y8;
+				DEVELOPMENT_TEAM = J6WURQU382;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = OsVigaristas/Info.plist;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFO_PLIST_FILE = OsVigaristas/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = Erika.OsVigaristas;
+				PRODUCT_BUNDLE_IDENTIFIER = eumesmo.OsVigaristas;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -395,19 +418,18 @@
 				CODE_SIGN_ENTITLEMENTS = OsVigaristas/OsVigaristas.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = TUC4R5H9Y8;
+				DEVELOPMENT_TEAM = J6WURQU382;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = OsVigaristas/Info.plist;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFO_PLIST_FILE = OsVigaristas/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = Erika.OsVigaristas;
+				PRODUCT_BUNDLE_IDENTIFIER = eumesmo.OsVigaristas;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
