@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct DetalhesTarefasView: View {
+    @Environment(\.dismiss) var dismiss
+    
     var body: some View {
         NavigationStack {
             VStack {
@@ -78,18 +80,18 @@ struct DetalhesTarefasView: View {
                     }
                 }
                 
-//                NavigationLink(destination: ResultadosAlunosView()) {
-                    HStack {
-                        Text("Resultado dos Alunos")
-                            .font(.title2)
-                            .bold()
-                        Image(systemName: "chevron.right")
-                            .foregroundColor(.pink)
-                            .foregroundStyle(Color.accentColor)
-                    }
-                    .frame(width: 355, height: 42, alignment: .leading)
-                    .padding(.vertical, 3)
-//                }
+                //                NavigationLink(destination: ResultadosAlunosView()) {
+                HStack {
+                    Text("Resultado dos Alunos")
+                        .font(.title2)
+                        .bold()
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(.pink)
+                        .foregroundStyle(Color.accentColor)
+                }
+                .frame(width: 355, height: 42, alignment: .leading)
+                .padding(.vertical, 3)
+                //                }
                 ScrollView(.horizontal) {
                     HStack(alignment: .center, spacing: 15) {
                         //trocar forEach para buscar do cloudKit
@@ -108,6 +110,13 @@ struct DetalhesTarefasView: View {
             .background(Color(.systemGray6))
             .navigationTitle("Tarefa do Barquinho")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancelar", systemImage: "chevron.left") {
+                        dismiss()
+                    }
+                }
+            }
         }
     }
 }
