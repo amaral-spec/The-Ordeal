@@ -36,7 +36,7 @@ final class TaskModel: Identifiable {
     init(from record: CKRecord) {
         self.id = record.recordID
         self.studentAudio = record["studentAudio"] as? [URL] ?? []
-        self.student = record["student"] as! CKRecord.Reference // must exist
+        self.student = record["student"] as! CKRecord.Reference
         self.title = record["title"] as? String ?? ""
         self.description = record["description"] as? String ?? ""
         self.reward = record["reward"] as? Int ?? 0
