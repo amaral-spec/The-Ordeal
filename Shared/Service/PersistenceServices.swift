@@ -24,8 +24,6 @@ class PersistenceServices: ObservableObject {
         let lastTask: TaskModel?
         let lastChallenge: ChallengeModel?
         
-        //usuario.lastChallenge = try await fetchLatestChallenge(for: recordID, in: db)
-        
         let usuario = UserModel(from: record)
         usuario.id = record.recordID
         usuario.email = email
@@ -33,7 +31,7 @@ class PersistenceServices: ObservableObject {
         usuario.streak = streak
         usuario.points = points
         usuario.lastTask = try await fetchLatestTask(for: recordID, in: db)
-        usuario.lastChallenge = nil // implementar funcao de encontrar ultimo challenge
+        usuario.lastChallenge = try await fetchLatestChallenge(for: recordID, in: db)
         return usuario
     }
     
@@ -64,6 +62,12 @@ class PersistenceServices: ObservableObject {
         record["name"] = grupo.name as CKRecordValue
         record["members"] = grupo.members as CKRecordValue
         
+        // Generates unique code for group
+        let uniqueCode = try await generateUniqueGroupCode()
+        grupo.groupCode = uniqueCode
+
+        record["groupCode"] = grupo.groupCode as CKRecordValue
+        
         do {
             try await db.save(record)
             print("Group created successfully: \(grupo.id)")
@@ -85,6 +89,18 @@ class PersistenceServices: ObservableObject {
         let groups = groupRecords.map { GroupModel(from: $0) }
         
         return groups
+    }
+    
+    func fetchGroupByCode(code: String) async throws -> GroupModel? {
+        let predicate = NSPredicate(format: "groupCode == %@", code)
+        let query = CKQuery(recordType: "Grupo", predicate: predicate)
+        
+        let (results, _) = try await db.records(matching: query)
+        guard let record = results.first?.1,
+              case .success(let ckRecord) = record else {
+            return nil
+        }
+        return GroupModel(from: ckRecord)
     }
     
     func fetchGroup(recordID: CKRecord.ID) async throws -> GroupModel {
@@ -381,5 +397,22 @@ class PersistenceServices: ObservableObject {
         let sortedChallenges = completedChallenges.sorted { $0.endDate > $1.endDate }
         
         return sortedChallenges.first
+    }
+    
+    func generateUniqueGroupCode() async throws -> String {
+        var code: String
+        var results: [(CKRecord.ID, Result<CKRecord, Error>)] = []
+        
+        repeat {
+            code = String(format: "%06d", Int.random(in: 0...999_999))
+            let predicate = NSPredicate(format: "groupCode == %@", code)
+            let query = CKQuery(recordType: "Grupo", predicate: predicate)
+            
+            let (queryResults, _) = try await db.records(matching: query)
+            results = queryResults.map { $0 } // assign to results for the next loop check
+            
+        } while !results.isEmpty
+        
+        return code
     }
 }
