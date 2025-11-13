@@ -64,7 +64,7 @@ class PersistenceServices: ObservableObject {
         
         let userRef = CKRecord.Reference(recordID: currentUser.id, action: .none)
         
-        let record = CKRecord(recordType: "Group", recordID: grupo.id)
+        let record = CKRecord(recordType: "MusicGroup", recordID: grupo.id)
         record["name"] = grupo.name as CKRecordValue
         record["members"] = [userRef] as CKRecordValue
         
@@ -99,7 +99,7 @@ class PersistenceServices: ObservableObject {
     
     func fetchGroupByCode(code: String) async throws -> GroupModel? {
         let predicate = NSPredicate(format: "groupCode == %@", code)
-        let query = CKQuery(recordType: "Group", predicate: predicate)
+        let query = CKQuery(recordType: "MusicGroup", predicate: predicate)
         
         let (results, _) = try await db.records(matching: query)
         guard let record = results.first?.1,
