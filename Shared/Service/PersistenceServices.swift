@@ -82,7 +82,7 @@ class PersistenceServices: ObservableObject {
         let groupRecords = groupResults.compactMap { try? $0.1.get() }
         
         // COnverting CKRecords to GroupModels
-        let groups = groupRecords.map {GroupModel(from: $0) }
+        let groups = groupRecords.map { GroupModel(from: $0) }
         
         return groups
     }
@@ -286,20 +286,20 @@ class PersistenceServices: ObservableObject {
     }
     
     // Fetching all tasks related to a particular user
-//    func fetchAllTasks(for userRecordID: CKRecord.ID) async throws -> [TaskModel] {
-//        
-//     
-//
-//    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    func fetchAllTasks(for userRecordID: CKRecord.ID) async throws -> [TaskModel] {
+        let userRef = CKRecord.Reference(recordID: userRecordID, action: .none)
+        let taskPredicate = NSPredicate(format: "members CONTAINS %@", userRef)
+        let taskQuery = CKQuery(recordType: "Task", predicate: taskPredicate)
+        
+        let (taskResults, _) = try await db.records(matching: taskQuery)
+        let taskRecords = taskResults.compactMap { try? $0.1.get() }
+        
+        // Converting CKRecords to TaskModels
+        let tasks = taskRecords.map { TaskModel(from: $0) }
+        
+        return tasks
+    }
+
     // Fetching a specific task from recordID
     func fetchTask(recordID: CKRecord.ID) async throws -> TaskModel {
         let record = try await db.record(for: recordID)
