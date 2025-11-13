@@ -86,7 +86,7 @@ class PersistenceServices: ObservableObject {
         // Creating query to find groups by user
         let userRef = CKRecord.Reference(recordID: userRecordID, action: .none)
         let groupPredicate = NSPredicate(format: "members CONTAINS %@", userRef)
-        let groupQuery = CKQuery(recordType: "Group", predicate: groupPredicate)
+        let groupQuery = CKQuery(recordType: "MusicGroup", predicate: groupPredicate)
         
         let (groupResults, _) = try await db.records(matching: groupQuery)
         let groupRecords = groupResults.compactMap { try? $0.1.get() }
@@ -230,7 +230,7 @@ class PersistenceServices: ObservableObject {
         // Finding all groups the user belongs to
         let userRef = CKRecord.Reference(recordID: userRecordID, action: .none)
         let groupPredicate = NSPredicate(format: "members CONTAINS %@", userRef)
-        let groupQuery = CKQuery(recordType: "Group", predicate: groupPredicate)
+        let groupQuery = CKQuery(recordType: "MusicGroup", predicate: groupPredicate)
 
         let (groupResults, _) = try await db.records(matching: groupQuery)
         let groupRecords = groupResults.compactMap { try? $0.1.get() }
@@ -409,7 +409,7 @@ class PersistenceServices: ObservableObject {
         while true {
             let code = String(format: "%06d", Int.random(in: 0...999_999))
             let predicate = NSPredicate(format: "groupCode == %@", code)
-            let query = CKQuery(recordType: "Group", predicate: predicate)
+            let query = CKQuery(recordType: "MusicGroup", predicate: predicate)
             let (results, _) = try await db.records(matching: query)
             
             if results.isEmpty {
