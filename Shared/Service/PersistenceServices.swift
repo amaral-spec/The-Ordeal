@@ -72,10 +72,20 @@ class PersistenceServices: ObservableObject {
         }
     }
     
-//    func fetchAllGroups(for userRecordID: CKRecord.ID) async throws -> [ChallengeModel] {
-//        
-//
-//    }
+    func fetchAllGroups(for userRecordID: CKRecord.ID) async throws -> [GroupModel] {
+        // Creating query to find groups by user
+        let userRef = CKRecord.Reference(recordID: userRecordID, action: .none)
+        let groupPredicate = NSPredicate(format: "members CONTAINS %@", userRef)
+        let groupQuery = CKQuery(recordType: "Group", predicate: groupPredicate)
+        
+        let (groupResults, _) = try await db.records(matching: groupQuery)
+        let groupRecords = groupResults.compactMap { try? $0.1.get() }
+        
+        // COnverting CKRecords to GroupModels
+        let groups = groupRecords.map {GroupModel(from: $0) }
+        
+        return groups
+    }
     
     func fetchGroup(recordID: CKRecord.ID) async throws -> GroupModel {
         let record = try await db.record(for: recordID)
@@ -281,6 +291,14 @@ class PersistenceServices: ObservableObject {
 //     
 //
 //    }
+    
+    
+    
+    
+    
+    
+    
+    
     
     // Fetching a specific task from recordID
     func fetchTask(recordID: CKRecord.ID) async throws -> TaskModel {
