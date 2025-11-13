@@ -400,19 +400,15 @@ class PersistenceServices: ObservableObject {
     }
     
     func generateUniqueGroupCode() async throws -> String {
-        var code: String
-        var results: [(CKRecord.ID, Result<CKRecord, Error>)] = []
-        
-        repeat {
-            code = String(format: "%06d", Int.random(in: 0...999_999))
+        while true {
+            let code = String(format: "%06d", Int.random(in: 0...999_999))
             let predicate = NSPredicate(format: "groupCode == %@", code)
             let query = CKQuery(recordType: "Grupo", predicate: predicate)
+            let (results, _) = try await db.records(matching: query)
             
-            let (queryResults, _) = try await db.records(matching: query)
-            results = queryResults.map { $0 } // assign to results for the next loop check
-            
-        } while !results.isEmpty
-        
-        return code
+            if results.isEmpty {
+                return code
+            }
+        }
     }
 }
