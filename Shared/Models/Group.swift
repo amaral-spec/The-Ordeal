@@ -22,4 +22,21 @@ final class GroupModel: Identifiable {
         self.members = []
         self.image = image
     }
+    
+    // Initializer from record
+    init(from record: CKRecord) {
+        self.id = record.recordID
+        self.name = record["name"] as? String ?? ""
+        self.members = record["members"] as? [CKRecord.Reference] ?? []
+        
+        if let asset = record["image"] as? CKAsset,
+           let fileURL = asset.fileURL,
+           let imageData = try? Data(contentsOf: fileURL),
+           let uiImage = UIImage(data: imageData) {
+            self.image = uiImage
+        } else {
+            self.image = nil
+        }
+    }
+
 }

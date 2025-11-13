@@ -31,4 +31,16 @@ final class TaskModel: Identifiable {
         self.startDate = startDate
         self.endDate = endDate
     }
+    
+    // To fetch from CloudKit
+    init(from record: CKRecord) {
+        self.id = record.recordID
+        self.studentAudio = record["studentAudio"] as? [URL] ?? []
+        self.student = record["student"] as! CKRecord.Reference
+        self.title = record["title"] as? String ?? ""
+        self.description = record["description"] as? String ?? ""
+        self.reward = record["reward"] as? Int ?? 0
+        self.startDate = record["startDate"] as? Date ?? Date()
+        self.endDate = record["endDate"] as? Date ?? Date()
+    }
 }
