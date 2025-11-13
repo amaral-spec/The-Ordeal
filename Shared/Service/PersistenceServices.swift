@@ -370,4 +370,16 @@ class PersistenceServices: ObservableObject {
             endDate: latestRecord["endDate"] as? Date ?? Date()
         )
     }
+    
+    func fetchLatestChallenge(for userRecordID: CKRecord.ID, in db: CKDatabase) async throws -> ChallengeModel? {
+        let allChallenges = try await fetchAllChallenges(for: userRecordID)
+        
+        // Filter for completed challenges: those whose endDate is in the past
+        let completedChallenges = allChallenges.filter { $0.endDate < Date() }
+        
+        // Sort by endDate descending (latest first)
+        let sortedChallenges = completedChallenges.sorted { $0.endDate > $1.endDate }
+        
+        return sortedChallenges.first
+    }
 }
