@@ -6,23 +6,29 @@
 //
 
 import SwiftUI
+import CloudKit
 
 struct CriarGrupoView: View {
+    var onGrupoCriado: (() -> Void)?
     @State private var grupoNome: String = ""
     @Environment(\.dismiss) var dismiss
+    @State private var isSaving = false
+    @EnvironmentObject var persistenceServices: PersistenceServices
     
     var body: some View {
         NavigationStack {
-            VStack() {
-                TextField("Nome do grupo", text: $grupoNome)
-                    .padding()
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 50)
-                            .fill(.gray.opacity(0.2))
-                    )
-                    .padding()
-                
-                Spacer()
+            ZStack {
+                VStack {
+                    TextField("Nome do grupo", text: $grupoNome)
+                        .padding()
+                        .background(
+                            RoundedRectangle(cornerRadius: 50)
+                                .fill(.gray.opacity(0.2))
+                        )
+                        .padding()
+                    
+                    Spacer()
+                }
             }
             .navigationTitle("Criar grupo")
             .navigationBarTitleDisplayMode(.inline)
@@ -33,12 +39,30 @@ struct CriarGrupoView: View {
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Adicionar", systemImage: "checkmark") {
-                        //funcao para adicionar o grupo
+                    if isSaving {
+                        ProgressView()
+                    } else {
+                        Button("Adicionar", systemImage: "checkmark") {
+                            Task {
+                                isSaving = true
+                                let group = GroupModel(name: grupoNome)
+                                do {
+                                    try await persistenceServices.createGroup(group)
+                                    try? await Task.sleep(for: .seconds(1.5)) // espera CloudKit atualizar
+                                    await MainActor.run {
+                                        onGrupoCriado?()
+                                        dismiss()
+                                    }
+                                } catch {
+                                    print("Erro ao criar grupo: \(error.localizedDescription)")
+                                }
+                                isSaving = false
+                            }
+                        }
+                        .disabled(grupoNome.isEmpty)
                     }
                 }
             }
-
         }
     }
 }

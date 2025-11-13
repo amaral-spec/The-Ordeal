@@ -25,7 +25,7 @@ struct DetalheGrupoView: View {
                     .font(.largeTitle)
                     .fontWeight(.bold)
                 
-                Text("\(grupo.members.count) alunos no grupo")
+                Text("\(grupo.members.count) participantes")
                     .font(.headline)
                     .foregroundStyle(.secondary)
                 

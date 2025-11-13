@@ -60,9 +60,15 @@ class PersistenceServices: ObservableObject {
     
     // MARK: CRUD: Grupo
     func createGroup(_ grupo: GroupModel) async throws {
-        let record = CKRecord(recordType: "Grupo", recordID: grupo.id)
+        guard let currentUser = AuthService.shared.currentUser else {
+            throw NSError(domain: "AuthError", code: 1, userInfo: [NSLocalizedDescriptionKey: "No user loggoed in"])
+        }
+        
+        let userRef = CKRecord.Reference(recordID: currentUser.id, action: .none)
+        
+        let record = CKRecord(recordType: "Group", recordID: grupo.id)
         record["name"] = grupo.name as CKRecordValue
-        record["members"] = grupo.members as CKRecordValue
+        record["members"] = [userRef] as CKRecordValue
         
         do {
             try await db.save(record)

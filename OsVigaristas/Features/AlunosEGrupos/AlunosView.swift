@@ -22,6 +22,9 @@ struct AlunosView: View {
     @State private var isGroupsEmpty = true
     @State private var selectedMode = Mode.Alunos
     @State private var criarGrupo = false
+    @State private var grupos: [GroupModel] = []
+    @EnvironmentObject var persistenceServices: PersistenceServices
+    
     
     //mock com os jsons
     
@@ -58,28 +61,28 @@ struct AlunosView: View {
                                 .fontWeight(.medium)
                         }
                         Spacer()
-
+                        
                     } else {
                         ScrollView {
                             LazyVGrid(columns: columns, spacing: 10) {
                                 // MARK: - Puxar do CloudKit
-//                                ForEach([]) { aluno in
-//                                    VStack {
-//                                        Image(aluno.foto)
-//                                            .resizable()
-//                                            .scaledToFill()
-//                                            .frame(width: 90, height: 90)
-//                                            .clipShape(Circle())
-//                                        
-//                                        Text(aluno.nome)
-//                                            .font(.caption)
-//                                            .foregroundColor(.primary)
-//                                    }
-//                                    .padding(6)
-//                                    .background(.white)
-//                                    .cornerRadius(10)
-//                                    .shadow(radius: 1)
-//                                }
+                                //                                ForEach([]) { aluno in
+                                //                                    VStack {
+                                //                                        Image(aluno.foto)
+                                //                                            .resizable()
+                                //                                            .scaledToFill()
+                                //                                            .frame(width: 90, height: 90)
+                                //                                            .clipShape(Circle())
+                                //
+                                //                                        Text(aluno.nome)
+                                //                                            .font(.caption)
+                                //                                            .foregroundColor(.primary)
+                                //                                    }
+                                //                                    .padding(6)
+                                //                                    .background(.white)
+                                //                                    .cornerRadius(10)
+                                //                                    .shadow(radius: 1)
+                                //                                }
                             }
                         }
                         .padding()
@@ -112,34 +115,40 @@ struct AlunosView: View {
                         ScrollView {
                             VStack(spacing: 10) {
                                 // MARK: - Puxar do CloudKit
-//                                ForEach(dataVM.grupos) { grupo in
-//                                    NavigationLink(destination: DetalheGrupoView(grupo: grupo)) {
-//                                        HStack {
-//                                            Image(grupo.foto)
-//                                                .resizable()
-//                                                .scaledToFill()
-//                                                .frame(width: 60, height: 60)
-//                                                .clipShape(RoundedRectangle(cornerRadius: 10))
-//                                            
-//                                            VStack(alignment: .leading) {
-//                                                Text(grupo.nome)
-//                                                    .font(.headline)
-//                                                
-//                                                Text("\(grupo.quantidadeAlunos) alunos")
-//                                                    .font(.subheadline)
-//                                                    .foregroundColor(.secondary)
-//                                            }
-//                                            
-//                                            Spacer()
-//                                        }
-//                                        .padding()
-//                                        .background(.white)
-//                                        .cornerRadius(12)
-//                                        .shadow(color: .black.opacity(0.08), radius: 4, x: 0, y: 2)
-//                                    }
-//                                    .buttonStyle(.plain) // <-- opcional, remove highlight azul
-//                                    
-//                                }
+                                ForEach(grupos) { grupo in
+                                    NavigationLink(destination: DetalheGrupoView(grupo: grupo)) {
+                                        HStack {
+                                            if let image = grupo.image {
+                                                Image(uiImage: image)
+                                                    .resizable()
+                                                    .scaledToFill()
+                                                    .frame(width: 60, height: 60)
+                                                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                                            } else {
+                                                RoundedRectangle(cornerRadius: 10)
+                                                    .fill(Color.gray.opacity(0.3))
+                                                    .frame(width: 60, height: 60)
+                                            }
+                                            
+                                            VStack(alignment: .leading) {
+                                                Text(grupo.name)
+                                                    .font(.headline)
+                                                
+                                                Text("\(grupo.members.count) participantes")
+                                                    .font(.subheadline)
+                                                    .foregroundColor(.secondary)
+                                            }
+                                            
+                                            Spacer()
+                                        }
+                                        .padding()
+                                        .background(.white)
+                                        .cornerRadius(12)
+                                        .shadow(color: .black.opacity(0.08), radius: 4, x: 0, y: 2)
+                                    }
+                                    .buttonStyle(.plain) // <-- opcional, remove highlight azul
+                                    
+                                }
                             }
                             .padding()
                         }
@@ -159,9 +168,35 @@ struct AlunosView: View {
                     }
                 }
             }
+            .task {
+                await carregarGrupos()
+            }
         }
         .sheet(isPresented: $criarGrupo) {
-            CriarGrupoView()
+            CriarGrupoView(onGrupoCriado: {
+                Task {
+                    await carregarGrupos()
+                }
+            })
+            .environmentObject(persistenceServices)
+        }
+    }
+    
+    private func carregarGrupos() async {
+        guard let currentUser = AuthService.shared.currentUser else {
+            print("Nenhum usuário logado.")
+            return
+        }
+        
+        do {
+            let gruposCarregados = try await persistenceServices.fetchAllGroups(for: currentUser.id)
+            await MainActor.run {
+                grupos = gruposCarregados
+                isGroupsEmpty = gruposCarregados.isEmpty
+            }
+            print("\(gruposCarregados.count) grupos carregados")
+        } catch {
+            print("Erro ao carregar grupos: \(error.localizedDescription)")
         }
     }
 }
