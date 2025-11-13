@@ -23,7 +23,7 @@ final class GroupModel: Identifiable {
         self.image = image
     }
     
-    // Initializer from record
+    // Initializer from reference
     init(from record: CKRecord) {
         self.id = record.recordID
         self.name = record["name"] as? String ?? ""
