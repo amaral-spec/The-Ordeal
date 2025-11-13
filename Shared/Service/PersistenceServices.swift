@@ -418,10 +418,27 @@ class PersistenceServices: ObservableObject {
         }
     }
     
-    func generalSearch(prompt: String, userRecordID: CKRecord.ID) async throws -> (groups: [GroupModel], challenges: [ChallengeModel], tasks: [TaskModel]) {
-        let groups: [GroupModel] = try await fetchAllGroups(for: userRecordID)
-        let challenges: [ChallengeModel] = try await fetchAllChallenges(for: userRecordID)
-        let tasks: [TaskModel] = try await fetchAllTasks(for: userRecordID)
+    func generalSearch(prompt: String, userRecordID: CKRecord.ID) async throws -> ([GroupModel], [ChallengeModel], [TaskModel]) {
+        // Function that creates predicates/queries for each type (group, challenge, task)
+        // Returns arrays with all objects found that match both the user's prompt
+        // and their user id
+        let groupPredicate = NSPredicate(format: "name CONTAINS %@", prompt)
+        let groupQuery = CKQuery(recordType: "MusicGroup", predicate: groupPredicate)
+        let (groupResults, _) = try await db.records(matching: groupQuery)
+        let groupRecords = groupResults.compactMap { try? $0.1.get() }
+        let groups = groupRecords.map { GroupModel(from: $0) }
+        
+        let challengePredicate = NSPredicate(format: "name CONTAINS %@", prompt)
+        let challengeQuery = CKQuery(recordType: "Challenge", predicate: challengePredicate)
+        let (challengeResults, _) = try await db.records(matching: groupQuery)
+        let challengeRecords = challengeResults.compactMap { try? $0.1.get() }
+        let challenges = challengeRecords.map { ChallengeModel(from: $0) }
+        
+        let taskPredicate = NSPredicate(format: "name CONTAINS %@", prompt)
+        let taskQuery = CKQuery(recordType: "Task", predicate: taskPredicate)
+        let (taskResults, _) = try await db.records(matching: taskQuery)
+        let taskRecords = taskResults.compactMap { try? $0.1.get() }
+        let tasks = taskRecords.map { TaskModel(from: $0) }
         
         return (groups, challenges, tasks)
     }
