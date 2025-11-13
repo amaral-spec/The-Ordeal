@@ -58,7 +58,7 @@ class PersistenceServices: ObservableObject {
     
     // MARK: CRUD: Grupo
     func createGroup(_ grupo: GroupModel) async throws {
-        let record = CKRecord(recordType: "Grupo", recordID: grupo.id)
+        let record = CKRecord(recordType: "Group", recordID: grupo.id)
         record["name"] = grupo.name as CKRecordValue
         record["members"] = grupo.members as CKRecordValue
         
@@ -93,7 +93,7 @@ class PersistenceServices: ObservableObject {
     
     func fetchGroupByCode(code: String) async throws -> GroupModel? {
         let predicate = NSPredicate(format: "groupCode == %@", code)
-        let query = CKQuery(recordType: "Grupo", predicate: predicate)
+        let query = CKQuery(recordType: "Group", predicate: predicate)
         
         let (results, _) = try await db.records(matching: query)
         guard let record = results.first?.1,
@@ -139,8 +139,8 @@ class PersistenceServices: ObservableObject {
         let predicate = NSPredicate(format: "grupo == %@", groupref)
         
         // Creates queries for tarefa and desafio
-        let queryTarefa = CKQuery(recordType: "Tarefa", predicate: predicate)
-        let queryDesafio = CKQuery(recordType: "Desafio", predicate: predicate)
+        let queryTarefa = CKQuery(recordType: "Task", predicate: predicate)
+        let queryDesafio = CKQuery(recordType: "Challenge", predicate: predicate)
         
         // Performs queries
         let (resultsTarefa, _) = try await db.records(matching: queryTarefa)
@@ -403,7 +403,7 @@ class PersistenceServices: ObservableObject {
         while true {
             let code = String(format: "%06d", Int.random(in: 0...999_999))
             let predicate = NSPredicate(format: "groupCode == %@", code)
-            let query = CKQuery(recordType: "Grupo", predicate: predicate)
+            let query = CKQuery(recordType: "Group", predicate: predicate)
             let (results, _) = try await db.records(matching: query)
             
             if results.isEmpty {
