@@ -417,4 +417,13 @@ class PersistenceServices: ObservableObject {
             }
         }
     }
+    
+    func generalSearch(prompt: String, userRecordID: CKRecord.ID) async throws -> (groups: [GroupModel], challenges: [ChallengeModel], tasks: [TaskModel]) {
+        let groups: [GroupModel] = try await fetchAllGroups(for: userRecordID)
+        let challenges: [ChallengeModel] = try await fetchAllChallenges(for: userRecordID)
+        let tasks: [TaskModel] = try await fetchAllTasks(for: userRecordID)
+        
+        return (groups, challenges, tasks)
+    }
+
 }
