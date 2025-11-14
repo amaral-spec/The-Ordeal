@@ -6,6 +6,7 @@
 //
 
 import CloudKit
+import SwiftUI
 
 
 @MainActor
@@ -13,7 +14,7 @@ class PersistenceServices: ObservableObject {
     let db = CKContainer.default().publicCloudDatabase
     
     // MARK: CRUD: Usuarios
-    func fetchUser(recordID: CKRecord.ID) async throws -> UserModel {
+    func fetchUserForProfile(recordID: CKRecord.ID) async throws -> UserModel {
         let record = try await db.record(for: recordID)
         
         let name = record["name"] as? String ?? ""
@@ -33,6 +34,25 @@ class PersistenceServices: ObservableObject {
         usuario.lastTask = try await fetchLatestTask(for: recordID, in: db)
         usuario.lastChallenge = try await fetchLatestChallenge(for: recordID, in: db)
         return usuario
+    }
+    
+    func fetchUserForTask(as userID: CKRecord.ID) async throws -> [UserModel] {
+        let groups = try await fetchAllGroups(for: userID)
+
+        let memberReferences = groups.flatMap { $0.members } // [CKRecord.Reference]
+
+        let memberIDs = Set(memberReferences.map { $0.recordID })
+            .subtracting([userID])  // exclude the user themselves
+
+        var users: [UserModel] = []
+
+        for id in memberIDs {
+            let record = try await db.record(for: id)
+            let user = UserModel(from: record)
+            users.append(user)
+        }
+
+        return users
     }
     
     func editUser(recordID: CKRecord.ID, newName: String, newEmail: String, isTeacher: Bool) async throws {
