@@ -22,46 +22,56 @@ struct DetalhesTarefasView: View {
                         .padding(.bottom, 10)
                         .frame(width: 353, height: 42, alignment: .leading)
                 }
-                HStack(spacing: 20) {
+                HStack(spacing: -10) {
                     ZStack {
                         RoundedRectangle(cornerRadius: 30)
-                            .frame(width: 173, height: 162, alignment: .leading)
+                            .frame(width: 173, height: 108, alignment: .leading)
                             .foregroundStyle(.white)
                         
-                        VStack(spacing: 15) {
+                        VStack() {
                             //trocar o texto para os dias que estão sendo contados desde o dia que a tarefa foi criada
-                            Text("Terminou a")
+                            Text("Terminou")
+                                .frame(maxWidth: .infinity, alignment: .leading)
                                 .font(.title)
                                 .foregroundStyle(Color.accentColor)
-                            Text("1212")
-                                .foregroundStyle(Color.accentColor)
-                                .font(.largeTitle)
-                                .bold()
-                            Text("Dias")
-                                .foregroundStyle(Color.accentColor)
-                                .font(.title)
+                                .frame(alignment: .leading)
+                                .padding(.horizontal, 14)
+                            
+                            HStack {
+                                Text("1212 Dias")
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .foregroundStyle(Color.accentColor)
+                                    .font(.title)
+                                    .bold()
+                                    .padding(.horizontal, 14)
+                            }
                         }
+                        .frame(width: 173, height: 108, alignment: .leading)
                     }
+                    .padding()
                     
                     ZStack {
                         RoundedRectangle(cornerRadius: 30)
-                            .frame(width: 173, height: 162, alignment: .leading)
+                            .frame(width: 173, height: 108, alignment: .leading)
                             .foregroundStyle(.white)
                         
-                        VStack(spacing: 15) {
+                        VStack() {
                             //trocar o texto para os dias que estão sendo contados desde o dia que a tarefa foi criada
                             Text("Prêmio")
+                                .frame(maxWidth: .infinity, alignment: .leading)
                                 .font(.title)
                                 .foregroundStyle(Color.accentColor)
-                            Text("50")
+                                .frame(alignment: .leading)
+                                .padding(.horizontal, 14)
+                            Text("50 Moedas")
+                                .frame(maxWidth: .infinity, alignment: .leading)
                                 .foregroundStyle(Color.accentColor)
-                                .font(.largeTitle)
+                                .font(.title)
                                 .bold()
-                            Text("Moedas")
-                                .foregroundStyle(Color.accentColor)
-                                .font(.title)
+                                .padding(.horizontal, 14)
                         }
                     }
+                    .padding()
                 }
                 
                 ZStack {
@@ -75,6 +85,7 @@ struct DetalhesTarefasView: View {
                             .fontWeight(.semibold)
                             .frame(width: 321, alignment: .topLeading)
                         
+                        // trocar para a descricao da tarefa
                         Text("Descrição fornecida pelo próprio professor.")
                             .frame(width: 321, height: 132, alignment: .topLeading)
                     }

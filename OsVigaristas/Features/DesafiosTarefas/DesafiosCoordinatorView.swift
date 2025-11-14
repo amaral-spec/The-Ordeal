@@ -59,7 +59,7 @@ struct HomeView: View {
                             VStack {
                                 Spacer()
                                 ForEach(0..<numChallenge, id: \.self) {
-                                    i in Card(index: i)
+                                    i in OldCard(index: i)
                                     Spacer(minLength: 20)
                                 }
                             }
@@ -95,7 +95,7 @@ struct HomeView: View {
                             VStack {
                                 Spacer()
                                 ForEach(0..<numTask, id: \.self) {
-                                    i in Card(index: i)
+                                    i in OldCard(index: i)
                                     Spacer(minLength: 20)
                                 }
                             }
