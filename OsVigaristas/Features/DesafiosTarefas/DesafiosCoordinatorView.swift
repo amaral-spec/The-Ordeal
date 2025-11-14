@@ -15,7 +15,8 @@ struct HomeView: View {
     @State private var criarDesafio = false
     @State private var criarTarefa = false
     @State private var numChallenge: Int = 0
-    @State private var numTask: Int = 0    
+    @State private var numTask: Int = 0
+    @EnvironmentObject var persistenceServices: PersistenceServices
     enum Mode: String, CaseIterable {
         case Desafio, Tarefa
     }
@@ -95,7 +96,7 @@ struct HomeView: View {
                             VStack {
                                 Spacer()
                                 ForEach(0..<numTask, id: \.self) {
-                                    i in OldCard(index: i)
+                                    i in Card(index: i)
                                     Spacer(minLength: 20)
                                 }
                             }
@@ -104,6 +105,9 @@ struct HomeView: View {
                 }
             }
             .navigationTitle("Resumo")
+            .task {
+                var tarefas = try await persistenceServices.fetchAllTasks()
+            }
             .toolbarTitleDisplayMode(.inlineLarge)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {

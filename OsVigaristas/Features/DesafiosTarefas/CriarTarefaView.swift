@@ -38,6 +38,8 @@ struct CriarTarefaView: View {
                     }
                     Section("Participantes") {
                         Picker("Escolha um aluno", selection: $selectedUserID) {
+                            Text("Selecione...").tag(nil as CKRecord.ID?)
+                            
                             ForEach(participants, id: \.id) { user in
                                 Text(user.name).tag(user.id as CKRecord.ID?)
                             }
@@ -59,6 +61,7 @@ struct CriarTarefaView: View {
             .task {
                 do {
                     participants = try await persistenceServices.fetchUserForTask()
+                    print("participantes carregados: ", participants.map(\.name))
                 } catch {
                     print("Erro ao carregar participantes: \(error.localizedDescription)")
                 }
@@ -103,7 +106,7 @@ struct CriarTarefaView: View {
                         dismiss()
                     }
                     .disabled(tarefaNome.isEmpty)
-                    .disabled(selecao == nil)
+                    .disabled(selectedUserID == nil)
                 }
             }
         }

@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct Card: View {
+    let index: Int
+
     var body: some View {
         HStack {
 //            if let image = grupo.image {
@@ -41,6 +43,6 @@ struct Card: View {
     }
 }
 
-#Preview {
-    Card()
-}
+//#Preview {
+//    Card()
+//}

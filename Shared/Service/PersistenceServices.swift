@@ -358,7 +358,7 @@ class PersistenceServices: ObservableObject {
     func createTask(_ task: TaskModel) async throws {
         let record = CKRecord(recordType: "Task", recordID: task.id)
         
-        record["studentAudio"] = task.studentAudio as CKRecordValue
+        record["studentAudio"] = task.studentAudio as CKRecordValue?
         record["student"] = task.student as CKRecordValue
         record["title"] = task.title as CKRecordValue
         record["description"] = task.description as CKRecordValue
