@@ -357,8 +357,7 @@ class PersistenceServices: ObservableObject {
     // MARK: CRUD: Tarefa
     func createTask(_ task: TaskModel) async throws {
         let record = CKRecord(recordType: "Task", recordID: task.id)
-        
-        record["studentAudio"] = task.studentAudio as CKRecordValue?
+        record["studentAudio"] = task.studentAudio as! CKRecordValue
         record["student"] = task.student as CKRecordValue
         record["title"] = task.title as CKRecordValue
         record["description"] = task.description as CKRecordValue
@@ -375,8 +374,12 @@ class PersistenceServices: ObservableObject {
     }
     
     // Fetching all tasks related to a particular user
-    func fetchAllTasks(for userRecordID: CKRecord.ID) async throws -> [TaskModel] {
-        let userRef = CKRecord.Reference(recordID: userRecordID, action: .none)
+    func fetchAllTasks() async throws -> [TaskModel] {
+        guard let currentUser = AuthService.shared.currentUser else {
+            throw NSError(domain: "AuthError", code: 1, userInfo: [NSLocalizedDescriptionKey: "No user loggoed in"])
+        }
+        
+        let userRef = CKRecord.Reference(recordID: currentUser.id, action: .none)
         let taskPredicate = NSPredicate(format: "members CONTAINS %@", userRef)
         let taskQuery = CKQuery(recordType: "Task", predicate: taskPredicate)
         
