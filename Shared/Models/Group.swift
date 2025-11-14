@@ -16,6 +16,7 @@ final class GroupModel: Identifiable {
     var members: [CKRecord.Reference]
     var image: UIImage?
     var groupCode: String
+    var joinSolicitations: [CKRecord.Reference]?
     
     init(name: String, image: UIImage? = nil) {
         self.id = CKRecord.ID(recordName: UUID().uuidString)
@@ -23,6 +24,7 @@ final class GroupModel: Identifiable {
         self.members = []
         self.image = image
         self.groupCode = String(format: "%06d", Int.random(in: 0...999_999))
+        self.joinSolicitations = nil
     }
     
     // Initializer from reference
@@ -31,6 +33,7 @@ final class GroupModel: Identifiable {
         self.name = record["name"] as? String ?? ""
         self.members = record["members"] as? [CKRecord.Reference] ?? []
         self.groupCode = record["groupCode"] as? String ?? "000000"
+        self.joinSolicitations = nil
         
         if let asset = record["image"] as? CKAsset,
            let fileURL = asset.fileURL,

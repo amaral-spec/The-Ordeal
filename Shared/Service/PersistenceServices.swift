@@ -121,7 +121,7 @@ class PersistenceServices: ObservableObject {
         return grupo
     }
     
-    func editGroup(recordID: CKRecord.ID, newName: String, newDescricao: String, newQtdAlunos: Int, newMembers: [CKRecord.Reference]) async throws {
+    func editGroup(recordID: CKRecord.ID, newName: String, newMembers: [CKRecord.Reference]) async throws {
         // Note to development team: when implementing this function, you first need
         // to call fetchGroup to populate the fields, and then pass this function
         
@@ -173,21 +173,61 @@ class PersistenceServices: ObservableObject {
         print("Group deleted successfully: \(group.id.recordName)")
     }
     
-    // MARK: Grupo - members
-    func addMember(to grupo: GroupModel, usuario: UserModel) async throws {
+    // MARK: Grupo: pedidos e membros
+    func askToJoinGroup(to grupo: GroupModel, usuario: UserModel) async throws {
+        let record = try await db.record(for: grupo.id)
+        let newRef = CKRecord.Reference(recordID: usuario.id, action: .none)
+        
+        // Checks if user is already in group
+        var members = record["members"] as? [CKRecord.Reference] ?? []
+        if members.contains(where: { $0.recordID == newRef.recordID }) {
+            print("Student already in group.")
+            return
+        }
+        
+        var joinSolicitations = record["joinSolicitations"] as? [CKRecord.Reference] ?? []
+        
+        if !joinSolicitations.contains(where: { $0.recordID == newRef.recordID }) {
+            joinSolicitations.append(newRef)
+            record["joinSolicitations"] = joinSolicitations
+            
+            try await db.save(record)
+        } else {
+            print("User already in solicitations list.")
+        }
+    }
+    
+    func acceptSolicitation(to grupo: GroupModel, usuario: UserModel) async throws {
         let record = try await db.record(for: grupo.id)
         
         var members = record["members"] as? [CKRecord.Reference] ?? []
+        var joinSolicitations = record["joinSolicitations"] as? [CKRecord.Reference] ?? []
         let newRef = CKRecord.Reference(recordID: usuario.id, action: .none)
         
         // Avoid duplicates
         if !members.contains(where: { $0.recordID == newRef.recordID }) {
+            // Adds user to members, removes user from joinSolicitations
             members.append(newRef)
+            joinSolicitations.removeAll { $0.recordID == newRef.recordID }
+            
             record["members"] = members
-            record["qtdAlunos"] = members.count
+            record["joinSolicitations"] = joinSolicitations
             
             try await db.save(record)
+        } else {
+            print("Student already in group.")
         }
+    }
+    
+    func rejectSolicitation(to grupo: GroupModel, usuario: UserModel) async throws {
+        let record = try await db.record(for: grupo.id)
+        var joinSolicitations = record["joinSolicitations"] as? [CKRecord.Reference] ?? []
+        let newRef = CKRecord.Reference(recordID: usuario.id, action: .none)
+        
+        joinSolicitations.removeAll { $0.recordID == newRef.recordID }
+        record["joinSolicitations"] = joinSolicitations
+        
+        try await db.save(record)
     }
     
     func removeMember(from grupo: GroupModel, usuario: UserModel) async throws {
@@ -197,7 +237,6 @@ class PersistenceServices: ObservableObject {
         members.removeAll { $0.recordID == usuario.id }
         
         record["members"] = members
-        record["qtdAlunos"] = members.count
         
         try await db.save(record)
     }
