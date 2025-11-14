@@ -22,11 +22,13 @@ struct ResumeCoordinatorView: View {
                 switch route {
                 case .detailChallenge(let challenge):
 //                    ChallengeDetailView(challenge: challenge)
-                    EmptyView()
+                    DetalhesTarefasView()
+//                    EmptyView()
 
                 case .detailTask(let task):
+                    DetalhesTarefasView()
 //                    TaskDetailView(task: task)
-                    EmptyView()
+//                    EmptyView()EmptyView()
 
                 case .list:
                     EmptyView()

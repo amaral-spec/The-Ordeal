@@ -35,7 +35,12 @@ struct StudentMainCoordinatorView: View {
                     .environmentObject(authVM)
             }
             Tab("Buscar", systemImage: "magnifyingglass", value: .search, role: .search) {
-                Text("Buscar View")
+                NavigationStack {
+                    BuscarView()
+                        .navigationTitle("Buscar")
+                        .toolbarTitleDisplayMode(.inlineLarge)
+                }
+                .searchable(text: $searchText)
             }
         }
         .tint(Color(red: 0.65, green: 0.13, blue: 0.29))
