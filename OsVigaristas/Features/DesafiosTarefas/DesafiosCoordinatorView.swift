@@ -15,8 +15,7 @@ struct HomeView: View {
     @State private var criarDesafio = false
     @State private var criarTarefa = false
     @State private var numChallenge: Int = 0
-    @State private var numTask: Int = 0
-    
+    @State private var numTask: Int = 0    
     enum Mode: String, CaseIterable {
         case Desafio, Tarefa
     }

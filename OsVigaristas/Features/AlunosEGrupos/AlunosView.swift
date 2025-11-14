@@ -167,6 +167,14 @@ struct AlunosView: View {
                             .background(Color.white)
                     }
                 }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button(action: {
+                    }) {
+                        Image(systemName: "person.fill.checkmark.and.xmark")
+                            .foregroundStyle(Color(red: 0.65, green: 0.13, blue: 0.29))
+                            .background(Color.white)
+                    }
+                }
             }
             .task {
                 await carregarGrupos()

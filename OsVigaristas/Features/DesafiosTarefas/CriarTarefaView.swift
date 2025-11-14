@@ -23,6 +23,9 @@ struct CriarTarefaView: View {
     @State private var selecao: UUID?
     @Environment(\.dismiss) var dismiss
     @Binding var numTask: Int
+    @EnvironmentObject var persistenceServices: PersistenceServices
+    @State private var isSaving = false
+    var onTarefaCriada: (() -> Void)?
     
     init(numTask: Binding<Int>) {
         self._numTask = numTask
@@ -74,6 +77,22 @@ struct CriarTarefaView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Adicionar", systemImage: "checkmark") {
+                        Task {
+                            isSaving = true
+                            let task = TaskModel(title: tarefaNome, description: tarefaDescricao, student: <#T##CKRecord.Reference#>, startDate: <#T##Date#>, endDate: <#T##Date#>)
+                            do {
+                                try await persistenceServices.createGroup(group)
+                                try? await Task.sleep(for: .seconds(1.5)) // espera CloudKit atualizar
+                                await MainActor.run {
+                                    onTarefaCriada?()
+                                    dismiss()
+                                }
+                            } catch {
+                                print("Erro ao criar grupo: \(error.localizedDescription)")
+                            }
+                            isSaving = false
+                        }
+
                         numTask += 1
                         dismiss()
                     }

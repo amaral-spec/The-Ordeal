@@ -22,6 +22,10 @@ struct CriarDesafioView: View {
     @State private var selecao: UUID?
     @Environment(\.dismiss) var dismiss
     @Binding var numChallenge: Int
+    @EnvironmentObject var persistenceServices: PersistenceServices
+    @State private var isSaving = false
+    var onDesafioCriado: (() -> Void)?
+
     
     init(numChallenge: Binding<Int>) {
         self._numChallenge = numChallenge
@@ -84,6 +88,22 @@ struct CriarDesafioView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Adicionar", systemImage: "checkmark") {
+//                        Task {
+//                            isSaving = true
+//                            let group = GroupModel(name: grupoNome)
+//                            do {
+//                                try await persistenceServices.createGroup(group)
+//                                try? await Task.sleep(for: .seconds(1.5)) // espera CloudKit atualizar
+//                                await MainActor.run {
+//                                    onGrupoCriado?()
+//                                    dismiss()
+//                                }
+//                            } catch {
+//                                print("Erro ao criar grupo: \(error.localizedDescription)")
+//                            }
+//                            isSaving = false
+//                        }
+
                         numChallenge += 1
                         dismiss()
                     }

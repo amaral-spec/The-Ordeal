@@ -49,16 +49,6 @@ struct DetalheGrupoView: View {
             .navigationTitle("Detalhes do Grupo")
             .navigationBarTitleDisplayMode(.inline)
         }
-        .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                Button(action: {
-                }) {
-                    Image(systemName: "person.fill.checkmark.and.xmark")
-                        .foregroundStyle(Color(red: 0.65, green: 0.13, blue: 0.29))
-                        .background(Color.white)
-                }
-            }
-        }
     }
 }
 
