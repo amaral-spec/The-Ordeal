@@ -25,9 +25,7 @@ struct AlunoMainCoordinatorView: View {
         
         TabView(selection: $selectedTab) {
             Tab("Início", systemImage: "music.note.house.fill", value: .inicio) {
-                VStack {
-                    Text("Tela Principal (Logado)")
-                }
+                InicioView()
             }
             Tab("Treino", systemImage: "music.pages", value: .treino) {
                 Text("Treino View")
