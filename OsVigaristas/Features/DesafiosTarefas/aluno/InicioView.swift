@@ -22,18 +22,12 @@ struct InicioView: View {
                 Spacer()
             }
 
-            .navigationBarTitleDisplayMode(.inline)
             // MARK: Toolbar
+            
+            
+            .navigationTitle("Resumo")
+            .toolbarTitleDisplayMode(.inlineLarge)
             .toolbar {
-                ToolbarItem(placement: .principal) {
-                    HStack(){
-                        Text("Início")
-                            .font(.largeTitle)
-                            .bold()
-                        Spacer()
-                    }
-                    .frame(alignment: .leading)
-                }
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button {
                         //navegacao pra perfil
