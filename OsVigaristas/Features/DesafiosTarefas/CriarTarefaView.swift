@@ -6,12 +6,7 @@
 //
 
 import SwiftUI
-
-private let grupos = [
-    Grupo(nome: "JJ"),
-    Grupo(nome: "ALIEN"),
-    Grupo(nome: "Maria Maria")
-]
+import CloudKit
 
 struct CriarTarefaView: View {
     @State private var selectedItem: Int = 0
@@ -26,6 +21,8 @@ struct CriarTarefaView: View {
     @EnvironmentObject var persistenceServices: PersistenceServices
     @State private var isSaving = false
     var onTarefaCriada: (() -> Void)?
+    @State private var participants: [UserModel] = []
+    @State private var selectedUserID: CKRecord.ID? = nil
     
     init(numTask: Binding<Int>) {
         self._numTask = numTask
@@ -39,19 +36,10 @@ struct CriarTarefaView: View {
                         TextField("Nome da Tarefa (Obrigatório)", text: $tarefaNome)
                         TextField("Descrição (Opcional)", text: $tarefaDescricao)
                     }
-                    Section {
-                        LabeledContent("Participantes") {
-                            NavigationLink(destination: List(grupos, selection: $selecao) { grupo in Text(grupo.nome) }
-                            ) {
-                                HStack{
-                                    Spacer()
-                                    if (selecao == nil) { Text("Nenhum") }
-                                    ForEach(grupos) { grupo in
-                                        if (grupo.id == selecao) {
-                                            Text(grupo.nome)
-                                        }
-                                    }
-                                }
+                    Section("Participantes") {
+                        Picker("Escolha um aluno", selection: $selectedUserID) {
+                            ForEach(participants, id: \.id) { user in
+                                Text(user.name).tag(user.id as CKRecord.ID?)
                             }
                         }
                     }
@@ -68,6 +56,13 @@ struct CriarTarefaView: View {
                 }
             }
             .navigationTitle("Adicionar Tarefa")
+            .task {
+                do {
+                    participants = try await persistenceServices.fetchUserForTask()
+                } catch {
+                    print("Erro ao carregar participantes: \(error.localizedDescription)")
+                }
+            }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -77,21 +72,32 @@ struct CriarTarefaView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Adicionar", systemImage: "checkmark") {
-//                        Task {
-//                            isSaving = true
-//                            let task = TaskModel(title: tarefaNome, description: tarefaDescricao, student: <#T##CKRecord.Reference#>, startDate: <#T##Date#>, endDate: <#T##Date#>)
-//                            do {
-//                                try await persistenceServices.createGroup(group)
-//                                try? await Task.sleep(for: .seconds(1.5)) // espera CloudKit atualizar
-//                                await MainActor.run {
-//                                    onTarefaCriada?()
-//                                    dismiss()
-//                                }
-//                            } catch {
-//                                print("Erro ao criar grupo: \(error.localizedDescription)")
-//                            }
-//                            isSaving = false
-//                        }
+                        Task {
+                            isSaving = true
+                            guard let selectedID = selectedUserID,
+                                  let selectedUser = participants.first(where: { $0.id == selectedID }) else { return }
+                        
+                            let studentRef = CKRecord.Reference(recordID: selectedUser.id, action: .none)
+                            
+                            let task = TaskModel(
+                                title: tarefaNome,
+                                description: tarefaDescricao,
+                                student: studentRef,
+                                startDate: selectedDateInit,
+                                endDate: selectedDateEnd
+                            )
+                            do {
+                                try await persistenceServices.createTask(task)
+                                try? await Task.sleep(for: .seconds(1.5)) // espera CloudKit atualizar
+                                await MainActor.run {
+                                    onTarefaCriada?()
+                                    dismiss()
+                                }
+                            } catch {
+                                print("Erro ao criar grupo: \(error.localizedDescription)")
+                            }
+                            isSaving = false
+                        }
 
                         numTask += 1
                         dismiss()
@@ -103,7 +109,7 @@ struct CriarTarefaView: View {
         }
     }
 }
-
-#Preview {
-    CriarTarefaView(numTask: .constant(0))
-}
+//
+//#Preview {
+//    CriarTarefaView(numTask: .constant(0))
+//}
