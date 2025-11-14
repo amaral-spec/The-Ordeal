@@ -24,7 +24,7 @@ struct ProfessorMainCoordinatorView: View {
     var body: some View {
         TabView(selection: $selectedTab) {
             Tab("Início", systemImage: "music.note.house.fill", value: .inicio) {
-                HomeView()
+                ResumeCoordinatorView(isTeacher: true)
             }
             Tab("Alunos", systemImage: "person.3", value: .alunos) {
                 AlunosView()

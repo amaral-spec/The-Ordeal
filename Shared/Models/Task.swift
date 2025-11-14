@@ -9,8 +9,8 @@ import Foundation
 import CloudKit
 
 
-@MainActor
-final class TaskModel: Identifiable {
+//@MainActor
+final class TaskModel:  Identifiable, Equatable, Hashable  {
     var id: CKRecord.ID
     var studentAudio: [URL]?
     var student: CKRecord.Reference
@@ -42,5 +42,13 @@ final class TaskModel: Identifiable {
         self.reward = record["reward"] as? Int ?? 0
         self.startDate = record["startDate"] as? Date ?? Date()
         self.endDate = record["endDate"] as? Date ?? Date()
+    }
+    
+    static func == (lhs: TaskModel, rhs: TaskModel) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }

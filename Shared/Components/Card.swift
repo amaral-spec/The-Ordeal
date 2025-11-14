@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct Card: View {
-    let index: Int
+    let name: String
+    let quantity: Int
 
     var body: some View {
         HStack {
@@ -25,10 +26,10 @@ struct Card: View {
 //            }
             
             VStack(alignment: .leading) {
-                Text("Substituir pelo nome")
+                Text(name)
                     .font(.headline)
                 
-                Text("Substituir pela quantidade de participantes")
+                Text("\(quantity)")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }

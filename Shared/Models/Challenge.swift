@@ -8,7 +8,8 @@
 import Foundation
 import CloudKit
 
-@MainActor
+// Os models não devem ser actor-isolated, mas sim os viewModels
+//@MainActor
 final class ChallengeModel: Identifiable, Equatable, Hashable {
     var id: CKRecord.ID
     var studentAudios: [URL]

@@ -9,7 +9,7 @@ import Foundation
 import CloudKit
 import SwiftUI
 
-@MainActor
+//@MainActor
 final class GroupModel: Identifiable {
     var id: CKRecord.ID
     var name: String
