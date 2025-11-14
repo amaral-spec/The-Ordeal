@@ -146,7 +146,7 @@ struct AlunosView: View {
                                         .cornerRadius(12)
                                         .shadow(color: .black.opacity(0.08), radius: 4, x: 0, y: 2)
                                     }
-                                    .buttonStyle(.plain) // <-- opcional, remove highlight azul
+                                    .buttonStyle(.plain)
                                     
                                 }
                             }
@@ -163,6 +163,14 @@ struct AlunosView: View {
                         criarGrupo = true
                     }) {
                         Image(systemName: "person.2.badge.plus.fill")
+                            .foregroundStyle(Color(red: 0.65, green: 0.13, blue: 0.29))
+                            .background(Color.white)
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button(action: {
+                    }) {
+                        Image(systemName: "person.fill.checkmark.and.xmark")
                             .foregroundStyle(Color(red: 0.65, green: 0.13, blue: 0.29))
                             .background(Color.white)
                     }

@@ -12,7 +12,7 @@ import CloudKit
 @MainActor
 final class TaskModel: Identifiable {
     var id: CKRecord.ID
-    var studentAudio: [URL]
+    var studentAudio: [URL]?
     var student: CKRecord.Reference
     var title: String
     var description: String
@@ -23,7 +23,7 @@ final class TaskModel: Identifiable {
     
     init(title: String, description: String, student: CKRecord.Reference, startDate: Date, endDate: Date){
         self.id = CKRecord.ID(recordName: UUID().uuidString)
-        self.studentAudio = []
+        self.studentAudio = nil
         self.student = student
         self.title = title
         self.description = description
@@ -35,7 +35,7 @@ final class TaskModel: Identifiable {
     // To fetch from CloudKit
     init(from record: CKRecord) {
         self.id = record.recordID
-        self.studentAudio = record["studentAudio"] as? [URL] ?? []
+        self.studentAudio = record["studentAudio"] as? [URL] ?? nil
         self.student = record["student"] as! CKRecord.Reference
         self.title = record["title"] as? String ?? ""
         self.description = record["description"] as? String ?? ""
