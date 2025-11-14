@@ -11,39 +11,14 @@ import SwiftData
 @main
 struct OsVigaristasApp: App {
     @StateObject private var authService = AuthService.shared
-    
-    
-    var sharedModelContainer: ModelContainer = {
-
-        let schema = Schema([Usuarios.self,
-                             Grupos.self,
-                             Tarefas.self,
-                             Desafio.self])
-        
-        let modelConfiguration = ModelConfiguration(
-            schema: schema,
-            isStoredInMemoryOnly: false,
-            cloudKitDatabase: .private("iCloud.eumesmo.OsVigaristas")
-        )
-        
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
+    @StateObject private var persistenceServices = PersistenceServices()
 
     var body: some Scene {
         WindowGroup {
             AppRootView()
                 .environmentObject(authService) // Compartilha o estado global de login
-                // TODO: rever isso aq mno parece ser iCloud
-                .modelContainer(sharedModelContainer)
+                .environmentObject(persistenceServices) // Compartilha funcoes do CloudKit
                 .preferredColorScheme(.light)
-                .task {
-                    self.authService.configure(context: sharedModelContainer.mainContext)
-                }
-            // ContentView(authVM: AuthViewModel(modelContext: sharedModelContainer.mainContext))
         }
     }
 }

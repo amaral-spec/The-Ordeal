@@ -7,10 +7,19 @@
 
 import SwiftUI
 
+private let grupos = [
+    Grupo(nome: "JJ"),
+    Grupo(nome: "ALIEN"),
+    Grupo(nome: "Maria Maria")
+]
+
 struct CriarDesafioView: View {
+    @State private var selectedItem: Int = 0
+    @State private var selectedDate = Date()
     @State private var desafioNome: String = ""
     @State private var desafioDescricao: String = ""
-    @State private var moedas: Int = 0
+    @State private var moedas: Int = 5
+    @State private var selecao: UUID?
     @Environment(\.dismiss) var dismiss
     @Binding var numChallenge: Int
     
@@ -24,26 +33,43 @@ struct CriarDesafioView: View {
                 Form {
                     Section {
                         LabeledContent("Tipo de Desafio") {
-                     
+                            Picker("", selection: $selectedItem) {
+                                Text("Personalizado").tag(0)
+                                Text("Echo").tag(1)
+                                Text("Encadeia").tag(2)
+                            }
                         }
                     }
                     Section {
-                        TextField("Nome do Desafio", text: $desafioNome)
+                        TextField("Nome do Desafio (Obrigatório)", text: $desafioNome)
                         TextField("Descrição (Opcional)", text: $desafioDescricao)
                     }
                     Section {
                         LabeledContent("Participantes") {
-                     
+                            NavigationLink(destination: List(grupos, selection: $selecao) { grupo in Text(grupo.nome) }
+                            ) {
+                                HStack{
+                                    Spacer()
+                                    if (selecao == nil) { Text("Nenhum") }
+                                    ForEach(grupos) { grupo in
+                                        if (grupo.id == selecao) {
+                                            Text(grupo.nome)
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                     Section {
                         LabeledContent("Recompensa: \(moedas) moedas") {
-                     
+                            Stepper("Recompensa: \(moedas) moedas", value: $moedas, in: 0...50)
+                                .labelsHidden()
                         }
                     }
                     Section {
-                        LabeledContent("Início") {
-                     
+                        LabeledContent("Data de início") {
+                            DatePicker("", selection: $selectedDate)
+                                .datePickerStyle(.compact)
                         }
                     }
                 }
@@ -62,6 +88,7 @@ struct CriarDesafioView: View {
                         dismiss()
                     }
                     .disabled(desafioNome.isEmpty)
+                    .disabled(selecao == nil)
                 }
             }
         }

@@ -6,17 +6,9 @@
 
 import SwiftUI
 
-struct Card: View {
-    let index: Int
-    
-    var body: some View {
-        ZStack {
-            Image("violao")
-                .resizable()
-        }
-        .frame(width: 370, height: 190)
-        .cornerRadius(30)
-    }
+struct Grupo: Identifiable, Hashable {
+    let id = UUID()
+    let nome: String
 }
 
 struct HomeView: View {
@@ -28,7 +20,9 @@ struct HomeView: View {
     enum Mode: String, CaseIterable {
         case Desafio, Tarefa
     }
+    
     @State private var selectedMode = Mode.Desafio
+    
     var body: some View {
         NavigationStack {
             Picker("", selection: $selectedMode) {
@@ -36,7 +30,7 @@ struct HomeView: View {
             }
             .pickerStyle(.segmented)
             .frame(width: 350, height: 30, alignment: .center)
-            VStack (spacing: -15){
+            VStack (spacing: -15) {
                 if selectedMode == Mode.Desafio {
                     if numChallenge == 0 {
                         Spacer(minLength: 100)
@@ -48,8 +42,8 @@ struct HomeView: View {
                                 .opacity(0.3)
                                 .frame(width: 50, height: 50, alignment: .center)
                                 .padding()
-                                                }
-                            VStack (spacing: -15){
+                        }
+                        VStack (spacing: -15){
                             Text("Sem Desafios")
                                 .font(.title3)
                                 .foregroundColor(.primary)
@@ -61,17 +55,6 @@ struct HomeView: View {
                                 .fontWeight(.medium)
                         }
                         Spacer()
-                        
-                        Button {
-                            criarDesafio = true
-//                            numChallenge += 1
-                        } label: {
-                            Text("Novo Desafio")
-                                .frame(maxWidth: 320, maxHeight: 30)
-                        }
-                        .frame(minWidth: 350, minHeight: 70)
-                        .padding(.horizontal)
-                        .buttonStyle(.glassProminent)
                     } else {
                         ScrollView{
                             VStack {
@@ -81,6 +64,7 @@ struct HomeView: View {
                                     Spacer(minLength: 20)
                                 }
                             }
+                            .frame(width: 405)
                         }
                     }
                 } else {
@@ -107,17 +91,6 @@ struct HomeView: View {
                             .fontWeight(.medium)
                         
                         Spacer()
-                        
-                        Button {
-                            criarTarefa = true
-//                            numTask += 1
-                        } label: {
-                            Text("Nova Tarefa")
-                                .frame(maxWidth: 320, maxHeight: 30)
-                        }
-                        .frame(maxWidth: 350, minHeight: 70)
-                        .padding(.horizontal)
-                        .buttonStyle(.glassProminent)
                     } else {
                         ScrollView{
                             VStack {
@@ -138,10 +111,8 @@ struct HomeView: View {
                     Button("Adicionar", systemImage: "plus") {
                         if selectedMode == Mode.Desafio {
                             criarDesafio = true
-//                            numChallenge += 1
                         } else {
                             criarTarefa = true
-//                            numTask += 1
                         }
                     }
                 }
@@ -169,9 +140,9 @@ struct HomeView: View {
 //    let isProfessor: Bool
 //
 //    var body: some View {
-//        
+//
 //        Text("Desafio")
-//        
+//
 //        NavigationStack(path: $path) {
 //            DesafiosListView(viewModel: makeViewModel())
 //                .navigationDestination(for: Route.self) { route in
