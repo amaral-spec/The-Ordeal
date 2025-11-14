@@ -36,13 +36,17 @@ class PersistenceServices: ObservableObject {
         return usuario
     }
     
-    func fetchUserForTask(as userID: CKRecord.ID) async throws -> [UserModel] {
-        let groups = try await fetchAllGroups(for: userID)
+    func fetchUserForTask() async throws -> [UserModel] {
+        guard let currentUser = AuthService.shared.currentUser else {
+            throw NSError(domain: "AuthError", code: 1, userInfo: [NSLocalizedDescriptionKey: "No user loggoed in"])
+        }
+        
+        let groups = try await fetchAllGroups(for: currentUser.id)
 
         let memberReferences = groups.flatMap { $0.members } // [CKRecord.Reference]
 
         let memberIDs = Set(memberReferences.map { $0.recordID })
-            .subtracting([userID])  // exclude the user themselves
+            .subtracting([currentUser.id])  // exclude the user themselves
 
         var users: [UserModel] = []
 
