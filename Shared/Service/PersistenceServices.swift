@@ -477,7 +477,7 @@ class PersistenceServices: ObservableObject {
             NSPredicate(format: "members CONTAINS %@", userRef)
         ])
         let challengeQuery = CKQuery(recordType: "Challenge", predicate: challengePredicate)
-        let (challengeResults, _) = try await db.records(matching: groupQuery)
+        let (challengeResults, _) = try await db.records(matching: challengeQuery)
         let challengeRecords = challengeResults.compactMap { try? $0.1.get() }
         let challenges = challengeRecords.map { ChallengeModel(from: $0) }
         
