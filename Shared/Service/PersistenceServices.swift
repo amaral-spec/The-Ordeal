@@ -175,6 +175,10 @@ class PersistenceServices: ObservableObject {
     
     // MARK: Grupo: pedidos e membros
     func askToJoinGroup(to grupo: GroupModel, usuario: UserModel) async throws {
+        guard let currentUser = AuthService.shared.currentUser else {
+            throw NSError(domain: "AuthError", code: 1, userInfo: [NSLocalizedDescriptionKey: "No user loggoed in"])
+        }
+        
         let record = try await db.record(for: grupo.id)
         let newRef = CKRecord.Reference(recordID: usuario.id, action: .none)
         
