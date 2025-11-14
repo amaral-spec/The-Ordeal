@@ -461,19 +461,30 @@ class PersistenceServices: ObservableObject {
         // Function that creates predicates/queries for each type (group, challenge, task)
         // Returns arrays with all objects found that match both the user's prompt
         // and their user id
-        let groupPredicate = NSPredicate(format: "name CONTAINS %@", prompt)
+        let userRef = CKRecord.Reference(recordID: userRecordID, action: .none)
+
+        let groupPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+            NSPredicate(format: "name CONTAINS %@", prompt),
+            NSPredicate(format: "members CONTAINS %@", userRef)
+        ])
         let groupQuery = CKQuery(recordType: "MusicGroup", predicate: groupPredicate)
         let (groupResults, _) = try await db.records(matching: groupQuery)
         let groupRecords = groupResults.compactMap { try? $0.1.get() }
         let groups = groupRecords.map { GroupModel(from: $0) }
         
-        let challengePredicate = NSPredicate(format: "name CONTAINS %@", prompt)
+        let challengePredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+            NSPredicate(format: "title CONTAINS %@", prompt),
+            NSPredicate(format: "members CONTAINS %@", userRef)
+        ])
         let challengeQuery = CKQuery(recordType: "Challenge", predicate: challengePredicate)
         let (challengeResults, _) = try await db.records(matching: groupQuery)
         let challengeRecords = challengeResults.compactMap { try? $0.1.get() }
         let challenges = challengeRecords.map { ChallengeModel(from: $0) }
         
-        let taskPredicate = NSPredicate(format: "name CONTAINS %@", prompt)
+        let taskPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+            NSPredicate(format: "title CONTAINS %@", prompt),
+            NSPredicate(format: "members CONTAINS %@", userRef)
+        ])
         let taskQuery = CKQuery(recordType: "Task", predicate: taskPredicate)
         let (taskResults, _) = try await db.records(matching: taskQuery)
         let taskRecords = taskResults.compactMap { try? $0.1.get() }
