@@ -23,9 +23,7 @@ struct InicioView: View {
             }
 
             // MARK: Toolbar
-            
-            
-            .navigationTitle("Resumo")
+            .navigationTitle("Início")
             .toolbarTitleDisplayMode(.inlineLarge)
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
