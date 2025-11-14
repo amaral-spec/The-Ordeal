@@ -463,6 +463,7 @@ class PersistenceServices: ObservableObject {
         // and their user id
         let userRef = CKRecord.Reference(recordID: userRecordID, action: .none)
 
+        // Fetching groups from prompt
         let groupPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
             NSPredicate(format: "name CONTAINS %@", prompt),
             NSPredicate(format: "members CONTAINS %@", userRef)
@@ -472,18 +473,26 @@ class PersistenceServices: ObservableObject {
         let groupRecords = groupResults.compactMap { try? $0.1.get() }
         let groups = groupRecords.map { GroupModel(from: $0) }
         
+        // Fetching challenges from prompt
+        let userGroups = try await fetchAllGroups(for: userRecordID)
+        let groupRefs = userGroups.map { CKRecord.Reference(recordID: $0.id, action: .none) }
+        
+        let challengeNamePredicate = NSPredicate(format: "name CONTAINS %@", prompt)
+        let groupListPredicate = NSPredicate(format: "group IN %@", groupRefs)
         let challengePredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
-            NSPredicate(format: "title CONTAINS %@", prompt),
-            NSPredicate(format: "members CONTAINS %@", userRef)
+            challengeNamePredicate,
+            groupListPredicate
         ])
+        
         let challengeQuery = CKQuery(recordType: "Challenge", predicate: challengePredicate)
         let (challengeResults, _) = try await db.records(matching: challengeQuery)
         let challengeRecords = challengeResults.compactMap { try? $0.1.get() }
         let challenges = challengeRecords.map { ChallengeModel(from: $0) }
         
+        // Fetching tasks from prompt
         let taskPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
             NSPredicate(format: "title CONTAINS %@", prompt),
-            NSPredicate(format: "members CONTAINS %@", userRef)
+            NSPredicate(format: "student == %@", userRef)
         ])
         let taskQuery = CKQuery(recordType: "Task", predicate: taskPredicate)
         let (taskResults, _) = try await db.records(matching: taskQuery)
