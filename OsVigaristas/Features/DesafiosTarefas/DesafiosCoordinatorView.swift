@@ -104,10 +104,7 @@ struct HomeView: View {
                     }
                 }
             }
-            .navigationTitle("Resumo")
-            .task {
-                var tarefas = try await persistenceServices.fetchAllTasks()
-            }
+            .navigationTitle("Resumo") 
             .toolbarTitleDisplayMode(.inlineLarge)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
