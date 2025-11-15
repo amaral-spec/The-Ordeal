@@ -57,31 +57,29 @@ struct CriarTarefaView: View {
                     }
                 }
             }
-            .navigationTitle("Adicionar Tarefa")
-            .task {
-                do {
-                    participants = try await persistenceServices.fetchUserForTask()
-                    print("participantes carregados: ", participants.map(\.name))
-                } catch {
-                    print("Erro ao carregar participantes: \(error.localizedDescription)")
-                }
-            }
             .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle("Adicionar Tarefa")
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancelar", systemImage: "xmark") {
-                        dismiss()
-                    }
-                }
+                // If you want a cancel button, uncomment:
+                 ToolbarItem(placement: .cancellationAction) {
+                     Button {
+                         dismiss()
+                     } label: {
+                         Label("Cancelar", systemImage: "xmark")
+                     }
+                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Adicionar", systemImage: "checkmark") {
+                    Button {
                         Task {
                             isSaving = true
+                            defer { isSaving = false }
+                            
                             guard let selectedID = selectedUserID,
                                   let selectedUser = participants.first(where: { $0.id == selectedID }) else { return }
-                        
+                            
                             let studentRef = CKRecord.Reference(recordID: selectedUser.id, action: .none)
                             
+                            // Use TaskModel as required by PersistenceServices
                             let task = TaskModel(
                                 title: tarefaNome,
                                 description: tarefaDescricao,
@@ -94,21 +92,28 @@ struct CriarTarefaView: View {
                                 try? await Task.sleep(for: .seconds(1.5)) // espera CloudKit atualizar
                                 await MainActor.run {
                                     onTarefaCriada?()
+                                    numTask += 1
                                     dismiss()
                                 }
                             } catch {
                                 print("Erro ao criar grupo: \(error.localizedDescription)")
                             }
-                            isSaving = false
                         }
-
-                        numTask += 1
-                        dismiss()
+                    } label: {
+                        Label("Adicionar", systemImage: "checkmark")
                     }
-                    .disabled(tarefaNome.isEmpty)
-                    .disabled(selectedUserID == nil)
+                    .disabled(tarefaNome.isEmpty || selectedUserID == nil || isSaving)
                 }
             }
+            // If needed, load participants automatically:
+             .task {
+                 do {
+                     participants = try await persistenceServices.fetchUserForTask()
+                     print("participantes carregados: ", participants.map(\.name))
+                 } catch {
+                     print("Erro ao carregar participantes: \(error.localizedDescription)")
+                 }
+             }
         }
     }
 }

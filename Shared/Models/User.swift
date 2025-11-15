@@ -9,7 +9,7 @@ import Foundation
 import CloudKit
 import AuthenticationServices
 
-@MainActor
+//@MainActor
 final class UserModel: Identifiable {
     var id: CKRecord.ID
     var creationDate: Date
