@@ -9,7 +9,14 @@ import SwiftUI
 
 struct Card: View {
     let name: String
-    let quantity: Int
+    let quantity: Int?
+    let grupo: String?
+    
+    init(name: String, quantity: Int, grupo: String) {
+        self.name = name
+        self.quantity = quantity
+        self.grupo = grupo
+    }
 
     var body: some View {
         HStack {
@@ -29,9 +36,19 @@ struct Card: View {
                 Text(name)
                     .font(.headline)
                 
-                Text("\(quantity)")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
+                if let quantity, let grupo {
+                    Text("\(grupo) • \(quantity)")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                } else if let quantity {
+                    Text("\(quantity)")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                } else if let grupo {
+                    Text(grupo)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
             }
             
             Spacer()
@@ -45,5 +62,6 @@ struct Card: View {
 }
 
 //#Preview {
-//    Card()
+//    Card(name: "Título", quantity: 3, grupo: "Grupo A")
 //}
+
