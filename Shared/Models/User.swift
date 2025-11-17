@@ -9,7 +9,7 @@ import Foundation
 import CloudKit
 import AuthenticationServices
 
-@MainActor
+//@MainActor
 final class UserModel: Identifiable {
     var id: CKRecord.ID
     var creationDate: Date
@@ -34,6 +34,7 @@ final class UserModel: Identifiable {
         self.lastChallenge = nil
     }
     
+    // To fetch from CloudKit
     init(from record: CKRecord) {
         self.id = record.recordID
         self.creationDate = record.creationDate ?? Date()

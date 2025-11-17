@@ -8,7 +8,8 @@
 import Foundation
 import CloudKit
 
-@MainActor
+// Os models não devem ser actor-isolated, mas sim os viewModels
+//@MainActor
 final class ChallengeModel: Identifiable, Equatable, Hashable {
     var id: CKRecord.ID
     var studentAudios: [URL]
@@ -33,7 +34,21 @@ final class ChallengeModel: Identifiable, Equatable, Hashable {
         self.startDate = startDate
         self.endDate = endDate
     }
-
+    
+    // To fetch from CloudKit
+    init(from record: CKRecord) {
+        self.id = record.recordID
+        self.studentAudios = []
+        self.generalAudio = nil
+        self.group = record["group"] as? CKRecord.Reference
+        self.title = record["title"] as? String ?? ""
+        self.description = record["description"] as? String ?? ""
+        self.whichChallenge = record["whichChallenge"] as? Int ?? 0
+        self.reward = record["reward"] as? Int ?? 0
+        self.startDate = record["startDate"] as? Date ?? Date()
+        self.endDate = record["endDate"] as? Date ?? Date()
+    }
+    
     static func == (lhs: ChallengeModel, rhs: ChallengeModel) -> Bool {
         lhs.id == rhs.id
     }

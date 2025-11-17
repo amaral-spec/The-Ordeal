@@ -23,7 +23,7 @@ struct AppRootView: View {
             } else if (authService.currentUser!.isTeacher) {
                 ProfessorMainCoordinatorView()
             } else {
-                AlunoMainCoordinatorView()
+                StudentMainCoordinatorView()
             }
         }
         .animation(.easeInOut, value: authService.isLoggedIn)

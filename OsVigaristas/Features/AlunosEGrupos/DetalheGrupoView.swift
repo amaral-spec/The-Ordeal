@@ -25,7 +25,7 @@ struct DetalheGrupoView: View {
                     .font(.largeTitle)
                     .fontWeight(.bold)
                 
-                Text("\(grupo.members.count) alunos no grupo")
+                Text("\(grupo.members.count) participantes")
                     .font(.headline)
                     .foregroundStyle(.secondary)
                 
@@ -48,16 +48,6 @@ struct DetalheGrupoView: View {
             .padding()
             .navigationTitle("Detalhes do Grupo")
             .navigationBarTitleDisplayMode(.inline)
-        }
-        .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                Button(action: {
-                }) {
-                    Image(systemName: "person.fill.checkmark.and.xmark")
-                        .foregroundStyle(Color(red: 0.65, green: 0.13, blue: 0.29))
-                        .background(Color.white)
-                }
-            }
         }
     }
 }
