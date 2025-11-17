@@ -12,21 +12,29 @@ struct ResumeCoordinatorView: View {
 
     @State private var path: [Route] = []
     let isTeacher: Bool
+    var resumeVM: ResumeViewModel
+    
+    init(isTeacher: Bool) {
+        self.isTeacher = isTeacher
+        resumeVM = ResumeViewModel(isTeacher: isTeacher)
+    }
 
     var body: some View {
         NavigationStack(path: $path) {
-            ResumeView(resumeVM: ResumeViewModel(isTeacher: isTeacher)) { route in
+            ResumeView(resumeVM: resumeVM) { route in
                 path.append(route)
             }
             .navigationDestination(for: Route.self) { route in
                 switch route {
                 case .detailChallenge(let challenge):
 //                    ChallengeDetailView(challenge: challenge)
-                    DetalhesTarefasView()
+                    TaskDetailView()
+                        .environmentObject(resumeVM)
 //                    EmptyView()
 
                 case .detailTask(let task):
-                    DetalhesTarefasView()
+                    TaskDetailView()
+                        .environmentObject(resumeVM)
 //                    TaskDetailView(task: task)
 //                    EmptyView()EmptyView()
 

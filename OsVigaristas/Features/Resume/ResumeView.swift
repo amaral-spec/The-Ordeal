@@ -67,7 +67,7 @@ struct ResumeView: View {
         }
     }
     
-    
+    // MARK: - DESAFIOS
     private var desafiosSection: some View {
         Group {
             if resumeVM.challenges.count == 0 {
