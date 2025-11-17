@@ -91,5 +91,4 @@ final class ResumeViewModel: ObservableObject {
         self.groupsByID[groupA.id] = groupA
         self.groupsByID[groupB.id] = groupB
     }
-
 }

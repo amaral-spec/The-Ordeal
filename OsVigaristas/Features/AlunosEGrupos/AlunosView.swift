@@ -197,7 +197,7 @@ struct AlunosView: View {
         }
         
         do {
-            let gruposCarregados = try await persistenceServices.fetchAllGroups(for: currentUser.id)
+            let gruposCarregados = try await persistenceServices.fetchAllGroups()
             await MainActor.run {
                 grupos = gruposCarregados
                 isGroupsEmpty = gruposCarregados.isEmpty

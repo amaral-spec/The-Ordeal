@@ -5,6 +5,9 @@ struct ResumeView: View {
     
     @State private var criarDesafio = false
     @State private var criarTarefa = false
+    @EnvironmentObject var persistenceServices: PersistenceServices
+    @State private var desafios: [ChallengeModel] = []
+    @State private var isChallengeEmpty: Bool = true
     
     @StateObject var resumeVM: ResumeViewModel
     let onNavigate: (ResumeCoordinatorView.Route) -> Void
@@ -32,6 +35,9 @@ struct ResumeView: View {
         }
         .frame(maxHeight: .infinity, alignment: .top)
         .navigationTitle("Resumo")
+        .task {
+            await carregarDesafios()
+        }
         .toolbarTitleDisplayMode(.inlineLarge)
         .toolbar {
             if (resumeVM.isTeacher) {
@@ -64,6 +70,24 @@ struct ResumeView: View {
         }
         .sheet(isPresented: $criarTarefa) {
             CriarTarefaView(numTask: .constant(0))
+        }
+    }
+    
+    private func carregarDesafios() async {
+        guard let currentUser = AuthService.shared.currentUser else {
+            print("Nenhum usuário logado.")
+            return
+        }
+        
+        do {
+            let desafiosCarregados = try await persistenceServices.fetchAllChallenges()
+            await MainActor.run {
+                desafios = desafiosCarregados
+                isChallengeEmpty = desafiosCarregados.isEmpty
+            }
+            print("\(desafiosCarregados.count) grupos carregados")
+        } catch {
+            print("Erro ao carregar grupos: \(error.localizedDescription)")
         }
     }
     
