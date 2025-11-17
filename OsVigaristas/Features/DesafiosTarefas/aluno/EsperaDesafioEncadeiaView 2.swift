@@ -7,44 +7,23 @@
 
 import SwiftUI
 
-struct EaperaDesafioEncadeiaView: View {
+struct EsperaDesafioEncadeiaView: View {
     var body: some View {
         NavigationStack{
             
-            Spacer()
+            
             VStack{//Escrita
-                Text("Toque algo de sua escolha por 15 segundos")
-                    .padding()
-                    .multilineTextAlignment(.center)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .font(.title3.bold())
+                
                 Spacer()
                 
-                ZStack{ //Imagem no meio estranha
-                    Circle()
-                        .frame(width: 50, height: 50)
-                        .foregroundColor(Color("RosinhaColor"))
-                    
-                    Image(systemName: "waveform")
-                        .resizable()
-                        .foregroundColor(Color("AccentColor"))
-                        .frame(width: 25, height: 25)
-                }
+                ImagemIconeRosaEsperaView(nomeIcone: "clock.arrow.trianglehead.counterclockwise.rotate.90")
+                
                 //.padding()
+                MensagemDaImagemView(title: "Em espera", subtitle: "Outra pessoas está gravando,\nespere o desafio estar livre\npara começar")
                 
-                VStack(){
-                    Text("Em espera")
-                        .font(.title2.bold())
-                    Text("Outra pessoas está gravando,\nespere o desafio estar livre\npara começar")
-                        .font(.title3)
-                        .foregroundColor(.gray)
-                        .multilineTextAlignment(.center)
-                        
-                }
                 
                 Spacer()
-                Spacer()
-                botaoGravacao()
+                //botaoGravacao(color: .gray)
             }
             .navigationTitle(Text("Encadeia"))
             .navigationBarTitleDisplayMode(.inline)
@@ -55,12 +34,7 @@ struct EaperaDesafioEncadeiaView: View {
                         //dismis()
                     }
                 }
-                ToolbarItem(placement: .confirmationAction){
-                    Button("confirmar", systemImage: "checkmark"){
-                        
-                    }
-                    .tint(Color.gray)
-                }
+                
             }
         }
     }
@@ -73,6 +47,6 @@ struct EaperaDesafioEncadeiaView: View {
 
 
 #Preview {
-    EaperaDesafioEncadeiaView()
+    EsperaDesafioEncadeiaView()
 }
 
