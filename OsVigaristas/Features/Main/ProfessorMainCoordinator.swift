@@ -20,11 +20,11 @@ struct ProfessorMainCoordinatorView: View {
         print("professor")
         _authVM = StateObject(wrappedValue: AuthViewModel(authService: AuthService.shared))
     }
-
+    
     var body: some View {
         TabView(selection: $selectedTab) {
             Tab("Início", systemImage: "music.note.house.fill", value: .inicio) {
-                HomeView()
+                ResumeCoordinatorView(isTeacher: true)
             }
             Tab("Alunos", systemImage: "person.3", value: .alunos) {
                 AlunosView()
@@ -35,14 +35,14 @@ struct ProfessorMainCoordinatorView: View {
             }
             Tab("Buscar", systemImage: "magnifyingglass", value: .buscar, role: .search) {
                 NavigationStack {
-                        BuscarView()
-                            .navigationTitle("Buscar")
-                            .toolbarTitleDisplayMode(.inlineLarge)
-                    }
-                    .searchable(text: $searchText)
+                    BuscarView()
+                        .navigationTitle("Buscar")
+                        .toolbarTitleDisplayMode(.inlineLarge)
                 }
+                .searchable(text: $searchText)
+            }
         }
         .tint(Color(red: 0.65, green: 0.13, blue: 0.29))
-//        .searchable(text: $searchText)
+        //        .searchable(text: $searchText)
     }
 }

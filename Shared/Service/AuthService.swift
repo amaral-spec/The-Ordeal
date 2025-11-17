@@ -95,7 +95,11 @@ final class AuthService: NSObject, ObservableObject {
             Task { @MainActor in
                 switch state {
                 case .authorized:
-                    self.isLoggedIn = true
+                    if let existingUser = await self.fetchUserFromCloudKit(userId: self.appleUserID) {
+                        self.currentUser = existingUser
+                        self.isLoggedIn = true
+                        self.saveSession(for: self.appleUserID)
+                    }
                 case .revoked, .notFound:
                     self.logout()
                 default:
