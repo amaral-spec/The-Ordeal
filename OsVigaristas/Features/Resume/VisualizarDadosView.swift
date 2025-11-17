@@ -8,12 +8,14 @@
 import SwiftUI
 
 struct VisualizarDadosView: View {
+    @StateObject var resumeVM: ResumeViewModel
+    
     var body: some View {
         NavigationStack{
             VStack{
-                //colocar titulo dinamico aqui
+                //colocar titulo dinamico para o caso desafio/tarefa
                 Dados()
-                listaParticipante()
+                listaParticipante(resumeVM: ResumeViewModel(isTeacher: true))
                 Spacer()
             }
             .navigationTitle("visualizar dados")
@@ -28,7 +30,7 @@ struct Dados: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 30)
                     .frame(width: 173, height: 108, alignment: .leading)
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.gray.opacity(0.3)) //mudar dps
                 
                 VStack() {
                     //trocar o texto para os dias que estão sendo contados desde o dia que a tarefa foi criada
@@ -36,26 +38,23 @@ struct Dados: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .font(.title)
                         .foregroundStyle(Color.accentColor)
-                        .frame(alignment: .leading)
-                        .padding(.horizontal, 14)
+                        .padding(.horizontal, 15)
                     
-                    HStack {
-                        Text("1212 Dias")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .foregroundStyle(Color.accentColor)
-                            .font(.title)
-                            .bold()
-                            .padding(.horizontal, 14)
-                    }
+                    Text("1212 Dias")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .foregroundStyle(Color.accentColor)
+                        .font(.title)
+                        .bold()
+                        .padding(.horizontal, 15)
                 }
-                .frame(width: 173, height: 108, alignment: .leading)
+                .frame(width: 173, height: 108)
             }
             .padding()
             
             ZStack {
                 RoundedRectangle(cornerRadius: 30)
                     .frame(width: 173, height: 108, alignment: .leading)
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.gray.opacity(0.3)) //mudar dps
                 
                 VStack() {
                     //trocar o texto para os dias que estão sendo contados desde o dia que a tarefa foi criada
@@ -63,8 +62,7 @@ struct Dados: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .font(.title)
                         .foregroundStyle(Color.accentColor)
-                        .frame(alignment: .leading)
-                        .padding(.horizontal, 14)
+                        .padding(.horizontal, 15)
                     Text("50 Moedas")
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .foregroundStyle(Color.accentColor)
@@ -80,7 +78,7 @@ struct Dados: View {
             RoundedRectangle(cornerRadius: 30)
                 .frame(height: 201, alignment: .center)
                 .padding(.horizontal)
-                .foregroundStyle(.white)
+                .foregroundStyle(.gray.opacity(0.3))
             VStack {
                 Text("Descrição")
                     .font(.title3)
@@ -96,11 +94,15 @@ struct Dados: View {
 }
 
 struct listaParticipante: View {
+    @StateObject var resumeVM: ResumeViewModel
+    
     var body: some View {
         HStack {
-            Text("Resultado dos Alunos")
-                .font(.title2)
-                .bold()
+            Button(action: {}) {
+                resumeVM.isTeacher ? Text("Resultados dos alunos").fontWeight(.bold) : Text("Participantes").fontWeight(.bold)
+            }
+            .buttonStyle(.plain)
+            
             Image(systemName: "chevron.right")
                 .foregroundColor(.pink)
                 .foregroundStyle(Color.accentColor)
@@ -125,5 +127,5 @@ struct listaParticipante: View {
 
 
 #Preview {
-    VisualizarDadosView()
+    VisualizarDadosView(resumeVM: ResumeViewModel())
 }
