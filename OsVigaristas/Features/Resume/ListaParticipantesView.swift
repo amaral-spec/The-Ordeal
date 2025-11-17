@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct listaParticipantesView: View {
+struct ListaParticipantesView: View {
     @StateObject var resumeVM: ResumeViewModel
     
     var body: some View {
@@ -56,5 +56,5 @@ struct Participante: View {
 }
 
 #Preview {
-    listaParticipantesView(resumeVM: ResumeViewModel(isTeacher: true))
+    ListaParticipantesView(resumeVM: ResumeViewModel(isTeacher: true))
 }

@@ -110,7 +110,7 @@ struct ResumeView: View {
 #Preview {
     @Previewable @State var path: [ResumeCoordinatorView.Route] = []
     
-    return NavigationStack(path: $path) {
+    NavigationStack(path: $path) {
         ResumeView(
             resumeVM: ResumeViewModel(isTeacher: true)
         ) { route in
@@ -122,8 +122,11 @@ struct ResumeView: View {
                 EmptyView()
             case .detailTask(_):
                 EmptyView()
+            
             case .list:
                 EmptyView()
+            case .participants:
+                ListaParticipantesView(resumeVM: ResumeViewModel())
             }
         }
         .environmentObject(PersistenceServices())

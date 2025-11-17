@@ -8,6 +8,7 @@ struct ResumeCoordinatorView: View {
         case list
         case detailChallenge(ChallengeModel)
         case detailTask(TaskModel)
+        case participants
     }
 
     @State private var path: [Route] = []
@@ -40,6 +41,11 @@ struct ResumeCoordinatorView: View {
 
                 case .list:
                     EmptyView()
+                    
+                case .participants:
+                    ListaParticipantesView(resumeVM: ResumeViewModel())
+                    
+                
                 }
             }
         }
