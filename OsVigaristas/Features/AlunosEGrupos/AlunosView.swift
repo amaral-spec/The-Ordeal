@@ -191,11 +191,6 @@ struct AlunosView: View {
     }
     
     private func carregarGrupos() async {
-        guard let currentUser = AuthService.shared.currentUser else {
-            print("Nenhum usuário logado.")
-            return
-        }
-        
         do {
             let gruposCarregados = try await persistenceServices.fetchAllGroups()
             await MainActor.run {
