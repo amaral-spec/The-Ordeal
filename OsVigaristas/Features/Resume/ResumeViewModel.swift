@@ -8,6 +8,11 @@
 import Foundation
 import CloudKit
 
+struct Grupo: Identifiable, Hashable {
+    let id = UUID()
+    let nome: String
+}
+
 final class ResumeViewModel: ObservableObject {
     @Published var challenges: [ChallengeModel]
     @Published var tasks: [TaskModel]
