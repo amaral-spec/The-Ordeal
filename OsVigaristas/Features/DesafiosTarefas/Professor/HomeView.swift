@@ -38,8 +38,7 @@ struct HomeView: View {
                             Image(systemName: "flag.pattern.checkered.2.crossed")
                                 .foregroundColor(Color.accentColor)
                             Circle()
-                                .fill(Color.accentColor)
-                                .opacity(0.3)
+                                .fill(Color("AccentMidColor"))
                                 .frame(width: 50, height: 50, alignment: .center)
                                 .padding()
                         }
@@ -74,8 +73,7 @@ struct HomeView: View {
                             Image(systemName: "checklist.checked")
                                 .foregroundColor(Color.accentColor)
                             Circle()
-                                .fill(Color.accentColor)
-                                .opacity(0.3)
+                                .fill(Color("AccentMidColor"))
                                 .frame(width: 50, height: 50, alignment: .center)
                                 .padding()
                         }
@@ -96,7 +94,10 @@ struct HomeView: View {
                             VStack {
                                 Spacer()
                                 ForEach(0..<numTask, id: \.self) {
-                                    i in Card(index: i)
+                                    i in
+                                    NavigationLink(destination: DetalhesTarefasView()) {
+                                        Card(index: i)
+                                    }
                                     Spacer(minLength: 20)
                                 }
                             }
@@ -130,35 +131,3 @@ struct HomeView: View {
 #Preview {
     HomeView()
 }
-//struct DesafiosCoordinatorView: View {
-//    enum Route: Hashable {
-//        case list
-//        case detalhe(Desafio)
-//    }
-//
-//    @State private var path = [Route]()
-//    let isProfessor: Bool
-//
-//    var body: some View {
-//
-//        Text("Desafio")
-//
-//        NavigationStack(path: $path) {
-//            DesafiosListView(viewModel: makeViewModel())
-//                .navigationDestination(for: Route.self) { route in
-//                    switch route {
-//                    case .detalhe(let desafio):
-//                        TarefaDetalheView(desafio: desafio)
-//                    default:
-//                        EmptyView()
-//                    }
-//                }
-//        }
-//    }
-//
-//    private func makeViewModel() -> DesafiosListViewModel {
-//        userType == .professor
-//            ? ProfessorDesafiosViewModel()
-//            : AlunoDesafiosViewModel()
-//    }
-//}

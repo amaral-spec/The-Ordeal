@@ -110,13 +110,13 @@ struct DetalhesTarefasView: View {
             .background(Color(.systemGray6))
             .navigationTitle("Tarefa do Barquinho")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancelar", systemImage: "chevron.left") {
-                        dismiss()
-                    }
-                }
-            }
+//            .toolbar {
+//                ToolbarItem(placement: .cancellationAction) {
+//                    Button("Cancelar", systemImage: "chevron.left") {
+//                        dismiss()
+//                    }
+//                }
+//            }
         }
     }
 }
