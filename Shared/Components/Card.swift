@@ -27,9 +27,9 @@ struct Card: View {
 //                    .frame(width: 60, height: 60)
 //                    .clipShape(RoundedRectangle(cornerRadius: 10))
 //            } else {
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(Color.gray.opacity(0.3))
-                    .frame(width: 60, height: 60)
+//                RoundedRectangle(cornerRadius: 10)
+//                    .fill(Color.gray.opacity(0.3))
+//                    .frame(width: 60, height: 60)
 //            }
             
             VStack(alignment: .leading) {
@@ -50,18 +50,16 @@ struct Card: View {
                         .foregroundColor(.secondary)
                 }
             }
-            
             Spacer()
         }
         .padding()
         .background(.white)
         .cornerRadius(12)
-        .shadow(color: .black.opacity(0.08), radius: 4, x: 0, y: 2)
-
+        .shadow(color: .black.opacity(0.20), radius: 4, x: 0, y: 2)
     }
 }
 
-//#Preview {
-//    Card(name: "Título", quantity: 3, grupo: "Grupo A")
-//}
+#Preview {
+    Card(name: "Título", quantity: 3, grupo: "Grupo A")
+}
 

@@ -388,7 +388,7 @@ class PersistenceServices: ObservableObject {
         }
         
         let userRef = CKRecord.Reference(recordID: currentUser.id, action: .none)
-        let taskPredicate = NSPredicate(format: "members CONTAINS %@", userRef)
+        let taskPredicate = NSPredicate(format: "student CONTAINS %@", userRef)
         let taskQuery = CKQuery(recordType: "Task", predicate: taskPredicate)
         
         let (taskResults, _) = try await db.records(matching: taskQuery)

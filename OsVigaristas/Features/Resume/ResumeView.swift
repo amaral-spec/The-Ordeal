@@ -37,6 +37,7 @@ struct ResumeView: View {
         .navigationTitle("Resumo")
         .task {
             await resumeVM.carregarDesafios()
+            await resumeVM.carregarTarefas()
         }
         .toolbarTitleDisplayMode(.inlineLarge)
         .toolbar {
