@@ -34,7 +34,7 @@ struct DetalheGrupoView: View {
                 Button {
                     //func para copiar o codigo?
                 } label: {
-                    Text("Código do grupo: 1234")
+                    Text("Código do grupo: \(grupo.groupCode)")
                         .font(.headline)
                         .foregroundColor(.white)
                         .padding()

@@ -1,29 +1,51 @@
-//
-//  PerfilCoordinatorView.swift
-//  OsVigaristas
-//
-//  Created by Ludivik de Paula on 04/11/25.
-//
-
 import SwiftUI
+import CloudKit
+
 
 struct PerfilCoordinatorView: View {
     @EnvironmentObject var authVM: AuthViewModel
     let isProfessor: Bool
+    @State private var groupCode: String = ""
+    @EnvironmentObject var persistenceServices: PersistenceServices
+    
+    @State private var fetchedGroup: GroupModel? = nil
+    @State private var fetchError: String? = nil
 
     var body: some View {
         if isProfessor {
-//            ProfessorPerfilView(viewModel: PerfilViewModel(userType: .professor))
             Text("Perfil Professor")
-            Button("Logout") {
-                authVM.logout()
-            }
+            Button("Logout") { authVM.logout() }
+
         } else {
-            Text("Perfil Aluno")
-            Button("Logout") {
-                authVM.logout()
+            VStack {
+                TextField("Código do grupo", text: $groupCode)
+                    .textFieldStyle(.roundedBorder)
+                    .padding()
+
+                if let group = fetchedGroup {
+                    Text("Grupo encontrado: \(group.name)")
+                        .foregroundColor(.green)
+                } else if let error = fetchError {
+                    Text("Erro: \(error)")
+                        .foregroundColor(.red)
+                } else {
+                    Text("Nenhum grupo encontrado")
+                        .foregroundColor(.gray)
+                }
+
+                Button("Logout") { authVM.logout() }
             }
-//            AlunoPerfilView(viewModel: PerfilViewModel(userType: .aluno))
+            .onChange(of: groupCode) { newValue in
+                Task {
+                    do {
+                        fetchedGroup = try await persistenceServices.fetchGroupByCode(code: newValue)
+                        fetchError = nil
+                    } catch {
+                        fetchedGroup = nil
+                        fetchError = error.localizedDescription
+                    }
+                }
+            }
         }
     }
 }
