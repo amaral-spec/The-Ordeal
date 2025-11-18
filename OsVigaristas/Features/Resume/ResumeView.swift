@@ -26,6 +26,7 @@ struct ResumeView: View {
         }
         .pickerStyle(.segmented)
         .padding()
+        
         VStack {
             if selectedMode == .Desafio {
                 desafiosSection
@@ -113,25 +114,27 @@ struct ResumeView: View {
     
 }
 
-//#Preview {
-//    @Previewable @State var path: [ResumeCoordinatorView.Route] = []
-//    
-//    return NavigationStack(path: $path) {
-//        ResumeView(
-//            resumeVM: ResumeViewModel(isTeacher: true)
-//        ) { route in
-//            path.append(route)
-//        }
-//        .navigationDestination(for: ResumeCoordinatorView.Route.self) { route in
-//            switch route {
-//            case .detailChallenge(_):
-//                EmptyView()
-//            case .detailTask(_):
-//                EmptyView()
-//            case .list:
-//                EmptyView()
-//            }
-//        }
-//        .environmentObject(PersistenceServices())
-//    }
-//}
+#Preview {
+    @Previewable @State var path: [ResumeCoordinatorView.Route] = []
+    @Previewable @State var isTeacher: Bool = true
+    @Previewable @StateObject var persistenceServices: PersistenceServices = PersistenceServices()
+    
+    NavigationStack(path: $path) {
+        ResumeView(
+            resumeVM: ResumeViewModel(persistenceServices: persistenceServices, isTeacher: true)
+        ) { route in
+            path.append(route)
+        }
+        .navigationDestination(for: ResumeCoordinatorView.Route.self) { route in
+            switch route {
+            case .detailChallenge(_):
+                EmptyView()
+            case .detailTask(_):
+                EmptyView()
+            case .list:
+                EmptyView()
+            }
+        }
+        .environmentObject(PersistenceServices())
+    }
+}

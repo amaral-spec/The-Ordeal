@@ -10,7 +10,9 @@ import SwiftUI
 
 
 @MainActor
-class PersistenceServices: ObservableObject {
+class PersistenceServices: NSObject, ObservableObject {
+    static let shared = PersistenceServices()
+    
     let db = CKContainer.default().publicCloudDatabase
     
     // MARK: CRUD: Usuarios
@@ -56,6 +58,17 @@ class PersistenceServices: ObservableObject {
             users.append(user)
         }
 
+        return users
+    }
+    
+    // Fetch all students (users where isTeacher == false)
+    func fetchAllStudents() async throws -> [UserModel] {
+        let predicate = NSPredicate(format: "isTeacher == %@", NSNumber(value: false))
+        let query = CKQuery(recordType: "User", predicate: predicate)
+        
+        let (results, _) = try await db.records(matching: query)
+        let records: [CKRecord] = results.compactMap { try? $0.1.get() }
+        let users = records.map { UserModel(from: $0) }
         return users
     }
     
