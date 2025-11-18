@@ -28,23 +28,19 @@ struct ResumeCoordinatorView: View {
             .navigationDestination(for: Route.self) { route in
                 switch route {
                 case .detailChallenge(let challenge):
-//                    ChallengeDetailView(challenge: challenge)
-                    TaskDetailView()
+                    VisualizarDadosView()
                         .environmentObject(resumeVM)
-//                    EmptyView()
 
                 case .detailTask(let task):
-                    TaskDetailView()
+                    VisualizarDadosView()
                         .environmentObject(resumeVM)
-//                    TaskDetailView(task: task)
-//                    EmptyView()EmptyView()
 
                 case .list:
                     EmptyView()
                     
                 case .participants:
-                    ListaParticipantesView(resumeVM: ResumeViewModel())
-                    
+                    ListaParticipantesView()
+                        .environmentObject(resumeVM)
                 
                 }
             }

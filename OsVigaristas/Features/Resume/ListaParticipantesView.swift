@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ListaParticipantesView: View {
-    @StateObject var resumeVM: ResumeViewModel
+    @EnvironmentObject var resumeVM: ResumeViewModel
     
     var body: some View {
         NavigationStack{
@@ -56,5 +56,5 @@ struct Participante: View {
 }
 
 #Preview {
-    ListaParticipantesView(resumeVM: ResumeViewModel(isTeacher: true))
+    ListaParticipantesView()
 }

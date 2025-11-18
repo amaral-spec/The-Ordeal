@@ -19,10 +19,11 @@ struct PerfilCoordinatorView: View {
                 authVM.logout()
             }
         } else {
-            Text("Perfil Aluno")
-            Button("Logout") {
-                authVM.logout()
-            }
+//            Text("Perfil Aluno")
+//            Button("Logout") {
+//                authVM.logout()
+//            }
+            PerfilView()
 //            AlunoPerfilView(viewModel: PerfilViewModel(userType: .aluno))
         }
     }

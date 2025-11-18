@@ -67,6 +67,7 @@ struct ResumeView: View {
         }
     }
     
+    
     // MARK: - DESAFIOS
     private var desafiosSection: some View {
         Group {
@@ -119,14 +120,18 @@ struct ResumeView: View {
         .navigationDestination(for: ResumeCoordinatorView.Route.self) { route in
             switch route {
             case .detailChallenge(_):
+                //VisualizarDadosView()
                 EmptyView()
+                
             case .detailTask(_):
+                //VisualizarDadosView()
                 EmptyView()
-            
+                
             case .list:
                 EmptyView()
+                
             case .participants:
-                ListaParticipantesView(resumeVM: ResumeViewModel())
+                ListaParticipantesView()
             }
         }
         .environmentObject(PersistenceServices())

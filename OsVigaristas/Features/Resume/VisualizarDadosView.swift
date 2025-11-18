@@ -8,14 +8,15 @@
 import SwiftUI
 
 struct VisualizarDadosView: View {
-    @StateObject var resumeVM: ResumeViewModel
+    @EnvironmentObject var resumeVM: ResumeViewModel
+    //let onNavigate: (ResumeCoordinatorView.Route) -> Void
     
     var body: some View {
         NavigationStack{
             VStack{
                 //colocar titulo dinamico para o caso desafio/tarefa
                 Dados()
-                listaParticipante(resumeVM: ResumeViewModel(isTeacher: true))
+                listaParticipante()
                 if(!resumeVM.isTeacher){
                     Button(action: {}) {
                         Text("Começar desafio")
@@ -106,22 +107,24 @@ struct Dados: View {
 }
 
 struct listaParticipante: View {
-    @StateObject var resumeVM: ResumeViewModel
+    @EnvironmentObject var resumeVM: ResumeViewModel
+    //let onNavigate: (ResumeCoordinatorView.Route) -> Void
     
     var body: some View {
         HStack {
             Button(action: {}) {
                 resumeVM.isTeacher ? Text("Resultados dos alunos").fontWeight(.bold) : Text("Participantes").fontWeight(.bold)
+                
+                Image(systemName: "chevron.right")
+                    .foregroundColor(.pink)
+                    .foregroundStyle(Color.accentColor)
             }
             .buttonStyle(.plain)
             
-            Image(systemName: "chevron.right")
-                .foregroundColor(.pink)
-                .foregroundStyle(Color.accentColor)
         }
         .frame(width: 355, height: 42, alignment: .leading)
         .padding(.vertical, 3)
-        //                }
+
         ScrollView(.horizontal) {
             HStack(alignment: .center, spacing: 15) {
                 //trocar forEach para buscar do cloudKit
@@ -139,5 +142,5 @@ struct listaParticipante: View {
 
 
 #Preview {
-    VisualizarDadosView(resumeVM: ResumeViewModel(isTeacher: true))
+    VisualizarDadosView()
 }
