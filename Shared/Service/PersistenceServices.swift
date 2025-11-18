@@ -467,7 +467,7 @@ class PersistenceServices: ObservableObject {
         return TaskModel(
             title: latestRecord["title"] as? String ?? "",
             description: latestRecord["description"] as? String ?? "",
-            student: latestRecord["student"] as! CKRecord.Reference,
+            student: latestRecord["student"] as! [CKRecord.Reference],
             startDate: latestRecord["startDate"] as? Date ?? Date(),
             endDate: latestRecord["endDate"] as? Date ?? Date()
         )
