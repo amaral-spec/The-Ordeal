@@ -28,7 +28,7 @@ struct StudentMainCoordinatorView: View {
                     .environment(\.selectedStudentTab, $selectedTab)
             }
             Tab("Treino", systemImage: "music.pages", value: .training) {
-                Text("Treino View")
+                AlunosCoordinatorView()
             }
             Tab("Perfil", systemImage: "person.fill", value: .perfil) {
                 PerfilCoordinatorView(isProfessor: false)

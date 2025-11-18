@@ -6,28 +6,29 @@
 //
 
 import SwiftUI
+import CloudKit
 
 struct Solicitacoes: View {
-    var onSolicitacoes: (() -> Void)?
-
+    @EnvironmentObject var persistenceServices: PersistenceServices
+    @State private var solicitacoes: [CKRecord.ID : [UserModel]] = [:]
+    
     var body: some View {
         NavigationStack {
             ScrollView {
                 List {
-                    ForEach() {
-                        
-                    }
+                    
                 }
             }
-            .navigationTitle("Solicições")
+            .navigationTitle("Solicitações")
+            .task {
+                do {
+                    solicitacoes = try await persistenceServices.fetchSolicitations()
+                } catch {
+                    print("Solicitações não carregadas: \(error)")
+                }
+            }
             .navigationBarTitleDisplayMode(.inline)
-        }
-        .task {
-            //carregar task
         }
     }
 }
 
-#Preview {
-    Solicitacoes()
-}
