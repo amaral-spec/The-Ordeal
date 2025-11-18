@@ -12,6 +12,7 @@ struct TaskDetailView: View {
     
     // receber o ResumeVM
     @EnvironmentObject var resumeVM: ResumeViewModel
+    @EnvironmentObject var persistenceServices: PersistenceServices
     
     var body: some View {
         VStack {
@@ -140,9 +141,9 @@ struct TaskDetailView: View {
     }
 }
 
-#Preview {
-    NavigationStack {
-        TaskDetailView()
-            .environmentObject(ResumeViewModel(isTeacher: false))
-    }
-}
+//#Preview {
+//    NavigationStack {
+//        TaskDetailView()
+//            .environmentObject(ResumeViewModel(isTeacher: false))
+//    }
+//}

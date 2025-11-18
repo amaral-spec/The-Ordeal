@@ -36,7 +36,7 @@ struct ResumeView: View {
         .frame(maxHeight: .infinity, alignment: .top)
         .navigationTitle("Resumo")
         .task {
-            await carregarDesafios()
+            await resumeVM.carregarDesafios()
         }
         .toolbarTitleDisplayMode(.inlineLarge)
         .toolbar {
@@ -72,25 +72,6 @@ struct ResumeView: View {
             CriarTarefaView(numTask: .constant(0))
         }
     }
-    
-    private func carregarDesafios() async {
-        guard let currentUser = AuthService.shared.currentUser else {
-            print("Nenhum usuário logado.")
-            return
-        }
-        
-        do {
-            let desafiosCarregados = try await persistenceServices.fetchAllChallenges()
-            await MainActor.run {
-                desafios = desafiosCarregados
-                isChallengeEmpty = desafiosCarregados.isEmpty
-            }
-            print("\(desafiosCarregados.count) grupos carregados")
-        } catch {
-            print("Erro ao carregar grupos: \(error.localizedDescription)")
-        }
-    }
-    
     
     private var desafiosSection: some View {
         Group {
@@ -131,25 +112,25 @@ struct ResumeView: View {
     
 }
 
-#Preview {
-    @Previewable @State var path: [ResumeCoordinatorView.Route] = []
-    
-    return NavigationStack(path: $path) {
-        ResumeView(
-            resumeVM: ResumeViewModel(isTeacher: true)
-        ) { route in
-            path.append(route)
-        }
-        .navigationDestination(for: ResumeCoordinatorView.Route.self) { route in
-            switch route {
-            case .detailChallenge(_):
-                EmptyView()
-            case .detailTask(_):
-                EmptyView()
-            case .list:
-                EmptyView()
-            }
-        }
-        .environmentObject(PersistenceServices())
-    }
-}
+//#Preview {
+//    @Previewable @State var path: [ResumeCoordinatorView.Route] = []
+//    
+//    return NavigationStack(path: $path) {
+//        ResumeView(
+//            resumeVM: ResumeViewModel(isTeacher: true)
+//        ) { route in
+//            path.append(route)
+//        }
+//        .navigationDestination(for: ResumeCoordinatorView.Route.self) { route in
+//            switch route {
+//            case .detailChallenge(_):
+//                EmptyView()
+//            case .detailTask(_):
+//                EmptyView()
+//            case .list:
+//                EmptyView()
+//            }
+//        }
+//        .environmentObject(PersistenceServices())
+//    }
+//}
