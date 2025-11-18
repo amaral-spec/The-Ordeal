@@ -42,7 +42,7 @@ struct AlunosCoordinatorView: View {
                 case .list:
                     EmptyView()
                 case .solicitation:
-                    Solicitacoes() // trocar para a view de solicitacoes
+                    SolicitacoesView() // trocar para a view de solicitacoes
                 }
             }
         }
