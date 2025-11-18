@@ -242,6 +242,39 @@ class PersistenceServices: NSObject, ObservableObject {
         }
     }
     
+    func fetchSolicitations() async throws -> [CKRecord.ID: [UserModel]] {
+        var result: [CKRecord.ID: [UserModel]] = [:]
+
+        // Fetch all groups of this teacher
+        let grupos = try await fetchAllGroups()
+
+        for grupo in grupos {
+            guard let solicitations = grupo.joinSolicitations,
+                  !solicitations.isEmpty else {
+                continue // skip groups with no solicitations
+            }
+
+            var users: [UserModel] = []
+
+            for ref in solicitations {
+                do {
+                    let userRecord = try await db.record(for: ref.recordID)
+                    let user = UserModel(from: userRecord)
+                    users.append(user)
+                } catch {
+                    print("Failed to fetch user \(ref.recordID): \(error)")
+                }
+            }
+
+            if !users.isEmpty {
+                result[grupo.id] = users
+            }
+        }
+
+        return result
+    }
+
+    
     func acceptSolicitation(to grupo: GroupModel, usuario: UserModel) async throws {
         let record = try await db.record(for: grupo.id)
         
