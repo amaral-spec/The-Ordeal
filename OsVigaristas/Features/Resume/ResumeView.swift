@@ -56,7 +56,8 @@ struct ResumeView: View {
             } else {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button {
-                        selectedTab?.wrappedValue = .perfil                     } label: {
+                        selectedTab?.wrappedValue = .perfil
+                    } label: {
                             (Text("40").foregroundStyle(.black) + Text(Image(systemName: "bitcoinsign.circle.fill")))
                             +
                             (Text("  4").foregroundStyle(.black) + Text(Image(systemName: "flame.fill")))

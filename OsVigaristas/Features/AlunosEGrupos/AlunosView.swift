@@ -22,6 +22,7 @@ struct AlunosView: View {
     @State private var isGroupsEmpty = true
     @State private var selectedMode = Mode.Alunos
     @State private var criarGrupo = false
+    @State private var solicitacoes = false
     @State private var grupos: [GroupModel] = []
     @EnvironmentObject var persistenceServices: PersistenceServices
     
@@ -169,7 +170,7 @@ struct AlunosView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button(action: {
-                        
+                        solicitacoes = true
                     }) {
                         Image(systemName: "person.fill.checkmark.and.xmark")
                             .foregroundStyle(Color(red: 0.65, green: 0.13, blue: 0.29))
@@ -185,6 +186,14 @@ struct AlunosView: View {
             CriarGrupoView(onGrupoCriado: {
                 Task {
                     await carregarGrupos()
+                }
+            })
+            .environmentObject(persistenceServices)
+        }
+        .sheet(isPresented: $solicitacoes) {
+            Solicitacoes(onSolicitacoes: {
+                Task {
+                    //funcao pra carregar as solicitacoes
                 }
             })
             .environmentObject(persistenceServices)
