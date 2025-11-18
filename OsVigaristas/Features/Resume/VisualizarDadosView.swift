@@ -16,6 +16,18 @@ struct VisualizarDadosView: View {
                 //colocar titulo dinamico para o caso desafio/tarefa
                 Dados()
                 listaParticipante(resumeVM: ResumeViewModel(isTeacher: true))
+                if(!resumeVM.isTeacher){
+                    Button(action: {}) {
+                        Text("Começar desafio")
+                            .foregroundColor(.white)
+                            .fontWeight(.semibold)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color("AccentColor"))
+                            .cornerRadius(30)
+                    }
+                    .padding()
+                }
                 Spacer()
             }
             .navigationTitle("visualizar dados")
@@ -127,5 +139,5 @@ struct listaParticipante: View {
 
 
 #Preview {
-    VisualizarDadosView(resumeVM: ResumeViewModel())
+    VisualizarDadosView(resumeVM: ResumeViewModel(isTeacher: true))
 }
