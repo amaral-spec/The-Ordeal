@@ -202,7 +202,7 @@ class PersistenceServices: ObservableObject {
     }
     
     // MARK: Grupo: pedidos e membros
-    func askToJoinGroup(to grupo: GroupModel, usuario: UserModel) async throws {
+    func askToJoinGroup(to grupo: GroupModel) async throws {
         guard let currentUser = AuthService.shared.currentUser else {
             throw NSError(domain: "AuthError", code: 1, userInfo: [NSLocalizedDescriptionKey: "No user loggoed in"])
         }
@@ -222,7 +222,7 @@ class PersistenceServices: ObservableObject {
         if !joinSolicitations.contains(where: { $0.recordID == newRef.recordID }) {
             joinSolicitations.append(newRef)
             record["joinSolicitations"] = joinSolicitations
-            
+
             try await db.save(record)
         } else {
             print("User already in solicitations list.")

@@ -25,6 +25,16 @@ struct PerfilCoordinatorView: View {
                 if let group = fetchedGroup {
                     Text("Grupo encontrado: \(group.name)")
                         .foregroundColor(.green)
+                    Button("Entrar no grupo") {
+                        Task {
+                            do {
+                                try await persistenceServices.askToJoinGroup(to: fetchedGroup!)
+                                print("solicitacao enviada")
+                            } catch {
+                                print("Notificação não enviada!!! \(error)")
+                            }
+                        }
+                    }
                 } else if let error = fetchError {
                     Text("Erro: \(error)")
                         .foregroundColor(.red)
