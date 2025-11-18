@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DetalheGrupoView: View {
+struct DetailGroupView: View {
     let grupo: GroupModel
     
     var body: some View {
