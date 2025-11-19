@@ -6,12 +6,12 @@ struct SolicitacoesView: View {
     @EnvironmentObject var persistenceServices: PersistenceServices
     @ObservedObject var alunoVM: AlunosViewModel
     
-    @State private var solicitantes: [UserModel] = []
+    @State private var solicitantes: [CKRecord.ID: [UserModel]] = [:]
     @State private var group: GroupModel?
     
     var body: some View {
         List {
-            ForEach(solicitantes) { user in
+            ForEach(Array(solicitantes.values).flatMap { $0 }) { user in
                 SolicitacaoCard(
                     user: user,
                     groupName: group?.name ?? "",
@@ -44,7 +44,6 @@ struct SolicitacoesView: View {
                         .foregroundColor(.black)
                 }
             }
-            
         }
     }
 }

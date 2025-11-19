@@ -22,6 +22,8 @@ class AlunosViewModel: ObservableObject {
     @Published var isGroupsEmpty: Bool = true
     @Published var grupos: [GroupModel] = []
     @Published var criarGrupo: Bool = false
+    @Published var solicitations: [CKRecord.ID: [UserModel]] = [:]
+    @Published var isSolicitationsEmpty: Bool = true
 
     private let persistenceServices: PersistenceServices   // agora é apenas referência externa
 
@@ -58,8 +60,13 @@ class AlunosViewModel: ObservableObject {
     func loadSolicitations() async {
         do {
             let solicitacoes = try await persistenceServices.fetchSolicitations()
+            await MainActor.run {
+                self.solicitations = solicitacoes
+                self.isSolicitationsEmpty = solicitacoes.isEmpty
+                print("Carregado \(solicitacoes.count) solicitações")
+            }
         } catch {
-            print("Erro ao carregar solicitações: \(error)")
+            print("Erro ao carregar solicitações: \(error.localizedDescription)")
         }
     }
     
