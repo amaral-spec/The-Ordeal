@@ -42,7 +42,8 @@ struct AlunosCoordinatorView: View {
                 case .list:
                     EmptyView()
                 case .solicitation:
-                    SolicitacoesView() // trocar para a view de solicitacoes
+                    SolicitacoesView()
+//                        .environmentObject(persistenceServices)
                 }
             }
         }
