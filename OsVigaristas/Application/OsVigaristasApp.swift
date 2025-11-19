@@ -16,9 +16,8 @@ struct OsVigaristasApp: App {
     var body: some Scene {
         WindowGroup {
             AppRootView()
-                .environmentObject(authService) // Compartilha o estado global de login
-                .environmentObject(persistenceServices) // Compartilha funcoes do CloudKit
-                .preferredColorScheme(.light)
+                .environmentObject(authService)
+                .environmentObject(persistenceServices)
         }
     }
 }

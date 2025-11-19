@@ -9,7 +9,7 @@ import Foundation
 import CloudKit
 
 
-//@MainActor
+
 final class TaskModel:  Identifiable, Equatable, Hashable  {
     var id: CKRecord.ID
     var studentAudio: [URL]?
@@ -23,6 +23,7 @@ final class TaskModel:  Identifiable, Equatable, Hashable  {
     
     init(title: String, description: String, student: [CKRecord.Reference], startDate: Date, endDate: Date){
         self.id = CKRecord.ID(recordName: UUID().uuidString)
+
         self.studentAudio = nil
         self.student = student
         self.title = title
