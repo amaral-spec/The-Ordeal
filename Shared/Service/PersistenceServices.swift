@@ -249,11 +249,12 @@ class PersistenceServices: NSObject, ObservableObject {
         let grupos = try await fetchAllGroups()
 
         for grupo in grupos {
+            
             guard let solicitations = grupo.joinSolicitations,
                   !solicitations.isEmpty else {
                 continue // skip groups with no solicitations
             }
-
+            
             var users: [UserModel] = []
 
             for ref in solicitations {

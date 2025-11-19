@@ -62,6 +62,7 @@ class AlunosViewModel: ObservableObject {
             let solicitacoes = try await persistenceServices.fetchSolicitations()
             await MainActor.run {
                 self.solicitations = solicitacoes
+                print("Solicitacoes: \(solicitacoes)")
                 self.isSolicitationsEmpty = solicitacoes.isEmpty
                 print("Carregado \(solicitacoes.count) solicitações")
             }
