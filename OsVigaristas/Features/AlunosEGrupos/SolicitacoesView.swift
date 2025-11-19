@@ -4,6 +4,7 @@ import CloudKit
 struct SolicitacoesView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var persistenceServices: PersistenceServices
+    @ObservedObject var alunoVM: AlunosViewModel
     
     @State private var solicitantes: [UserModel] = []
     @State private var group: GroupModel?
@@ -31,6 +32,9 @@ struct SolicitacoesView: View {
             }
             .listStyle(.plain)
             .navigationTitle("Solicitações")
+            .task {
+                await alunoVM.loadSolicitations()
+            }
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar {
@@ -40,13 +44,6 @@ struct SolicitacoesView: View {
                             .font(.title3)
                             .foregroundColor(.black)
                     }
-                }
-            }
-            .task {
-                do {
-                    try await persistenceServices.fetchSolicitations()
-                } catch {
-                    print("Erro ao carregar solicitações: \(error)")
                 }
             }
         }

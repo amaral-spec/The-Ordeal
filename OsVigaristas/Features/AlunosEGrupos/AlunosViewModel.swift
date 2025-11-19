@@ -7,6 +7,7 @@
 
 
 import SwiftUI
+import CloudKit
 import Foundation
 
 enum Mode: String, CaseIterable {
@@ -51,6 +52,14 @@ class AlunosViewModel: ObservableObject {
             }
         } catch {
             print("Erro ao carregar grupos: \(error.localizedDescription)")
+        }
+    }
+    
+    func loadSolicitations() async {
+        do {
+            let solicitacoes = try await persistenceServices.fetchSolicitations()
+        } catch {
+            print("Erro ao carregar solicitações: \(error)")
         }
     }
     
