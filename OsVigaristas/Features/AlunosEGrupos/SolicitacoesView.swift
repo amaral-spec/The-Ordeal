@@ -17,12 +17,40 @@ struct SolicitacoesView: View {
                     groupName: group?.name ?? "",
                     onAccept: {
                         Task {
-                            try? await persistenceServices.acceptSolicitation(to: group!, usuario: user)
+                            guard let group = group else {
+                                print("Não foi possível aceitar: group é nil")
+                                return
+                            }
+                            do {
+                                try await persistenceServices.acceptSolicitation(to: group, usuario: user)
+                                
+                                await alunoVM.loadSolicitations()
+                                
+                                await MainActor.run {
+                                    self.solicitantes = alunoVM.solicitations
+                                }
+                            } catch {
+                                print("Erro ao aceitar solicitação:", error)
+                            }
                         }
                     },
                     onReject: {
                         Task {
-                            try? await persistenceServices.rejectSolicitation(to: group!, usuario: user)
+                            guard let group = group else {
+                                print("Não foi possível rejeitar: group é nil")
+                                return
+                            }
+                            do {
+                                try await persistenceServices.rejectSolicitation(to: group, usuario: user)
+                                
+                                await alunoVM.loadSolicitations()
+                                
+                                await MainActor.run {
+                                    self.solicitantes = alunoVM.solicitations
+                                }
+                            } catch {
+                                print("Erro ao rejeitar solicitação:", error)
+                            }
                         }
                     }
                 )
@@ -31,9 +59,6 @@ struct SolicitacoesView: View {
         }
         .listStyle(.plain)
         .navigationTitle("Solicitações")
-        .task {
-            await alunoVM.loadSolicitations()
-        }
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -43,6 +68,25 @@ struct SolicitacoesView: View {
                         .font(.title3)
                         .foregroundColor(.black)
                 }
+            }
+        }
+        .task {
+            /// Carrega as solicitações
+            await alunoVM.loadSolicitations()
+            self.solicitantes = alunoVM.solicitations
+            
+            /// Agora buscamos o grupo correspondente
+            if let groupID = alunoVM.solicitations.keys.first {
+                do {
+                    let fetchedGroup = try await persistenceServices.fetchGroup(recordID: groupID)
+                    await MainActor.run {
+                        self.group = fetchedGroup
+                    }
+                } catch {
+                    print("Erro ao buscar o grupo:", error)
+                }
+            } else {
+                self.group = nil
             }
         }
     }
