@@ -6,8 +6,9 @@
 //
 
 import SwiftUI
+import Foundation
 
-struct ImagemIconeRosaView: View{
+struct PinkIconImageView: View{
     var nomeIcone: String = "waveform"
     var body: some View {
         ZStack{ //Imagem no meio estranha
@@ -24,15 +25,15 @@ struct ImagemIconeRosaView: View{
     }
 }
 
-struct ImagemIconeRosaEsperaView: View{
-    var nomeIcone: String = "clock.arrow.trianglehead.counterclockwise.rotate.90"
+struct PinkWaitingIconImageView: View{
+    var iconName: String = "clock.arrow.trianglehead.counterclockwise.rotate.90"
     var body: some View {
         ZStack{ //Imagem no meio estranha
             Circle()
                 .frame(width: 50, height: 50)
                 .foregroundColor(Color("RosinhaColor"))
             
-            Image(systemName: nomeIcone)
+            Image(systemName: iconName)
                 .foregroundColor(Color("AccentColor"))
                 .font(.system(size: 25))
             
@@ -42,7 +43,7 @@ struct ImagemIconeRosaEsperaView: View{
     }
 }
 
-struct MensagemDaImagemView: View {
+struct ImageMessageView: View {
     var title: String
     var subtitle: String
     var body: some View{
@@ -59,7 +60,7 @@ struct MensagemDaImagemView: View {
     
 }
 
-struct BotaoGravacaoView: View{
+struct RecordingButtonView: View{
     var color: Color
     var body: some View{
         
@@ -79,7 +80,7 @@ struct BotaoGravacaoView: View{
     }
 }
 
-struct ReprentacaoAudioView: View{
+struct AudioRepresentationView: View{
     var body: some View{
         ZStack{
             RoundedRectangle(cornerRadius: 20)
@@ -108,10 +109,10 @@ struct ReprentacaoAudioView: View{
     }
 }
 
-struct InstrucaoTopoPaginaView: View{
-    var instrucao: String
+struct TopPageInstructionView: View{
+    var instruction: String
     var body: some View{
-        Text(instrucao)
+        Text(instruction)
             .padding()
             .multilineTextAlignment(.center)
             .frame(maxWidth: .infinity, alignment: .center)

@@ -1,35 +1,34 @@
 //
-//  GravarDesafioEncadeiaView.swift
+//  InicioDesafioEncadeiaView.swift
 //  AudioRecorderDemo2
 //
 //  Created by João Victor Perosso Souza on 12/11/25.
 //
 
 import SwiftUI
-import UIKit // For haptic feedback
-import Combine
-import AVFoundation
 
-
-struct GravarDesafioEncadeiaView: View {
+struct InitialChainedChallengeView: View {
     var body: some View {
         NavigationStack{
-            
             Spacer()
             VStack{//Escrita
-                InstrucaoTopoPaginaView(instrucao: "Toque algo de sua escolha por 15 segundos")
-                
-                
-                Spacer()
-          
-                
-                ReprentacaoAudioView()
-                
-                
+               
+                TopPageInstructionView(instruction: "Toque algo de sua escolha por 15 segundos")
                 Spacer()
                 
-                BotaoGravacaoView(color: .accentColor)
                 
+                PinkIconImageView()
+                
+                ImageMessageView(title: "Grave o seu audio", subtitle: "Faça milage")
+                
+                Spacer()
+                Spacer()
+                NavigationLink{
+                    ReceivedAudioRecordChainedChallengeView()
+                }label:{
+                    RecordingButtonView(color: .accentColor)
+
+                }
             }
             .navigationTitle(Text("Encadeia"))
             .navigationBarTitleDisplayMode(.inline)
@@ -37,24 +36,22 @@ struct GravarDesafioEncadeiaView: View {
                 ToolbarItem(placement: .cancellationAction){
                     Button("Cancelar", systemImage: "xmark")
                     {
-                        //dismis()
+                       // dismiss()
                     }
                 }
 //                ToolbarItem(placement: .confirmationAction){
 //                    Button("confirmar", systemImage: "checkmark"){
 //                        
 //                    }
-//                    .tint(Color("AccentColor"))
+//                    .tint(Color(.gray))
+//                    .
 //                }
             }
         }
     }
 }
 
-
-
-
 #Preview {
-    GravarDesafioEncadeiaView()
+    InitialChainedChallengeView()
 }
 

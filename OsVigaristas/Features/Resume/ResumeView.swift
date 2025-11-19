@@ -40,6 +40,10 @@ struct ResumeView: View {
             await resumeVM.carregarDesafios()
             await resumeVM.carregarTarefas()
         }
+        .refreshable {
+            await resumeVM.carregarDesafios()
+            await resumeVM.carregarTarefas()
+        }
         .toolbarTitleDisplayMode(.inlineLarge)
         .toolbar {
             if (resumeVM.isTeacher) {
