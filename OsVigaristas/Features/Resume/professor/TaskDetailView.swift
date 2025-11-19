@@ -7,12 +7,17 @@
 
 import SwiftUI
 
-struct DetalhesTarefasView: View {
+struct TaskDetailView: View {
+    // Colocar uma variavel para receber a tarefa
+    
+    // receber o ResumeVM
+    @EnvironmentObject var resumeVM: ResumeViewModel
+    @EnvironmentObject var persistenceServices: PersistenceServices
     
     var body: some View {
         VStack {
             HStack(alignment: .center, spacing: 10) {
-                Text("Dados da Tarefa")
+                Text("Dados da Tarefa/desafio prof e desafio aluno")
                     .font(.title2)
                     .bold()
                     .padding(.horizontal, 8)
@@ -114,6 +119,20 @@ struct DetalhesTarefasView: View {
                 .frame(minWidth: 403, maxWidth: 403, alignment: .leading)
             }
             Spacer()
+            
+            
+            // Exemplo de uso de uma propriedade existente para remover o erro de if incompleto
+            if resumeVM.isTeacher {
+                Text("Você é professor")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            } else {
+                Text("Você é Aluno - começar desafio")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                EmptyView()
+            }
+            Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemGray6))
@@ -122,8 +141,9 @@ struct DetalhesTarefasView: View {
     }
 }
 
-#Preview {
-    NavigationStack {
-        DetalhesTarefasView()
-    }
-}
+//#Preview {
+//    NavigationStack {
+//        TaskDetailView()
+//            .environmentObject(ResumeViewModel(isTeacher: false))
+//    }
+//}

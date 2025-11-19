@@ -5,6 +5,9 @@ struct ResumeView: View {
     
     @State private var criarDesafio = false
     @State private var criarTarefa = false
+    @EnvironmentObject var persistenceServices: PersistenceServices
+    @State private var desafios: [ChallengeModel] = []
+    @State private var isChallengeEmpty: Bool = true
     
     @StateObject var resumeVM: ResumeViewModel
     let onNavigate: (ResumeCoordinatorView.Route) -> Void
@@ -23,6 +26,7 @@ struct ResumeView: View {
         }
         .pickerStyle(.segmented)
         .padding()
+        
         VStack {
             if selectedMode == .Desafio {
                 desafiosSection
@@ -32,6 +36,10 @@ struct ResumeView: View {
         }
         .frame(maxHeight: .infinity, alignment: .top)
         .navigationTitle("Resumo")
+        .task {
+            await resumeVM.carregarDesafios()
+            await resumeVM.carregarTarefas()
+        }
         .toolbarTitleDisplayMode(.inlineLarge)
         .toolbar {
             if (resumeVM.isTeacher) {
@@ -49,7 +57,8 @@ struct ResumeView: View {
             } else {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button {
-                        selectedTab?.wrappedValue = .perfil                     } label: {
+                        selectedTab?.wrappedValue = .perfil
+                    } label: {
                             (Text("40").foregroundStyle(.black) + Text(Image(systemName: "bitcoinsign.circle.fill")))
                             +
                             (Text("  4").foregroundStyle(.black) + Text(Image(systemName: "flame.fill")))
@@ -66,7 +75,6 @@ struct ResumeView: View {
             CriarTarefaView(numTask: .constant(0))
         }
     }
-    
     
     private var desafiosSection: some View {
         Group {
@@ -109,10 +117,12 @@ struct ResumeView: View {
 
 #Preview {
     @Previewable @State var path: [ResumeCoordinatorView.Route] = []
+    @Previewable @State var isTeacher: Bool = true
+    @Previewable @StateObject var persistenceServices: PersistenceServices = PersistenceServices()
     
-    return NavigationStack(path: $path) {
+    NavigationStack(path: $path) {
         ResumeView(
-            resumeVM: ResumeViewModel(isTeacher: true)
+            resumeVM: ResumeViewModel(persistenceServices: persistenceServices, isTeacher: true)
         ) { route in
             path.append(route)
         }

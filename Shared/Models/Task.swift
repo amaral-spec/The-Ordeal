@@ -13,7 +13,7 @@ import CloudKit
 final class TaskModel:  Identifiable, Equatable, Hashable  {
     var id: CKRecord.ID
     var studentAudio: [URL]?
-    var student: CKRecord.Reference
+    var student: [CKRecord.Reference]
     var title: String
     var description: String
     var reward: Int
@@ -21,7 +21,7 @@ final class TaskModel:  Identifiable, Equatable, Hashable  {
     var endDate: Date
     
     
-    init(title: String, description: String, student: CKRecord.Reference, startDate: Date, endDate: Date){
+    init(title: String, description: String, student: [CKRecord.Reference], startDate: Date, endDate: Date){
         self.id = CKRecord.ID(recordName: UUID().uuidString)
 
         self.studentAudio = nil
@@ -37,7 +37,7 @@ final class TaskModel:  Identifiable, Equatable, Hashable  {
     init(from record: CKRecord) {
         self.id = record.recordID
         self.studentAudio = record["studentAudio"] as? [URL] ?? nil
-        self.student = record["student"] as! CKRecord.Reference
+        self.student = record["student"] as! [CKRecord.Reference]
         self.title = record["title"] as? String ?? ""
         self.description = record["description"] as? String ?? ""
         self.reward = record["reward"] as? Int ?? 0
