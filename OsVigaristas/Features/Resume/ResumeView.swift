@@ -41,8 +41,11 @@ struct ResumeView: View {
             await resumeVM.carregarTarefas()
         }
         .refreshable {
-            await resumeVM.carregarDesafios()
-            await resumeVM.carregarTarefas()
+            if (selectedMode == .Desafio) {
+                await resumeVM.carregarDesafios()
+            } else {
+                await resumeVM.carregarTarefas()
+            }
         }
         .toolbarTitleDisplayMode(.inlineLarge)
         .toolbar {

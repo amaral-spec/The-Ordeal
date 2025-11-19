@@ -56,8 +56,8 @@ struct AlunosView: View {
                                 .cornerRadius(10)
                                 .shadow(radius: 1)
                             }
-                            
                         }
+                        .padding(8)
                     }
                     .padding()
                 }
