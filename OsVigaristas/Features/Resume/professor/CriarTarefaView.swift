@@ -102,13 +102,18 @@ struct CriarTarefaView: View {
                             guard let selectedID = selectedUserID,
                                   let selectedUser = participants.first(where: { $0.id == selectedID }) else { return }
                             
+                            guard let currentUser = AuthService.shared.currentUser else {
+                                throw NSError(domain: "AuthError", code: 1, userInfo: [NSLocalizedDescriptionKey: "No user loggoed in"])
+                            }
+                            let currentRef = CKRecord.Reference(recordID: currentUser.id, action: .none)
+                            
                             let studentRef = CKRecord.Reference(recordID: selectedUser.id, action: .none)
                             
                             // Use TaskModel as required by PersistenceServices
                             let task = TaskModel(
                                 title: tarefaNome,
                                 description: tarefaDescricao,
-                                student: studentRef,
+                                student: [currentRef, studentRef],
                                 startDate: selectedDateInit,
                                 endDate: selectedDateEnd
                             )

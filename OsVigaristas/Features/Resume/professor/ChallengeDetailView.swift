@@ -7,9 +7,8 @@
 
 import SwiftUI
 
-struct TaskDetailView: View {
-    // Colocar uma variavel para receber a tarefa
-    
+struct ChallengeDetailView: View {
+
     // receber o ResumeVM
     @EnvironmentObject var resumeVM: ResumeViewModel
     @EnvironmentObject var persistenceServices: PersistenceServices

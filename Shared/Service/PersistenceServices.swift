@@ -10,7 +10,9 @@ import SwiftUI
 
 
 @MainActor
-class PersistenceServices: ObservableObject {
+class PersistenceServices: NSObject, ObservableObject {
+    static let shared = PersistenceServices()
+    
     let db = CKContainer.default().publicCloudDatabase
     
     // MARK: CRUD: Usuarios
@@ -41,7 +43,7 @@ class PersistenceServices: ObservableObject {
             throw NSError(domain: "AuthError", code: 1, userInfo: [NSLocalizedDescriptionKey: "No user loggoed in"])
         }
         
-        let groups = try await fetchAllGroups(for: currentUser.id)
+        let groups = try await fetchAllGroups()
 
         let memberReferences = groups.flatMap { $0.members } // [CKRecord.Reference]
 
@@ -56,6 +58,17 @@ class PersistenceServices: ObservableObject {
             users.append(user)
         }
 
+        return users
+    }
+    
+    // Fetch all students (users where isTeacher == false)
+    func fetchAllStudents() async throws -> [UserModel] {
+        let predicate = NSPredicate(format: "isTeacher == %@", NSNumber(value: false))
+        let query = CKQuery(recordType: "User", predicate: predicate)
+        
+        let (results, _) = try await db.records(matching: query)
+        let records: [CKRecord] = results.compactMap { try? $0.1.get() }
+        let users = records.map { UserModel(from: $0) }
         return users
     }
     
@@ -106,9 +119,13 @@ class PersistenceServices: ObservableObject {
         }
     }
     
-    func fetchAllGroups(for userRecordID: CKRecord.ID) async throws -> [GroupModel] {
+    func fetchAllGroups() async throws -> [GroupModel] {
+        guard let currentUser = AuthService.shared.currentUser else {
+            throw NSError(domain: "AuthError", code: 1, userInfo: [NSLocalizedDescriptionKey: "No user loggoed in"])
+        }
+        
         // Creating query to find groups by user
-        let userRef = CKRecord.Reference(recordID: userRecordID, action: .none)
+        let userRef = CKRecord.Reference(recordID: currentUser.id, action: .none)
         let groupPredicate = NSPredicate(format: "members CONTAINS %@", userRef)
         let groupQuery = CKQuery(recordType: "MusicGroup", predicate: groupPredicate)
         
@@ -198,7 +215,7 @@ class PersistenceServices: ObservableObject {
     }
     
     // MARK: Grupo: pedidos e membros
-    func askToJoinGroup(to grupo: GroupModel, usuario: UserModel) async throws {
+    func askToJoinGroup(to grupo: GroupModel) async throws {
         guard let currentUser = AuthService.shared.currentUser else {
             throw NSError(domain: "AuthError", code: 1, userInfo: [NSLocalizedDescriptionKey: "No user loggoed in"])
         }
@@ -218,12 +235,45 @@ class PersistenceServices: ObservableObject {
         if !joinSolicitations.contains(where: { $0.recordID == newRef.recordID }) {
             joinSolicitations.append(newRef)
             record["joinSolicitations"] = joinSolicitations
-            
+
             try await db.save(record)
         } else {
             print("User already in solicitations list.")
         }
     }
+    
+    func fetchSolicitations() async throws -> [CKRecord.ID: [UserModel]] {
+        var result: [CKRecord.ID: [UserModel]] = [:]
+
+        // Fetch all groups of this teacher
+        let grupos = try await fetchAllGroups()
+
+        for grupo in grupos {
+            guard let solicitations = grupo.joinSolicitations,
+                  !solicitations.isEmpty else {
+                continue // skip groups with no solicitations
+            }
+
+            var users: [UserModel] = []
+
+            for ref in solicitations {
+                do {
+                    let userRecord = try await db.record(for: ref.recordID)
+                    let user = UserModel(from: userRecord)
+                    users.append(user)
+                } catch {
+                    print("Failed to fetch user \(ref.recordID): \(error)")
+                }
+            }
+
+            if !users.isEmpty {
+                result[grupo.id] = users
+            }
+        }
+
+        return result
+    }
+
     
     func acceptSolicitation(to grupo: GroupModel, usuario: UserModel) async throws {
         let record = try await db.record(for: grupo.id)
@@ -293,9 +343,13 @@ class PersistenceServices: ObservableObject {
     }
     
     // Fetching challenges from teacher's view screen
-    func fetchAllChallenges(for userRecordID: CKRecord.ID) async throws -> [ChallengeModel] {
+    func fetchAllChallenges() async throws -> [ChallengeModel] {
+        guard let currentUser = AuthService.shared.currentUser else {
+            throw NSError(domain: "AuthError", code: 1, userInfo: [NSLocalizedDescriptionKey: "No user loggoed in"])
+        }
+        
         // Finding all groups the user belongs to
-        let userRef = CKRecord.Reference(recordID: userRecordID, action: .none)
+        let userRef = CKRecord.Reference(recordID: currentUser.id, action: .none)
         let groupPredicate = NSPredicate(format: "members CONTAINS %@", userRef)
         let groupQuery = CKQuery(recordType: "MusicGroup", predicate: groupPredicate)
 
@@ -357,7 +411,9 @@ class PersistenceServices: ObservableObject {
     // MARK: CRUD: Tarefa
     func createTask(_ task: TaskModel) async throws {
         let record = CKRecord(recordType: "Task", recordID: task.id)
-        record["studentAudio"] = task.studentAudio as! CKRecordValue
+        if let audio = task.studentAudio {
+            record["studentAudio"] = audio as CKRecordValue
+        }
         record["student"] = task.student as CKRecordValue
         record["title"] = task.title as CKRecordValue
         record["description"] = task.description as CKRecordValue
@@ -380,7 +436,7 @@ class PersistenceServices: ObservableObject {
         }
         
         let userRef = CKRecord.Reference(recordID: currentUser.id, action: .none)
-        let taskPredicate = NSPredicate(format: "members CONTAINS %@", userRef)
+        let taskPredicate = NSPredicate(format: "student CONTAINS %@", userRef)
         let taskQuery = CKQuery(recordType: "Task", predicate: taskPredicate)
         
         let (taskResults, _) = try await db.records(matching: taskQuery)
@@ -457,14 +513,14 @@ class PersistenceServices: ObservableObject {
         return TaskModel(
             title: latestRecord["title"] as? String ?? "",
             description: latestRecord["description"] as? String ?? "",
-            student: latestRecord["student"] as! CKRecord.Reference,
+            student: latestRecord["student"] as! [CKRecord.Reference],
             startDate: latestRecord["startDate"] as? Date ?? Date(),
             endDate: latestRecord["endDate"] as? Date ?? Date()
         )
     }
     
     func fetchLatestChallenge(for userRecordID: CKRecord.ID, in db: CKDatabase) async throws -> ChallengeModel? {
-        let allChallenges = try await fetchAllChallenges(for: userRecordID)
+        let allChallenges = try await fetchAllChallenges()
         
         // Filter for completed challenges: those whose endDate is in the past
         let completedChallenges = allChallenges.filter { $0.endDate < Date() }
@@ -505,7 +561,7 @@ class PersistenceServices: ObservableObject {
         let groups = groupRecords.map { GroupModel(from: $0) }
         
         // Fetching challenges from prompt
-        let userGroups = try await fetchAllGroups(for: userRecordID)
+        let userGroups = try await fetchAllGroups()
         let groupRefs = userGroups.map { CKRecord.Reference(recordID: $0.id, action: .none) }
         
         let challengeNamePredicate = NSPredicate(format: "name CONTAINS %@", prompt)

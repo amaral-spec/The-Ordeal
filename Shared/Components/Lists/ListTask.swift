@@ -18,7 +18,7 @@ struct ListTask: View {
                 Button {
                     onTap(task)
                 } label: {
-                    Card(name: task.title, quantity: 10)
+                    Card(name: task.title, quantity: 10, grupo: "")
                 }
                 .buttonStyle(.plain)
 

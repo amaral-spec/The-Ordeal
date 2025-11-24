@@ -11,14 +11,13 @@ import SwiftData
 @main
 struct OsVigaristasApp: App {
     @StateObject private var authService = AuthService.shared
-    @StateObject private var persistenceServices = PersistenceServices()
+    @StateObject private var persistenceServices = PersistenceServices.shared
 
     var body: some Scene {
         WindowGroup {
             AppRootView()
-                .environmentObject(authService) // Compartilha o estado global de login
-                .environmentObject(persistenceServices) // Compartilha funcoes do CloudKit
-                .preferredColorScheme(.light)
+                .environmentObject(authService)
+                .environmentObject(persistenceServices)
         }
     }
 }

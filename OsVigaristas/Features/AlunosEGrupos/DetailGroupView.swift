@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DetalheGrupoView: View {
+struct DetailGroupView: View {
     let grupo: GroupModel
     
     var body: some View {
@@ -34,7 +34,7 @@ struct DetalheGrupoView: View {
                 Button {
                     //func para copiar o codigo?
                 } label: {
-                    Text("Código do grupo: 1234")
+                    Text("Código do grupo: \(grupo.groupCode)")
                         .font(.headline)
                         .foregroundColor(.white)
                         .padding()
