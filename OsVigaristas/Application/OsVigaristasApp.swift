@@ -18,6 +18,7 @@ struct OsVigaristasApp: App {
             AppRootView()
                 .environmentObject(authService)
                 .environmentObject(persistenceServices)
+                .preferredColorScheme(.light)
         }
     }
 }

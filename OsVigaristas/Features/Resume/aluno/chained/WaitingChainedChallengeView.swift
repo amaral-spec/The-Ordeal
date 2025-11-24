@@ -8,10 +8,15 @@
 import SwiftUI
 
 struct WaitingChainedChallengeView: View {
+    
+    @Environment(\.dismiss) var dismiss
+    
+    let onNavigation: (DoChallengeCoordinatorView.Route) -> Void
+    
     var body: some View {
         NavigationStack {
             
-            VStack { 
+            VStack {
                 Spacer()
                 PinkWaitingIconImageView(iconName: "clock.arrow.trianglehead.counterclockwise.rotate.90")
                 
@@ -27,8 +32,9 @@ struct WaitingChainedChallengeView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancelar", systemImage: "xmark") {
-                        // dismiss()
+                        dismiss()
                     }
+                    .foregroundStyle(.black)
                 }
             }
         }
@@ -36,5 +42,9 @@ struct WaitingChainedChallengeView: View {
 }
 
 #Preview {
-    WaitingChainedChallengeView()
+    NavigationStack {
+        WaitingChainedChallengeView { (_: DoChallengeCoordinatorView.Route) in
+            // No-op for preview
+        }
+    }
 }

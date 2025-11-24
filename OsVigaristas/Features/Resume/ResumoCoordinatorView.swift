@@ -2,13 +2,15 @@ import SwiftUI
 import Foundation
 
 struct ResumeCoordinatorView: View {
-    @EnvironmentObject var persistenceServices: PersistenceServices
-
     enum Route: Hashable {
         case list
         case detailChallenge(ChallengeModel)
         case detailTask(TaskModel)
     }
+    
+    @EnvironmentObject var persistenceServices: PersistenceServices
+
+    
 
     @State private var path: [Route] = []
     let isTeacher: Bool
@@ -43,7 +45,7 @@ struct ResumeCoordinatorView: View {
             .navigationDestination(for: Route.self) { route in
                 switch route {
                 case .detailChallenge(_):
-                    TaskDetailView()
+                    ChallengeDetailView()
                         .environmentObject(resumeVM)
                 case .detailTask(_):
                     TaskDetailView()

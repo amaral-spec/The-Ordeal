@@ -1,22 +1,23 @@
 import SwiftUI
 
 struct ResumeView: View {
-    @Environment(\.selectedStudentTab) var selectedTab
-    
-    @State private var criarDesafio = false
-    @State private var criarTarefa = false
-    @EnvironmentObject var persistenceServices: PersistenceServices
-    @State private var desafios: [ChallengeModel] = []
-    @State private var isChallengeEmpty: Bool = true
-    
-    @StateObject var resumeVM: ResumeViewModel
-    let onNavigate: (ResumeCoordinatorView.Route) -> Void
-    
+
     enum Mode: String, CaseIterable {
         case Desafio, Tarefa
     }
     
+    
+    @Environment(\.selectedStudentTab) var selectedTab
+    
+    @State private var criarDesafio = false
+    @State private var criarTarefa = false
+    @State private var desafios: [ChallengeModel] = []
+    @State private var isChallengeEmpty: Bool = true
     @State private var selectedMode = Mode.Desafio
+
+    @StateObject var resumeVM: ResumeViewModel
+    
+    let onNavigate: (ResumeCoordinatorView.Route) -> Void
     
     var body: some View {
         Picker("", selection: $selectedMode) {
@@ -123,26 +124,15 @@ struct ResumeView: View {
 }
 
 #Preview {
-    @Previewable @State var path: [ResumeCoordinatorView.Route] = []
-    @Previewable @State var isTeacher: Bool = true
-    @Previewable @StateObject var persistenceServices: PersistenceServices = PersistenceServices()
+    // Preview simples: NavigationStack opcional, sem navegação de destino.
+    let services = PersistenceServices()
+    let vm = ResumeViewModel(persistenceServices: services, isTeacher: true)
     
-    NavigationStack(path: $path) {
-        ResumeView(
-            resumeVM: ResumeViewModel(persistenceServices: persistenceServices, isTeacher: true)
-        ) { route in
-            path.append(route)
+    NavigationStack {
+        ResumeView(resumeVM: vm) { _ in
+            // onNavigate vazio no preview
         }
-        .navigationDestination(for: ResumeCoordinatorView.Route.self) { route in
-            switch route {
-            case .detailChallenge(_):
-                EmptyView()
-            case .detailTask(_):
-                EmptyView()
-            case .list:
-                EmptyView()
-            }
-        }
-        .environmentObject(PersistenceServices())
+        .navigationTitle("Resumo")
+        .toolbarTitleDisplayMode(.inlineLarge)
     }
 }

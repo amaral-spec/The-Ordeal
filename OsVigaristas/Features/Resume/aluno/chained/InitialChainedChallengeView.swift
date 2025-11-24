@@ -12,22 +12,17 @@ struct InitialChainedChallengeView: View {
         NavigationStack{
             Spacer()
             VStack{//Escrita
-               
                 TopPageInstructionView(instruction: "Toque algo de sua escolha por 15 segundos")
                 Spacer()
-                
-                
                 PinkIconImageView()
-                
                 ImageMessageView(title: "Grave o seu audio", subtitle: "Faça milage")
-                
                 Spacer()
                 Spacer()
                 NavigationLink{
                     ReceivedAudioRecordChainedChallengeView()
                 }label:{
                     RecordingButtonView(color: .accentColor)
-
+                    
                 }
             }
             .navigationTitle(Text("Encadeia"))
@@ -36,16 +31,16 @@ struct InitialChainedChallengeView: View {
                 ToolbarItem(placement: .cancellationAction){
                     Button("Cancelar", systemImage: "xmark")
                     {
-                       // dismiss()
+                        // dismiss()
                     }
                 }
-//                ToolbarItem(placement: .confirmationAction){
-//                    Button("confirmar", systemImage: "checkmark"){
-//                        
-//                    }
-//                    .tint(Color(.gray))
-//                    .
-//                }
+                //                ToolbarItem(placement: .confirmationAction){
+                //                    Button("confirmar", systemImage: "checkmark"){
+                //
+                //                    }
+                //                    .tint(Color(.gray))
+                //                    .
+                //                }
             }
         }
     }
