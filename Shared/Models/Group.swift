@@ -10,7 +10,7 @@ import CloudKit
 import SwiftUI
 
 //@MainActor
-final class GroupModel: Identifiable {
+final class GroupModel: Identifiable, Equatable, Hashable {
     var id: CKRecord.ID
     var name: String
     var members: [CKRecord.Reference]
@@ -45,4 +45,11 @@ final class GroupModel: Identifiable {
         }
     }
 
+    static func == (lhs: GroupModel, rhs: GroupModel) -> Bool {
+        lhs.id == rhs.id
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
 }

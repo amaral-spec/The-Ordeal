@@ -27,7 +27,7 @@ struct ProfessorMainCoordinatorView: View {
                 ResumeCoordinatorView(isTeacher: true)
             }
             Tab("Alunos", systemImage: "person.3", value: .alunos) {
-                AlunosView()
+                AlunosCoordinatorView()
             }
             Tab("Perfil", systemImage: "person.fill", value: .perfil) {
                 PerfilCoordinatorView(isProfessor: true)
