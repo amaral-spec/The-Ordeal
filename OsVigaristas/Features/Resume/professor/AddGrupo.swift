@@ -5,18 +5,12 @@
 //  Created by Erika Hacimoto on 13/11/25.
 //
 
-//struct Grupo: Identifiable, Hashable {
-//    let id = UUID()
-//    let nome: String
-//}
-
 import SwiftUI
 import CloudKit
 
 struct AddGrupo: View {
-//    @Binding var selecao: UUID?
-    @Binding var selecao: CKRecord.ID?
-//    let grupos: [Grupo]
+    @State private var select: UUID?
+    @Binding var selectedUserID: CKRecord.ID?
     let grupos: [GroupModel]
     @State private var searchText = ""
     
@@ -29,18 +23,13 @@ struct AddGrupo: View {
     }
     
     private func isSelected(_ grupo: GroupModel) -> Bool {
-        guard let selecao = selecao else { return false }
-        return grupo.id == selecao
+        guard let selectedUserID = selectedUserID else { return false }
+        return grupo.id == selectedUserID
     }
     
     var body: some View {
-        List(gruposFiltrados) { grupo in
+        List(gruposFiltrados, selection: $select) { grupo in
             HStack {
-//                Text(grupo.nome)
-//                Spacer()
-//                if grupo.id == selecao {
-//                    Image(systemName: "checkmark")
-//                        .foregroundColor(.accentColor)
                 if let image = grupo.image {
                     Image(uiImage: image)
                         .resizable()
@@ -74,11 +63,26 @@ struct AddGrupo: View {
                 }
             }
             .contentShape(Rectangle())
+//            .onTapGesture {
+//                
+////                selectedUserID = grupo.recordID
+//                if isSelected(grupo) {
+//                    selectedUserID = nil
+//                } else {
+//                    selectedUserID = grupo.id
+//                }
+//            }
             .onTapGesture {
+                print("Tapped grupo: \(grupo.name)")
+                print("Grupo ID: \(grupo.id)")
+                print("Currently selected: \(String(describing: selectedUserID))")
+                
                 if isSelected(grupo) {
-                    selecao = nil
+                    selectedUserID = nil
+                    print("Deselected grupo")
                 } else {
-                    selecao = grupo.id
+                    selectedUserID = grupo.id
+                    print("Selected grupo: \(grupo.name)")
                 }
             }
         }
@@ -89,6 +93,6 @@ struct AddGrupo: View {
 
 #Preview {
     NavigationStack {
-        AddGrupo(selecao: .constant(nil), grupos: [GroupModel(name: "JJ"), GroupModel(name: "ALIEN"), GroupModel(name: "Maria Maria")])
+        AddGrupo(selectedUserID: .constant(nil), grupos: [GroupModel(name: "JJ"), GroupModel(name: "ALIEN"), GroupModel(name: "Maria Maria")])
     }
 }

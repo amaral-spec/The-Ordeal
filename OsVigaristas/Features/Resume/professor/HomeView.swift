@@ -39,8 +39,7 @@ struct HomeView: View {
                             Image(systemName: "flag.pattern.checkered.2.crossed")
                                 .foregroundColor(Color.accentColor)
                             Circle()
-                                .fill(Color.accentColor)
-                                .opacity(0.3)
+                                .fill(Color("AccentMidColor"))
                                 .frame(width: 50, height: 50, alignment: .center)
                                 .padding()
                         }
@@ -75,8 +74,7 @@ struct HomeView: View {
                             Image(systemName: "checklist.checked")
                                 .foregroundColor(Color.accentColor)
                             Circle()
-                                .fill(Color.accentColor)
-                                .opacity(0.3)
+                                .fill(Color("AccentMidColor"))
                                 .frame(width: 50, height: 50, alignment: .center)
                                 .padding()
                         }
@@ -119,9 +117,9 @@ struct HomeView: View {
                 }
             }
         }
-        .sheet(isPresented: $criarDesafio) {
-            CriarDesafioView(numChallenge: $numChallenge)
-        }
+//        .sheet(isPresented: $criarDesafio) {
+//            CriarDesafioView(numChallenge: $numChallenge)
+//        }
         .sheet(isPresented: $criarTarefa) {
             CriarTarefaView(numTask: $numTask)
         }
