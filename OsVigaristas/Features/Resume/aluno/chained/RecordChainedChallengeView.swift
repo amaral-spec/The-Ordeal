@@ -6,38 +6,29 @@
 //
 
 import SwiftUI
-import UIKit // For haptic feedback
+import UIKit
 import Combine
 import AVFoundation
 
 struct RecordChainedChallengeView: View {
+
+    let onNavigation: (DoChallengeCoordinatorView.Route) -> Void
+
     var body: some View {
-        Spacer()
-        VStack { // Writing section
+        VStack {
             TopPageInstructionView(instruction: "Toque algo de sua escolha por 15 segundos")
+
             Spacer()
             AudioRepresentationView()
             Spacer()
-            RecordingButtonView(color: .accentColor)
-        }
-        .navigationTitle(Text("Em cadeia"))
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button("Cancelar", systemImage: "xmark") {
-                    // dismiss()
-                }
-            }
-            /*
-             ToolbarItem(placement: .confirmationAction) {
-             Button("confirmar", systemImage: "checkmark") { }
-             .tint(Color("AccentColor"))
-             }
-             */
-        }
-    }
-}
 
-#Preview {
-    RecordChainedChallengeView()
+            Button {
+                onNavigation(.recordChained)
+            } label: {
+                RecordingButtonView(color: .accentColor)
+            }
+        }
+        .navigationTitle("Em cadeia")
+        .navigationBarTitleDisplayMode(.inline)
+    }
 }

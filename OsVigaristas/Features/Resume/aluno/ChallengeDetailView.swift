@@ -104,6 +104,7 @@ struct ChallengeDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $startChallenge) {
             DoChallengeCoordinatorView()
+                .interactiveDismissDisabled(true)
         }
     }
     

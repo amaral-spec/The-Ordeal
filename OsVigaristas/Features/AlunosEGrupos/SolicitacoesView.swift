@@ -43,11 +43,11 @@ struct SolicitacoesView: View {
                 }
             }
             .task {
-                do {
-                    try await persistenceServices.fetchSolicitations()
-                } catch {
-                    print("Erro ao carregar solicitações: \(error)")
-                }
+//                do {
+//                    try await persistenceServices.fetchSolicitations()
+//                } catch {
+//                    print("Erro ao carregar solicitações: \(error)")
+//                }
             }
         }
     }

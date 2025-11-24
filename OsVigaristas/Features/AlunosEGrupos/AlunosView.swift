@@ -187,8 +187,8 @@ struct AlunosView: View {
     let services = PersistenceServices.shared
     let viewModel = AlunosViewModel(persistenceServices: services)
     
-    AlunosView(alunoVM: viewModel) { route in
+    AlunosView(alunoVM: viewModel) {_ in 
         
     }
-    .environmentObject(services)
+        .environmentObject(services)
 }

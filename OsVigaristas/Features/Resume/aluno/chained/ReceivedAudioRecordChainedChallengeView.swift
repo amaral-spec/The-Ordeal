@@ -11,8 +11,10 @@ import Combine
 import AVFoundation
 
 struct ReceivedAudioRecordChainedChallengeView: View {
+    
+    let onNavigation: (DoChallengeCoordinatorView.Route) -> Void
+    
     var body: some View {
-        Spacer()
         VStack { // Writing section
             TopPageInstructionView(instruction: """
                     Grave uma continuação de 
@@ -27,10 +29,13 @@ struct ReceivedAudioRecordChainedChallengeView: View {
                 title: "Grave o seu audio",
                 subtitle: "Faça milage"
             )
-            
             Spacer()
             Spacer()
-            RecordingButtonView(color: .accentColor)
+            Button {
+                onNavigation(.recordChained)
+            } label: {
+                RecordingButtonView(color: .accentColor)
+            }
         }
         .navigationTitle(Text("Em cadeia"))
         .navigationBarTitleDisplayMode(.inline)
@@ -39,5 +44,7 @@ struct ReceivedAudioRecordChainedChallengeView: View {
 }
 
 #Preview {
-    ReceivedAudioRecordChainedChallengeView()
+    ReceivedAudioRecordChainedChallengeView() {_ in 
+        print("Navegue")
+    }
 }

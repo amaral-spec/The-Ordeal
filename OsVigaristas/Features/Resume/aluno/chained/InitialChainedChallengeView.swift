@@ -8,45 +8,24 @@
 import SwiftUI
 
 struct InitialChainedChallengeView: View {
+    
+    let onNavigation: (DoChallengeCoordinatorView.Route) -> Void
+    
     var body: some View {
-        NavigationStack{
+        VStack{//Escrita
+            TopPageInstructionView(instruction: "Toque algo de sua escolha por 15 segundos")
             Spacer()
-            VStack{//Escrita
-                TopPageInstructionView(instruction: "Toque algo de sua escolha por 15 segundos")
-                Spacer()
-                PinkIconImageView()
-                ImageMessageView(title: "Grave o seu audio", subtitle: "Faça milage")
-                Spacer()
-                Spacer()
-                NavigationLink{
-                    ReceivedAudioRecordChainedChallengeView()
-                }label:{
-                    RecordingButtonView(color: .accentColor)
-                    
-                }
-            }
-            .navigationTitle(Text("Encadeia"))
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar{
-                ToolbarItem(placement: .cancellationAction){
-                    Button("Cancelar", systemImage: "xmark")
-                    {
-                        // dismiss()
-                    }
-                }
-                //                ToolbarItem(placement: .confirmationAction){
-                //                    Button("confirmar", systemImage: "checkmark"){
-                //
-                //                    }
-                //                    .tint(Color(.gray))
-                //                    .
-                //                }
+            PinkIconImageView()
+            ImageMessageView(title: "Grave o seu audio", subtitle: "Faça milage")
+            Spacer()
+            Spacer()
+            Button {
+                onNavigation(.recordChained)
+            } label: {
+                RecordingButtonView(color: .accentColor)
             }
         }
+        .navigationTitle(Text("Encadeia"))
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
-
-#Preview {
-    InitialChainedChallengeView()
-}
-

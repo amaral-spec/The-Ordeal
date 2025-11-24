@@ -15,41 +15,96 @@ struct DoChallengeCoordinatorView: View {
         case recordChained
     }
     
-    @EnvironmentObject private var persistenceServices: PersistenceServices
-    @State private var path: [Route] = []
-    @StateObject var DoChallengeVM: DoChallengeViewModel = DoChallengeViewModel()
+    @Environment(\.dismiss) private var dismiss
     
-    var body: some View {
-        NavigationStack {
-            WaitingChainedChallengeView() { route in
-                path.append(route)
-            }
-            .navigationDestination(for: Route.self) { route in
-                switch route {
-                case .waitingChained:
-                    EmptyView()
-                case .initialChained:
-                    EmptyView()
-                case .recordChained:
-                    EmptyView()
-                case .receiveChained:
-                    EmptyView()
-                }
+    @State private var path: [Route] = []
+    
+    @State private var showCancelAlert: Bool = false
+    @State private var showConfirmAlert: Bool = false
+    
+    @StateObject private var doChallengeVM = DoChallengeViewModel()
+    
+    @State private var currentRoute: Route = .waitingChained
+
+    private var cancelToolbar: some ToolbarContent {
+        ToolbarItem(placement: .topBarLeading) {
+            Button("Cancelar", systemImage: "xmark") {
+                showCancelAlert = true
             }
         }
     }
-}
-
-#Preview {
-    // Preview simples: NavigationStack opcional, sem navegação de destino.
-    let services = PersistenceServices()
-    let vm = ResumeViewModel(persistenceServices: services, isTeacher: true)
     
-    NavigationStack {
-        ResumeView(resumeVM: vm) { _ in
-            // onNavigate vazio no preview
+    private var confirmToolbar: some ToolbarContent {
+        ToolbarItem(placement: .topBarTrailing) {
+            Button {
+                showConfirmAlert = true
+            } label: {
+                Label("Confirmar", systemImage: "checkmark")
+            }
         }
-        .navigationTitle("Resumo")
-        .toolbarTitleDisplayMode(.inlineLarge)
+    }
+
+    var body: some View {
+        NavigationStack(path: $path) {
+            screen(for: .waitingChained)
+                .navigationDestination(for: Route.self) { route in
+                    screen(for: route)
+                }
+        }
+        .alert("Cancelar desafio?", isPresented: $showCancelAlert) {
+            Button("Manter", role: .cancel) { }
+            Button("Cancelar desafio", role: .destructive) {
+                dismiss()
+            }
+        } message: {
+            Text("Tem certeza que deseja cancelar? Seu progresso atual será descartado.")
+        }
+        .alert("Enviar Desafio?", isPresented: $showConfirmAlert) {
+            if #available(iOS 26.0, *) {
+                Button("Finalizar", role: .confirm) { dismiss() }
+            } else {
+                Button("Finalizar") { dismiss() }
+            }
+            Button("Cancelar", role: .cancel) { }
+        } message: {
+            Text("Tem certeza que deseja enviar? Não será possível enviar novamente.")
+        }
+        .environmentObject(doChallengeVM)
+    }
+    
+    @ViewBuilder
+    private func screen(for route: Route) -> some View {
+        switch route {
+        case .waitingChained:
+            WaitingChainedChallengeView { next in
+                path.append(next)
+            }
+            .toolbar { cancelToolbar }
+            .navigationBarBackButtonHidden(true)
+            
+        case .initialChained:
+            InitialChainedChallengeView { next in
+                path.append(next)
+            }
+            .toolbar { cancelToolbar }
+            .navigationBarBackButtonHidden(true)
+            
+        case .receiveChained:
+            ReceivedAudioRecordChainedChallengeView { next in
+                path.append(next)
+            }
+            .toolbar { cancelToolbar }
+            .navigationBarBackButtonHidden(true)
+
+        case .recordChained:
+            RecordChainedChallengeView { next in
+                path.append(next)
+            }
+            .toolbar {
+                cancelToolbar
+                confirmToolbar
+            }
+            .navigationBarBackButtonHidden(true)
+        }
     }
 }
