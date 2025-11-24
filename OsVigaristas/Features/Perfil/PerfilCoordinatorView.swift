@@ -17,7 +17,7 @@ struct PerfilCoordinatorView: View {
             Button("Logout") { authVM.logout() }
 
         } else {
-            PerfilView()
+            PerfilView(persistenceServices: persistenceServices)
 //            AlunoPerfilView(viewModel: PerfilViewModel(userType: .aluno))
 
         }

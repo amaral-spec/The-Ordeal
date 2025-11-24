@@ -8,6 +8,12 @@
 import SwiftUI
 
 struct PerfilView: View {
+    @StateObject private var vm: PerfilViewModel
+    
+    init(persistenceServices: PersistenceServices) {
+        _vm = StateObject(wrappedValue: PerfilViewModel(persistenceServices: persistenceServices))
+    }
+    
     var body: some View {
         NavigationStack {
             VStack(){
@@ -19,28 +25,74 @@ struct PerfilView: View {
                         .clipShape(Circle())
                         .padding()
                     
-                    Text("João da Silva")
+                    Text(vm.user?.name ?? "Loading...")
                         .font(.title)
                     
-                    Text("Aluno desde 18/11/2025")
+                    Text("Aluno desde \(vm.user?.creationDate.formatted(date: .numeric, time: .omitted) ?? "Loading...")")
                         .font(.caption)
                         .foregroundColor(Color("AccentColor"))
                     
                     HStack{
-                        CardPerfil(texto: "40 B")
-                        CardPerfil(texto: "4 F")
+                        CardPerfil(texto: "\(vm.user?.points ?? 0) B")
+                        CardPerfil(texto: "\(vm.user?.streak ?? 0) F")
                     }
                     .padding(.top, 20)
                     
                     HStack{
-                        CardPerfil(texto: "Última tarefa: \n13/11/25")
-                        CardPerfil(texto: "Último desafio: \n13/11/25")
+                        CardPerfil(texto: "Última tarefa: \n\(vm.user?.lastTask?.endDate.formatted(date: .numeric, time: .omitted) ?? "No data")")
+                        CardPerfil(texto: "Último desafio: \n\(vm.user?.lastChallenge?.endDate.formatted(date: .numeric, time: .omitted) ?? "No data")")
                     }
                     
-                    Button(action:{}){
-                        Row(texto: "Entrar em um grupo")
+                    Button {
+                        vm.isShowingPopup = true
+                        vm.resetGroupJoinState()
+                    } label: {
+                        HStack {
+                            Text("Entrar em um grupo")
+                        }
                     }
-                    .buttonStyle(.plain)
+                    .alert("Solicitar entrada em um grupo", isPresented: $vm.isShowingPopup) {
+                        TextField("Código do grupo", text: $vm.groupCodeInput)
+                            .textInputAutocapitalization(.never)
+                            .disableAutocorrection(true)
+                        
+                        Button(action: {
+                            Task { await vm.askToJoinGroup() }
+                        }) {
+                            Text(vm.isJoiningGroup ? "Aguarde..." : "Entrar")
+                        }
+                        .disabled(vm.fetchedGroup == nil || vm.isJoiningGroup)
+                        
+                        Button("Cancelar", role: .cancel) {
+                            vm.resetGroupJoinState()
+                        }
+                    }
+                    message: {
+                        // Display the dynamic message based on ViewModel state
+                        if vm.isJoiningGroup {
+                            Text("Aguarde, enviando solicitação...")
+                        } else if let group = vm.fetchedGroup {
+                            Text("Grupo encontrado: **\(group.name)**. Clique em Entrar para enviar a solicitação.")
+                        } else if let error = vm.fetchError {
+                            Text("**Erro:** \(error)")
+                        } else if vm.groupCodeInput.isEmpty {
+                            Text("Digite o código único do grupo.")
+                        } else {
+                            Text("Procurando grupo...")
+                        }
+                    }
+                    
+                    
+                    if let successMessage = vm.joinSuccessMessage {
+                        Text("Success: \(successMessage)")
+                            .foregroundColor(.green)
+                            .padding(.top)
+                    }
+                    if let errorMessage = vm.joinErrorMessage {
+                        Text("Erro: \(errorMessage)")
+                            .foregroundColor(.red)
+                            .padding(.top)
+                    }
                     
                     Button(action:{}){
                         Row(texto: "Histórico de tarefas")
@@ -60,6 +112,9 @@ struct PerfilView: View {
                 }
             }
             .navigationTitle("Perfil")
+        }
+        .task {
+            await vm.loadUser()
         }
     }
 }
@@ -90,7 +145,7 @@ struct Row: View {
             
             HStack {
                 Text(texto)
-
+                
                 Spacer()
                 Image(systemName: "chevron.right")
                     .font(.caption)
@@ -100,6 +155,4 @@ struct Row: View {
     }
 }
 
-#Preview {
-    PerfilView()
-}
+
