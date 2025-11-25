@@ -16,8 +16,12 @@ class PersistenceServices: NSObject, ObservableObject {
     let db = CKContainer.default().publicCloudDatabase
     
     // MARK: CRUD: Usuarios
-    func fetchUserForProfile(recordID: CKRecord.ID) async throws -> UserModel {
-        let record = try await db.record(for: recordID)
+    func fetchUserForProfile() async throws -> UserModel {
+        guard let currentUser = AuthService.shared.currentUser else {
+            throw NSError(domain: "AuthError", code: 1, userInfo: [NSLocalizedDescriptionKey: "No user loggoed in"])
+        }
+        
+        let record = try await db.record(for: currentUser.id)
         
         let name = record["name"] as? String ?? ""
         let email = record["email"] as? String ?? ""
@@ -33,8 +37,8 @@ class PersistenceServices: NSObject, ObservableObject {
         usuario.isTeacher = isTeacher
         usuario.streak = streak
         usuario.points = points
-        usuario.lastTask = try await fetchLatestTask(for: recordID, in: db)
-        usuario.lastChallenge = try await fetchLatestChallenge(for: recordID, in: db)
+        usuario.lastTask = try await fetchLatestTask(for: currentUser.id, in: db)
+        usuario.lastChallenge = try await fetchLatestChallenge(for: currentUser.id, in: db)
         return usuario
     }
     
@@ -482,7 +486,7 @@ class PersistenceServices: NSObject, ObservableObject {
     
     // MARK: Auxiliary functions
     func fetchLatestTask(for userRecordID: CKRecord.ID, in db: CKDatabase) async throws -> TaskModel? {
-        let predicate = NSPredicate(format: "student == %@", CKRecord.Reference(recordID: userRecordID, action: .none))
+        let predicate = NSPredicate(format: "student CONTAINS %@", CKRecord.Reference(recordID: userRecordID, action: .none))
         let taskQuery = CKQuery(recordType: "Task", predicate: predicate)
         
         // Performs queries
@@ -511,13 +515,7 @@ class PersistenceServices: NSObject, ObservableObject {
             return nil
         }
         
-        return TaskModel(
-            title: latestRecord["title"] as? String ?? "",
-            description: latestRecord["description"] as? String ?? "",
-            student: latestRecord["student"] as! [CKRecord.Reference],
-            startDate: latestRecord["startDate"] as? Date ?? Date(),
-            endDate: latestRecord["endDate"] as? Date ?? Date()
-        )
+        return TaskModel(from: latestRecord)
     }
     
     func fetchLatestChallenge(for userRecordID: CKRecord.ID, in db: CKDatabase) async throws -> ChallengeModel? {
