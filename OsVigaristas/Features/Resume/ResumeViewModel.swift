@@ -8,22 +8,19 @@
 import Foundation
 import CloudKit
 
-struct Grupo: Identifiable, Hashable {
-    let id = UUID()
-    let nome: String
-}
-
 final class ResumeViewModel: ObservableObject {
     @Published var challenges: [ChallengeModel] = []
     @Published var tasks: [TaskModel] = []
-    @Published var isTeacher: Bool = true
+    
+    @Published var isTeacher: Bool = false
+    
     @Published var groupsByID: [CKRecord.ID : GroupModel] = [:]
     @Published private var isChallengeEmpty: Bool = true
     @Published private var isTaskEmpty: Bool = true
     
     private let persistenceServices: PersistenceServices
     
-    init(persistenceServices: PersistenceServices, isTeacher: Bool = false) {
+    init(persistenceServices: PersistenceServices, isTeacher: Bool) {
         self.persistenceServices = persistenceServices
         self.isTeacher = isTeacher
     }
