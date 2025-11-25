@@ -47,8 +47,17 @@ struct PerfilView: View {
                         vm.isShowingPopup = true
                         vm.resetGroupJoinState()
                     } label: {
-                        HStack {
-                            Text("Entrar em um grupo")
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 30)
+                                .frame(width: 350, height: 50)
+                                .padding(10)
+                                .foregroundStyle(Color("AccentColor").opacity(0.3))
+                            
+                            HStack {
+                                Text("Entrar em um grupo")
+                                    .foregroundColor(.black)
+                            }
+                            .padding(.horizontal, 40)
                         }
                     }
                     .alert("Solicitar entrada em um grupo", isPresented: $vm.isShowingPopup) {
@@ -82,7 +91,7 @@ struct PerfilView: View {
                         }
                     }
                     
-                    
+                    // TODO: Modificar forma de demonstrar ao usuário que deu certo entrar no grupo
                     if let successMessage = vm.joinSuccessMessage {
                         Text("Success: \(successMessage)")
                             .foregroundColor(.green)
