@@ -27,6 +27,12 @@ class PerfilViewModel: ObservableObject {
     @Published var joinSuccessMessage: String? = nil
     @Published var joinErrorMessage: String? = nil
     
+    // Profile editing properties
+    @Published var isShowingEditProfile: Bool = false
+    @Published var editName: String = ""
+    @Published var editIsTeacher: Bool = false
+    @Published var isSavingChanges: Bool = false
+    
     private let persistenceServices: PersistenceServices
     private var groupCodeCancellable: AnyCancellable? // For debouncing
     
@@ -118,4 +124,36 @@ class PerfilViewModel: ObservableObject {
         isJoiningGroup = false
         // Keep joinSuccessMessage/joinErrorMessage to display after alert closes
     }
+
+    func updateProfileImage(_ image: UIImage) async {
+        do {
+            try await persistenceServices.updateProfileImage(image)
+            user?.profileImage = image
+        } catch {
+            print("Failed updating image: \(error)")
+        }
+    }
+
+    func saveUserEdits() async {
+        guard !isSavingChanges else { return }
+        isSavingChanges = true
+
+        do {
+            try await persistenceServices.editUser(
+                newName: editName,
+                isTeacher: editIsTeacher
+            )
+
+            // Update UI locally
+            user?.name = editName
+            user?.isTeacher = editIsTeacher
+
+            isShowingEditProfile = false
+        } catch {
+            print("Failed to edit user: \(error)")
+        }
+
+        isSavingChanges = false
+    }
+
 }
