@@ -12,6 +12,8 @@ import AVFoundation
 
 struct ReceivedAudioRecordChainedChallengeView: View {
     
+    @StateObject private var rec = MiniRecorder()
+    @EnvironmentObject var doChallengeVM: DoChallengeViewModel
     let onNavigation: (DoChallengeCoordinatorView.Route) -> Void
     
     var body: some View {
@@ -24,7 +26,7 @@ struct ReceivedAudioRecordChainedChallengeView: View {
             AudioRepresentationView()
                 .padding(.trailing, 30)
             Spacer()
-            PinkIconImageView()
+            IconImageView(nomeIcone: "waveform")
             ImageMessageView(
                 title: "Grave o seu audio",
                 subtitle: "Faça milage"
@@ -32,9 +34,9 @@ struct ReceivedAudioRecordChainedChallengeView: View {
             Spacer()
             Spacer()
             Button {
-                onNavigation(.recordChained)
+                
             } label: {
-                RecordingButtonView(color: .accentColor)
+                RecordingButtonView( isRecording: rec.isRecording)
             }
         }
         .navigationTitle(Text("Em cadeia"))

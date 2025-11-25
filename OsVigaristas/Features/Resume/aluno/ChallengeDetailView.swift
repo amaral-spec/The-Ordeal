@@ -2,8 +2,6 @@ import SwiftUI
 
 struct ChallengeDetailView: View {
     
-    @EnvironmentObject var resumeVM: ResumeViewModel
-    @EnvironmentObject var persistenceServices: PersistenceServices
     @State var startChallenge: Bool = false
     
     // MARK: - Example data (replace with real model)
@@ -75,25 +73,19 @@ struct ChallengeDetailView: View {
                     .padding(.horizontal)
                 }
                 
-                // MARK: - Ação
-                if resumeVM.isTeacher {
-                    Text("Você é professor")
-                        .foregroundStyle(.secondary)
-                        .padding(.horizontal)
-                } else {
-                    Button {
-                        startChallenge = true
-                    } label: {
-                        Text("Começar desafio")
-                            .font(.headline)
-                            .padding(.vertical, 15)
-                            .frame(maxWidth: .infinity)
-                            .background(Color.accentColor)
-                            .foregroundColor(.white)
-                            .cornerRadius(12)
-                    }
-                    .padding(.horizontal)
+                Button {
+                    startChallenge = true
+                } label: {
+                    Text("Começar desafio")
+                        .font(.headline)
+                        .padding(.vertical, 15)
+                        .frame(maxWidth: .infinity)
+                        .background(Color.accentColor)
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
                 }
+                .padding(.horizontal)
+                
                 
                 Spacer(minLength: 30)
             }
@@ -133,13 +125,8 @@ struct ChallengeDetailView: View {
 
 
 #Preview {
-    // Instâncias para o Preview
-    let services = PersistenceServices()
-    let resumeVM = ResumeViewModel(persistenceServices: services, isTeacher: false)
     
     return NavigationStack {
         ChallengeDetailView()
-            .environmentObject(resumeVM)
-            .environmentObject(services)
     }
 }

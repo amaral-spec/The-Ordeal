@@ -23,8 +23,11 @@ struct DoChallengeCoordinatorView: View {
     @State private var showConfirmAlert: Bool = false
     
     @StateObject private var doChallengeVM = DoChallengeViewModel()
+    @StateObject private var rec = MiniRecorder()
+    @StateObject private var player = MiniPlayer()
     
     @State private var currentRoute: Route = .waitingChained
+    @State private var micDenied = false
 
     private var cancelToolbar: some ToolbarContent {
         ToolbarItem(placement: .topBarLeading) {
@@ -36,12 +39,13 @@ struct DoChallengeCoordinatorView: View {
     
     private var confirmToolbar: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
-            Button {
+            Button() {
                 showConfirmAlert = true
             } label: {
                 Label("Confirmar", systemImage: "checkmark")
             }
-        }
+            .buttonStyle(.borderedProminent)      // Torna o botão primário
+            .tint(Color("BlueChallenge"))         }
     }
 
     var body: some View {
@@ -70,6 +74,27 @@ struct DoChallengeCoordinatorView: View {
             Text("Tem certeza que deseja enviar? Não será possível enviar novamente.")
         }
         .environmentObject(doChallengeVM)
+        .environmentObject(rec)
+        .environmentObject(player)
+        .task {
+            // Request permission to record when view appears.
+            rec.requestPermission { ok in
+                // Show an alert if permission is denied.
+                micDenied = (ok == false)
+            }
+        }
+        .alert("Microphone Access Needed", isPresented: $micDenied) {
+            Button("OK", role: .cancel) {}
+            #if canImport(UIKit)
+            Button("Open Settings") {
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(url)
+                }
+            }
+            #endif
+        } message: {
+            Text("Please allow microphone access in Settings to record audio.")
+        }
     }
     
     @ViewBuilder
@@ -81,6 +106,7 @@ struct DoChallengeCoordinatorView: View {
             }
             .toolbar { cancelToolbar }
             .navigationBarBackButtonHidden(true)
+            .environmentObject(doChallengeVM)
             
         case .initialChained:
             InitialChainedChallengeView { next in
@@ -88,6 +114,7 @@ struct DoChallengeCoordinatorView: View {
             }
             .toolbar { cancelToolbar }
             .navigationBarBackButtonHidden(true)
+            .environmentObject(doChallengeVM)
             
         case .receiveChained:
             ReceivedAudioRecordChainedChallengeView { next in
@@ -95,9 +122,10 @@ struct DoChallengeCoordinatorView: View {
             }
             .toolbar { cancelToolbar }
             .navigationBarBackButtonHidden(true)
+            .environmentObject(doChallengeVM)
 
         case .recordChained:
-            RecordChainedChallengeView { next in
+            RecordFromInitialChainedChallengeView { next in
                 path.append(next)
             }
             .toolbar {
