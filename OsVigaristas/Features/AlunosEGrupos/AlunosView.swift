@@ -110,8 +110,6 @@ struct AlunosView: View {
             await alunoVM.groupLoad()
         }
         .sheet(isPresented: $alunoVM.criarGrupo) {
-            // ❗ NÃO PASSA persistenceServices daqui
-            // Ele virá automaticamente do EnvironmentObject do seu App
             CriarGrupoView(onGrupoCriado: {
                 Task { await alunoVM.groupLoad() }
             })

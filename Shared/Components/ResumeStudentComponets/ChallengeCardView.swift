@@ -8,12 +8,19 @@
 import SwiftUI
 
 struct ChallengeCardView: View {
+    @ObservedObject var resumoVM: ResumeViewModel
+
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 25)
-                .fill(Color("BlueCard"))
+            if resumoVM.challenges.isEmpty {
+                RoundedRectangle(cornerRadius: 25)
+                    .fill(.gray)
+            } else {
+                RoundedRectangle(cornerRadius: 25)
+                    .fill(Color("BlueCard"))
+            }
 
-            VStack(spacing: 16) {
+            VStack {
                 HStack {
                     Text("Desafio")
                         .font(.title3.bold())
@@ -24,13 +31,19 @@ struct ChallengeCardView: View {
                         .foregroundColor(.white.opacity(0.9))
                 }
 
-                Image(systemName: "flag.checkered.circle.fill")
-                    .font(.system(size: 50))
+                Spacer()
+
+                Image("flag.pattern.checkered.2.crossed.circle.fill")
+                    .font(.system(size: 140))
                     .foregroundColor(.white)
-                    .padding(.top, 10)
+
+                Spacer()
             }
             .padding()
         }
-        .frame(height: 180)
+        .frame(height: 220)
+        .task {
+            await resumoVM.carregarDesafios()
+        }
     }
 }

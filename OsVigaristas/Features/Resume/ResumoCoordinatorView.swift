@@ -61,7 +61,8 @@ struct ResumeCoordinatorView: View {
                     VisualizarDadosView()
                         .environmentObject(resumeVM)
                 case .list:
-                    EmptyView()
+                    DesafiosList(resumoVM: resumeVM)
+                        .environmentObject(resumeVM)
                     
                 case .participants:
                     ListaParticipantesView()
