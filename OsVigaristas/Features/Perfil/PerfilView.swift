@@ -24,16 +24,16 @@ struct PerfilView: View {
                         Image(uiImage: image)
                             .resizable()
                             .scaledToFill()
-                            .frame(width: 100, height: 100)
+                            .frame(width: 150, height: 150)
                             .clipShape(Circle())
-                            .padding(30)
+                            .padding(.top, 30)
                     } else {
                         Image("partitura")
                             .resizable()
                             .scaledToFill()
-                            .frame(width: 100, height: 100)
+                            .frame(width: 150, height: 150)
                             .clipShape(Circle())
-                            .padding(30)
+                            .padding(.top, 30)
                     }
                     
                     Text(vm.user?.name ?? "Loading...")
@@ -138,6 +138,7 @@ struct PerfilView: View {
                 }
             }
             .navigationTitle("Perfil")
+            .toolbarTitleDisplayMode(.inlineLarge)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Editar") {

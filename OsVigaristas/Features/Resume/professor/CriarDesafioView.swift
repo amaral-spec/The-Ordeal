@@ -91,7 +91,7 @@ struct CriarDesafioView: View {
                                 group: groupRef,
                                 reward: moedas,
                                 startDate: selectedDate,
-                                endDate: selectedDate
+                                endDate: Calendar.current.date(byAdding: .day, value: 7, to: selectedDate)!
                             )
                             do {
                                 try await persistenceServices.createChallenge(challenge)
