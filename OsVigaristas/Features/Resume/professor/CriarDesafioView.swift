@@ -44,7 +44,7 @@ struct CriarDesafioView: View {
                             Text(group.name).tag(group.id as CKRecord.ID?)
                         }
                     }
-                    .pickerStyle(.menu)
+                    .pickerStyle(.navigationLink)
                 }
                 Section {
                     LabeledContent("Recompensa: \(moedas) moedas") {
