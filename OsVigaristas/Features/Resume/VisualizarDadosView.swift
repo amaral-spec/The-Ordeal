@@ -2,145 +2,115 @@
 //  VisualizarDadosView.swift
 //  OsVigaristas
 //
-//  Created by Jordana Lourenço Santos on 17/11/25.
-//
 
 import SwiftUI
 
 struct VisualizarDadosView: View {
     @EnvironmentObject var resumeVM: ResumeViewModel
-    //let onNavigate: (ResumeCoordinatorView.Route) -> Void
+    @State var challengeModel: ChallengeModel?
+    @State var taskModel: TaskModel?
+    
+    @State private var endDate: Date
+    @State private var description: String
+    @State private var title: String
+    @State private var participants: [String] = []
+    
+    init(challengeModel: ChallengeModel? = nil, taskModel: TaskModel? = nil) {
+        if let challengeModel = challengeModel {
+            self.challengeModel = challengeModel
+            self.endDate = challengeModel.endDate
+            self.description = challengeModel.description
+            self.title = challengeModel.whichChallenge == 1 ? "Echo" : "Encadeia"
+        } else if let taskModel = taskModel {
+            self.taskModel = taskModel
+            self.endDate = taskModel.endDate
+            self.description = taskModel.description
+            self.title = taskModel.title
+        } else {
+            self.endDate = Date()
+            self.description = ""
+            self.title = ""
+        }
+    }
     
     var body: some View {
-        NavigationStack{
-            VStack{
-                //colocar titulo dinamico para o caso desafio/tarefa
-                Dados()
-                listaParticipante()
-                if(!resumeVM.isTeacher){
-                    Button(action: {}) {
-                        Text("Começar desafio")
-                            .foregroundColor(.white)
-                            .fontWeight(.semibold)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color("AccentColor"))
-                            .cornerRadius(30)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                
+                // MARK: - CARD 1: Tempo Restante
+                VStack {
+                    HStack(spacing: 12) {
+                        
+                        Image(systemName: "calendar.badge.exclamationmark")
+                            .foregroundColor(Color("BlueCard"))
+                            .font(.system(size: 35))
+                        
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Termina em \(resumeVM.diasRestantes(ate: endDate)) dias!")
+                                .font(.title2.bold())
+                                .foregroundColor(.black)
+                        }
+                        Spacer()
+                    }
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(Color.white)
+                        .shadow(color: .black.opacity(0.1), radius: 6, y: 3)
+                )
+                
+                
+                // MARK: - CARD 2: Descrição
+                Section("Dados do Desafio") {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Descrição")
+                            .font(.title2.bold())
+                        
+                        Text(description)
+                            .font(.title2)
+                            .foregroundColor(.black.opacity(0.8))
+                            .multilineTextAlignment(.leading)
                     }
                     .padding()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(Color.white)
+                            .shadow(color: .black.opacity(0.1), radius: 6, y: 3)
+                    )
                 }
-                Spacer()
-            }
-            .navigationTitle("visualizar dados")
-            .navigationBarTitleDisplayMode(.inline)
-        }
-    }
-}
-
-struct Dados: View {
-    var body: some View {
-        HStack(spacing: -10) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 30)
-                    .frame(width: 173, height: 108, alignment: .leading)
-                    .foregroundStyle(.gray.opacity(0.3)) //mudar dps
+                .font(.title2.bold())
                 
-                VStack() {
-                    //trocar o texto para os dias que estão sendo contados desde o dia que a tarefa foi criada
-                    Text("Terminou")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .font(.title)
-                        .foregroundStyle(Color.accentColor)
-                        .padding(.horizontal, 15)
+                
+                // MARK: - CARD 3: Participantes
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("Participantes")
+                        .font(.title2.bold())
                     
-                    Text("1212 Dias")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .foregroundStyle(Color.accentColor)
-                        .font(.title)
-                        .bold()
-                        .padding(.horizontal, 15)
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 15) {
+                            ForEach(participants.indices, id: \.self) { index in
+                                VStack {
+                                    Circle()
+                                        .fill(Color.gray.opacity(0.3))
+                                        .frame(width: 60, height: 60)
+                                    
+                                    Text("Aluno \(index + 1)")
+                                        .font(.caption2)
+                                        .foregroundColor(.black.opacity(0.6))
+                                }
+                            }
+                        }
+                        .padding(.horizontal, 4)
+                    }
                 }
-                .frame(width: 173, height: 108)
-            }
-            .padding()
-            
-            ZStack {
-                RoundedRectangle(cornerRadius: 30)
-                    .frame(width: 173, height: 108, alignment: .leading)
-                    .foregroundStyle(.gray.opacity(0.3)) //mudar dps
-                
-                VStack() {
-                    //trocar o texto para os dias que estão sendo contados desde o dia que a tarefa foi criada
-                    Text("Prêmio")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .font(.title)
-                        .foregroundStyle(Color.accentColor)
-                        .padding(.horizontal, 15)
-                    Text("50 Moedas")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .foregroundStyle(Color.accentColor)
-                        .font(.title)
-                        .bold()
-                        .padding(.horizontal, 14)
-                }
+                .frame(maxWidth: .infinity)
             }
             .padding()
         }
-        
-        ZStack {
-            RoundedRectangle(cornerRadius: 30)
-                .frame(height: 201, alignment: .center)
-                .padding(.horizontal)
-                .foregroundStyle(.gray.opacity(0.3))
-            VStack {
-                Text("Descrição")
-                    .font(.title3)
-                    .fontWeight(.semibold)
-                    .frame(width: 321, alignment: .topLeading)
-                
-                // trocar para a descricao da tarefa
-                Text("Descrição fornecida pelo próprio professor.")
-                    .frame(width: 321, height: 132, alignment: .topLeading)
-            }
-        }
+        .navigationTitle(title)
+        .navigationBarTitleDisplayMode(.inline)
     }
-}
-
-struct listaParticipante: View {
-    @EnvironmentObject var resumeVM: ResumeViewModel
-    //let onNavigate: (ResumeCoordinatorView.Route) -> Void
-    
-    var body: some View {
-        HStack {
-            Button(action: {}) {
-                resumeVM.isTeacher ? Text("Resultados dos alunos").fontWeight(.bold) : Text("Participantes").fontWeight(.bold)
-                
-                Image(systemName: "chevron.right")
-                    .foregroundColor(.pink)
-                    .foregroundStyle(Color.accentColor)
-            }
-            .buttonStyle(.plain)
-            
-        }
-        .frame(width: 355, height: 42, alignment: .leading)
-        .padding(.vertical, 3)
-
-        ScrollView(.horizontal) {
-            HStack(alignment: .center, spacing: 15) {
-                //trocar forEach para buscar do cloudKit
-                ForEach(1...8, id: \.self) { _ in
-                    Circle()
-                        .frame(width: 80, height: 80)
-                }
-            }
-            .padding(.horizontal, 27)
-            .padding(.vertical, 0)
-            .frame(minWidth: 403, maxWidth: 403, alignment: .leading)
-        }
-    }
-}
-
-
-#Preview {
-    VisualizarDadosView()
 }
