@@ -1,13 +1,8 @@
-//
-//  ChallengeCardView.swift
-//  OsVigaristas
-//
-//  Created by Ludivik de Paula on 24/11/25.
-//
+
 
 import SwiftUI
 
-struct ChallengeCardView: View {
+struct BigTaskCardView: View {
     @ObservedObject var resumoVM: ResumeViewModel
 
     var body: some View {
@@ -17,26 +12,22 @@ struct ChallengeCardView: View {
                     .fill(.gray)
             } else {
                 RoundedRectangle(cornerRadius: 25)
-                    .fill(Color("BlueCard"))
+                    .fill(Color("GreenCard"))
             }
 
             VStack {
                 HStack {
-                    Text("Desafio")
+                    Text("Tarefas")
                         .font(.title3.bold())
                         .foregroundColor(.white)
                     Spacer()
-                    if(!resumoVM.isTeacher){
-                        Text("Faltam 2 dias")
-                            .font(.caption)
-                            .foregroundColor(.white.opacity(0.9))
-                    }
                 }
-
                 Spacer()
 
-                Image("flag.pattern.checkered.2.crossed.circle.fill")
-                    .font(.system(size: 140))
+                Image("custom.checklist.checked.circle.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 140, height: 140)
                     .foregroundColor(.white)
 
                 Spacer()
