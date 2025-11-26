@@ -44,6 +44,7 @@ struct CriarTarefaView: View {
                                 Text(user.name).tag(user.id as CKRecord.ID?)
                             }
                         }
+                        .pickerStyle(.navigationLink)   
                     }
                     Section {
                         LabeledContent("Início") {

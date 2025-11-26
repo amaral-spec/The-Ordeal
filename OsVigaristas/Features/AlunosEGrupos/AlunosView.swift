@@ -110,8 +110,6 @@ struct AlunosView: View {
             await alunoVM.groupLoad()
         }
         .sheet(isPresented: $alunoVM.criarGrupo) {
-            // ❗ NÃO PASSA persistenceServices daqui
-            // Ele virá automaticamente do EnvironmentObject do seu App
             CriarGrupoView(onGrupoCriado: {
                 Task { await alunoVM.groupLoad() }
             })
@@ -187,8 +185,8 @@ struct AlunosView: View {
     let services = PersistenceServices.shared
     let viewModel = AlunosViewModel(persistenceServices: services)
     
-    AlunosView(alunoVM: viewModel) { route in
-        Text("Hello, World!")
+    AlunosView(alunoVM: viewModel) {_ in 
+        
     }
-    .environmentObject(services)
+        .environmentObject(services)
 }

@@ -13,11 +13,10 @@ struct PerfilCoordinatorView: View {
 
     var body: some View {
         if isProfessor {
-            Text("Perfil Professor")
-            Button("Logout") { authVM.logout() }
+            PerfilProfessorView(persistenceServices: persistenceServices)
 
         } else {
-            PerfilView()
+            PerfilView(persistenceServices: persistenceServices)
 //            AlunoPerfilView(viewModel: PerfilViewModel(userType: .aluno))
 
         }

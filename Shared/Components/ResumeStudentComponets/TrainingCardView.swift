@@ -7,23 +7,37 @@
 
 import SwiftUI
 
+import SwiftUI
+
 struct TrainingCardView: View {
     var body: some View {
-        VStack(spacing: 16) {
-            Text("Treino")
-                .font(.headline)
-                .foregroundColor(.white)
-
-            Image(systemName: "music.note.list")
-                .font(.system(size: 40))
-                .foregroundColor(.white)
-        }
-        .frame(maxWidth: .infinity)
-        .padding()
-        .background(
+        ZStack {
             RoundedRectangle(cornerRadius: 20)
                 .fill(Color("RedCard"))
-        )
+                .frame(height: 160)
+            
+            VStack {
+                HStack {
+                    Text("Treino")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                    Spacer()
+                }
+                Spacer()
+            }
+            .padding(16)
+
+            Image("custom.music.pages.circle.fill")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 90, height: 90)
+                .padding(.top, 20)
+                .foregroundColor(.white)
+        }
         .frame(height: 160)
     }
+}
+
+#Preview {
+    TrainingCardView()
 }

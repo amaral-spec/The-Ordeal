@@ -8,22 +8,42 @@
 import SwiftUI
 
 struct TaskCardView: View {
-    var body: some View {
-        VStack(spacing: 16) {
-            Text("Tarefas")
-                .font(.headline)
-                .foregroundColor(.white)
+    @ObservedObject var resumoVM: ResumeViewModel
 
-            Image(systemName: "checklist")
-                .font(.system(size: 40))
+    var body: some View {
+        ZStack {
+            if resumoVM.tasks.isEmpty {
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(.gray)
+                    .frame(height: 160)
+            } else {
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(Color("GreenCard"))
+                    .frame(height: 160)
+            }
+            VStack {
+                HStack {
+                    Text("Tarefas")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                    Spacer()
+                }
+                Spacer()
+            }
+            .padding(16)
+
+            Image("custom.checklist.checked.circle.fill")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 90, height: 90)
+                .padding(.top, 20)
                 .foregroundColor(.white)
         }
-        .frame(maxWidth: .infinity)
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color("GreenCard"))
-        )
         .frame(height: 160)
+        .task {
+            await resumoVM.carregarTarefas()
+        }
     }
 }
+
+

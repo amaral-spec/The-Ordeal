@@ -55,4 +55,17 @@ final class ResumeViewModel: ObservableObject {
             print("Erro ao carregar tarefas: \(error.localizedDescription)")
         }
     }
+    
+    func formatarDiaMes(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM"
+        return formatter.string(from: date)
+    }
+
+    func diasRestantes(ate endDate: Date) -> Int {
+        let calendar = Calendar.current
+        let start = calendar.startOfDay(for: Date())
+        let end = calendar.startOfDay(for: endDate)
+        return calendar.dateComponents([.day], from: start, to: end).day ?? 0
+    }
 }

@@ -27,6 +27,8 @@ targets:
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UIRequiresFullScreen: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations: ["UIInterfaceOrientationPortrait"]
+        INFOPLIST_KEY_NSMicrophoneUsageDescription: "We need your microphone access to test the voice!"
+        
         TARGETED_DEVICE_FAMILY: "1" # iPhone only
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         GENERATE_INFOPLIST_FILE: YES

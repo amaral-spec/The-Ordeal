@@ -6,26 +6,31 @@ struct ResumeStudentView: View {
     let onNavigate: (ResumeCoordinatorView.Route) -> Void
     
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 12) {
 
             // MARK: Streak Card
             StreakCardView()
-                .padding(.horizontal)
 
             // MARK: Main Challenge
-            ChallengeCardView()
-                .padding(.horizontal)
+            Button {
+                onNavigate(.listChallenge)
+            } label: {
+                ChallengeCardView(resumoVM: resumeVM)
+            }
 
             // MARK: Grid Tarefas + Treino
-            HStack(spacing: 20) {
-                TaskCardView()
+            HStack(spacing: 12) {
+                Button {
+                    onNavigate(.listTask)
+                } label: {
+                    TaskCardView(resumoVM: resumeVM)
+                }
                 TrainingCardView()
             }
-            .padding(.horizontal)
             Spacer()
         }
         .padding(.top, 12)
-//        .frame(maxHeight: .infinity, alignment: .top)
+        .padding(.horizontal, 16)
         .navigationTitle("Resumo")
         .toolbarTitleDisplayMode(.inlineLarge)
         .toolbar {
