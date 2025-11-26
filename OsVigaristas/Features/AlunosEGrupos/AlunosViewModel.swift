@@ -7,6 +7,7 @@
 
 
 import SwiftUI
+import CloudKit
 import Foundation
 
 enum Mode: String, CaseIterable {
@@ -21,6 +22,8 @@ class AlunosViewModel: ObservableObject {
     @Published var isGroupsEmpty: Bool = true
     @Published var grupos: [GroupModel] = []
     @Published var criarGrupo: Bool = false
+    @Published var solicitations: [CKRecord.ID: [UserModel]] = [:]
+    @Published var isSolicitationsEmpty: Bool = true
 
     private let persistenceServices: PersistenceServices   // agora é apenas referência externa
 
@@ -51,6 +54,20 @@ class AlunosViewModel: ObservableObject {
             }
         } catch {
             print("Erro ao carregar grupos: \(error.localizedDescription)")
+        }
+    }
+    
+    func loadSolicitations() async {
+        do {
+            let solicitacoes = try await persistenceServices.fetchSolicitations()
+            await MainActor.run {
+                self.solicitations = solicitacoes
+                print("Solicitacoes: \(solicitacoes)")
+                self.isSolicitationsEmpty = solicitacoes.isEmpty
+                print("Carregado \(solicitacoes.count) solicitações")
+            }
+        } catch {
+            print("Erro ao carregar solicitações: \(error.localizedDescription)")
         }
     }
     

@@ -1,10 +1,9 @@
 //
-//  CriarDesafioView.swift
-//  OsVigaristas
+// CriarDesafioView.swift
+// OsVigaristas
 //
-//  Created by Erika Hacimoto on 10/11/25.
+// Created by Erika Hacimoto on 10/11/25.
 //
-
 import SwiftUI
 import CloudKit
 struct CriarDesafioView: View {

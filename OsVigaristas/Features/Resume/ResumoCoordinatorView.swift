@@ -14,8 +14,8 @@ struct ResumeCoordinatorView: View {
     
 
     @State private var path: [Route] = []
-    let isTeacher: Bool
     @StateObject private var resumeVM: ResumeViewModel
+    let isTeacher: Bool
 
     init(isTeacher: Bool) {
         self.isTeacher = isTeacher
@@ -24,8 +24,18 @@ struct ResumeCoordinatorView: View {
 
     var body: some View {
         NavigationStack(path: $path) {
-            ResumeView(resumeVM: resumeVM) { route in
-                path.append(route)
+            VStack{
+                if (isTeacher) {
+                    ResumeTeacherView() { next in
+                        path.append(next)
+                    }
+                    .environmentObject(resumeVM)
+                } else {
+                    ResumeStudentView() { next in
+                        path.append(next)
+                    }
+                    .environmentObject(resumeVM)
+                }
             }
             .onAppear {
                 // Replace the temporary services with the environment one if needed
@@ -53,7 +63,8 @@ struct ResumeCoordinatorView: View {
                     VisualizarDadosView()
                         .environmentObject(resumeVM)
                 case .list:
-                    EmptyView()
+                    DesafiosList(resumoVM: resumeVM)
+                        .environmentObject(resumeVM)
                     
                 case .participants:
                     ListaParticipantesView()
