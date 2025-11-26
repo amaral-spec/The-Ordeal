@@ -8,6 +8,7 @@ struct ResumeCoordinatorView: View {
         case list
         case detailChallenge(ChallengeModel)
         case detailTask(TaskModel)
+    
     }
 
     @State private var path: [Route] = []
@@ -22,13 +23,17 @@ struct ResumeCoordinatorView: View {
                 switch route {
                 case .detailChallenge(let challenge):
 //                    ChallengeDetailView(challenge: challenge)
-                    DetalhesTarefasView()
+                    //DetalhesTarefasView()
+                    InicioDesafioEncadeiaView()
 //                    EmptyView()
 
                 case .detailTask(let task):
                     DetalhesTarefasView()
 //                    TaskDetailView(task: task)
 //                    EmptyView()EmptyView()
+                    
+//                case .challengeCoordinator
+//                    ChallengeCoordinatorView
 
                 case .list:
                     EmptyView()

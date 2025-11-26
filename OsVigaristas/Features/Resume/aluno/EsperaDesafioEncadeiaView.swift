@@ -9,7 +9,6 @@ import SwiftUI
 
 struct EsperaDesafioEncadeiaView: View {
     var body: some View {
-        NavigationStack{
             
             
             VStack{//Escrita
@@ -28,15 +27,15 @@ struct EsperaDesafioEncadeiaView: View {
             .navigationTitle(Text("Encadeia"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar{
-                ToolbarItem(placement: .cancellationAction){
-                    Button("Cancelar", systemImage: "xmark")
-                    {
-                        //dismis()
-                    }
-                }
+//                ToolbarItem(placement: .cancellationAction){
+//                    Button("Cancelar", systemImage: "xmark")
+//                    {
+//                        //dismis()
+//                    }
+//                }
                 
             }
-        }
+        
     }
 }
 

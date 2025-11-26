@@ -9,7 +9,7 @@ import SwiftUI
 
 struct InicioDesafioEncadeiaView: View {
     var body: some View {
-        NavigationStack{
+       
             
             Spacer()
             VStack{//Escrita
@@ -34,12 +34,12 @@ struct InicioDesafioEncadeiaView: View {
             .navigationTitle(Text("Encadeia"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar{
-                ToolbarItem(placement: .cancellationAction){
-                    Button("Cancelar", systemImage: "xmark")
-                    {
-                       // dismiss()
-                    }
-                }
+//                ToolbarItem(placement: .cancellationAction){
+//                    Button("Cancelar", systemImage: "xmark")
+//                    {
+//                       // dismiss()
+//                    }
+//                }
 //                ToolbarItem(placement: .confirmationAction){
 //                    Button("confirmar", systemImage: "checkmark"){
 //                        
@@ -48,7 +48,7 @@ struct InicioDesafioEncadeiaView: View {
 //                    .
 //                }
             }
-        }
+        
     }
 }
 

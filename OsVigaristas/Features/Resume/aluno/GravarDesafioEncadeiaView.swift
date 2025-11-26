@@ -1,5 +1,5 @@
 //
-//  RecebeuAudioGravarDesafioEncadeiaView.swift
+//  GravarDesafioEncadeiaView.swift
 //  AudioRecorderDemo2
 //
 //  Created by João Victor Perosso Souza on 12/11/25.
@@ -11,28 +11,20 @@ import Combine
 import AVFoundation
 
 
-struct RecebeuAudioGravarDesafioEncadeiaView: View {
+struct GravarDesafioEncadeiaView: View {
     var body: some View {
-        NavigationStack{
             
             Spacer()
             VStack{//Escrita
+                InstrucaoTopoPaginaView(instrucao: "Toque algo de sua escolha por 15 segundos")
                 
-                InstrucaoTopoPaginaView(instrucao: """
-                    Grave uma continuação de 
-                    15 segundos para o audio abaixo
-                    """)
                 
                 Spacer()
           
                 
                 ReprentacaoAudioView()
-                    .padding(.trailing, 30)
-                    //.shadow(color: .gray, radius: 10)
-                Spacer()
-                ImagemIconeRosaView()
-                MensagemDaImagemView(title: "Grave o seu audio", subtitle: "Faça milage")
-                Spacer()
+                
+                
                 Spacer()
                 
                 BotaoGravacaoView(color: .accentColor)
@@ -54,7 +46,7 @@ struct RecebeuAudioGravarDesafioEncadeiaView: View {
 //                    .tint(Color("AccentColor"))
 //                }
             }
-        }
+        
     }
 }
 
@@ -62,6 +54,6 @@ struct RecebeuAudioGravarDesafioEncadeiaView: View {
 
 
 #Preview {
-    RecebeuAudioGravarDesafioEncadeiaView()
+    GravarDesafioEncadeiaView()
 }
 

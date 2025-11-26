@@ -17,6 +17,8 @@ struct OsVigaristasApp: App {
         WindowGroup {
             //AppRootView()
                 RecebeuAudioGravarDesafioEncadeiaView()
+            AppRootView()
+                //RecebeuAudioGravarDesafioEncadeiaView()
                 .environmentObject(authService) // Compartilha o estado global de login
                 .environmentObject(persistenceServices) // Compartilha funcoes do CloudKit
                 .preferredColorScheme(.light)
