@@ -56,14 +56,17 @@ struct ResumeCoordinatorView: View {
             .navigationDestination(for: Route.self) { route in
                 switch route {
                 case .detailChallenge(let challenge):
-                    VisualizarDadosView()
+                    ChallengeDetailView()
                         .environmentObject(resumeVM)
 
                 case .detailTask(let task):
                     VisualizarDadosView()
                         .environmentObject(resumeVM)
+                    
                 case .list:
-                    DesafiosList(resumoVM: resumeVM)
+                    DesafiosList(resumoVM: resumeVM) { next in
+                        path.append(next)
+                    }
                         .environmentObject(resumeVM)
                     
                 case .participants:
