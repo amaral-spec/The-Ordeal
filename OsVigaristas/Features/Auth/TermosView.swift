@@ -15,14 +15,10 @@ struct TermosView: View {
     var body: some View {
         VStack {
             ZStack {
-                Circle()
-                    .foregroundStyle(Color(red: 0.65, green: 0.13, blue: 0.29))
-                    .frame(height: 130)
+                Image("Logo")
+                    .scaleEffect(0.5)
+                    .frame(height: 150)
                     .padding()
-                
-                Image(systemName: "music.note")
-                    .font(.system(size: 70))
-                    .foregroundStyle(.white)
             }
         }
         
