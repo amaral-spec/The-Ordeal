@@ -1,29 +1,24 @@
-//
-//  PerfilCoordinatorView.swift
-//  OsVigaristas
-//
-//  Created by Ludivik de Paula on 04/11/25.
-//
-
 import SwiftUI
+import CloudKit
+
 
 struct PerfilCoordinatorView: View {
     @EnvironmentObject var authVM: AuthViewModel
     let isProfessor: Bool
+    @State private var groupCode: String = ""
+    @EnvironmentObject var persistenceServices: PersistenceServices
+    
+    @State private var fetchedGroup: GroupModel? = nil
+    @State private var fetchError: String? = nil
 
     var body: some View {
         if isProfessor {
-//            ProfessorPerfilView(viewModel: PerfilViewModel(userType: .professor))
-            Text("Perfil Professor")
-            Button("Logout") {
-                authVM.logout()
-            }
+            PerfilProfessorView(persistenceServices: persistenceServices)
+
         } else {
-            Text("Perfil Aluno")
-            Button("Logout") {
-                authVM.logout()
-            }
+            PerfilView(persistenceServices: persistenceServices)
 //            AlunoPerfilView(viewModel: PerfilViewModel(userType: .aluno))
+
         }
     }
 }

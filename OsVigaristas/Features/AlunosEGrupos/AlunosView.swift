@@ -2,14 +2,10 @@
 //  AlunosView.swift
 //  OsVigaristas
 //
-//  Created by Gabriel Amaral on 06/11/25.
+//  Created by Ludivik de Paula on 18/11/25.
 //
 
 import SwiftUI
-
-enum Mode: String, CaseIterable {
-    case Alunos, Grupos
-}
 
 let columns: [GridItem] = [
     GridItem(.flexible()),
@@ -18,198 +14,179 @@ let columns: [GridItem] = [
 ]
 
 struct AlunosView: View {
-    @State private var isStudentsEmpty = true
-    @State private var isGroupsEmpty = true
-    @State private var selectedMode = Mode.Alunos
-    @State private var criarGrupo = false
-    @State private var grupos: [GroupModel] = []
-    @EnvironmentObject var persistenceServices: PersistenceServices
-    
-    
-    //mock com os jsons
+    @ObservedObject var alunoVM: AlunosViewModel
+    let onNavigate: (AlunosCoordinatorView.Route) -> Void
     
     var body: some View {
-        NavigationStack {
-            Picker("", selection: $selectedMode) {
-                ForEach(Mode.allCases, id: \.self) { mode in Text(mode.rawValue) }
-            }
-            .pickerStyle(.segmented)
-            .frame(width: 350, height: 30, alignment: .center)
-            
-            VStack (spacing: -15){
-                if Mode.Alunos == selectedMode {
-                    if isStudentsEmpty {
-                        Spacer(minLength: 100)
-                        ZStack {
-                            Image(systemName: "person.3.fill")
-                                .foregroundColor(Color(red: 0.65, green: 0.13, blue: 0.29))
-                            Circle()
-                                .fill(Color(red: 0.65, green: 0.13, blue: 0.29))
-                                .opacity(0.3)
-                                .frame(width: 50, height: 50, alignment: .center)
-                                .padding()
-                        }
-                        VStack (spacing: -15){
-                            Text("Sem alunos")
-                                .font(.title3)
-                                .foregroundColor(.primary)
-                                .fontWeight(.bold)
-                                .padding()
-                            Text("Você ainda não possui alunos")
-                                .font(.headline)
-                                .foregroundColor(.secondary)
-                                .fontWeight(.medium)
-                        }
-                        Spacer()
-                        
-                    } else {
-                        ScrollView {
-                            LazyVGrid(columns: columns, spacing: 10) {
-                                // MARK: - Puxar do CloudKit
-                                //                                ForEach([]) { aluno in
-                                //                                    VStack {
-                                //                                        Image(aluno.foto)
-                                //                                            .resizable()
-                                //                                            .scaledToFill()
-                                //                                            .frame(width: 90, height: 90)
-                                //                                            .clipShape(Circle())
-                                //
-                                //                                        Text(aluno.nome)
-                                //                                            .font(.caption)
-                                //                                            .foregroundColor(.primary)
-                                //                                    }
-                                //                                    .padding(6)
-                                //                                    .background(.white)
-                                //                                    .cornerRadius(10)
-                                //                                    .shadow(radius: 1)
-                                //                                }
-                            }
-                        }
-                        .padding()
-                    }
-                } else {
-                    if isGroupsEmpty {
-                        Spacer(minLength: 100)
-                        ZStack {
-                            Image(systemName: "person.3.fill")
-                                .foregroundColor(Color(red: 0.65, green: 0.13, blue: 0.29))
-                            Circle()
-                                .fill(Color(red: 0.65, green: 0.13, blue: 0.29))
-                                .opacity(0.3)
-                                .frame(width: 50, height: 50, alignment: .center)
-                                .padding()
-                        }
-                        VStack (spacing: -15){
-                            Text("Sem grupos")
-                                .font(.title3)
-                                .foregroundColor(.primary)
-                                .fontWeight(.bold)
-                                .padding()
-                            Text("Você ainda não possui grupos")
-                                .font(.headline)
-                                .foregroundColor(.secondary)
-                                .fontWeight(.medium)
-                        }
-                        Spacer()
-                    } else {
-                        ScrollView {
-                            VStack(spacing: 10) {
-                                // MARK: - Puxar do CloudKit
-                                ForEach(grupos) { grupo in
-                                    NavigationLink(destination: DetalheGrupoView(grupo: grupo)) {
-                                        HStack {
-                                            if let image = grupo.image {
-                                                Image(uiImage: image)
-                                                    .resizable()
-                                                    .scaledToFill()
-                                                    .frame(width: 60, height: 60)
-                                                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                                            } else {
-                                                RoundedRectangle(cornerRadius: 10)
-                                                    .fill(Color.gray.opacity(0.3))
-                                                    .frame(width: 60, height: 60)
-                                            }
-                                            
-                                            VStack(alignment: .leading) {
-                                                Text(grupo.name)
-                                                    .font(.headline)
-                                                
-                                                Text("\(grupo.members.count) participantes")
-                                                    .font(.subheadline)
-                                                    .foregroundColor(.secondary)
-                                            }
-                                            
-                                            Spacer()
-                                        }
-                                        .padding()
-                                        .background(.white)
-                                        .cornerRadius(12)
-                                        .shadow(color: .black.opacity(0.08), radius: 4, x: 0, y: 2)
-                                    }
-                                    .buttonStyle(.plain)
-                                    
-                                }
-                            }
-                            .padding()
-                        }
-                    }
-                }
-            }
-            .navigationTitle("Alunos")
-            .toolbarTitleDisplayMode(.inlineLarge)
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button(action: {
-                        criarGrupo = true
-                    }) {
-                        Image(systemName: "person.2.badge.plus.fill")
-                            .foregroundStyle(Color(red: 0.65, green: 0.13, blue: 0.29))
-                            .background(Color.white)
-                    }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button(action: {
-                    }) {
-                        Image(systemName: "person.fill.checkmark.and.xmark")
-                            .foregroundStyle(Color(red: 0.65, green: 0.13, blue: 0.29))
-                            .background(Color.white)
-                    }
-                }
-            }
-            .task {
-                await carregarGrupos()
+        Picker("", selection: $alunoVM.selectedMode) {
+            ForEach(Mode.allCases, id: \.self) { mode in
+                Text(mode.rawValue)
             }
         }
-        .sheet(isPresented: $criarGrupo) {
-            CriarGrupoView(onGrupoCriado: {
-                Task {
-                    await carregarGrupos()
+        .pickerStyle(.segmented)
+        .padding()
+        
+        VStack(spacing: -15) {
+            // MARK: - ALUNOS
+            if alunoVM.selectedMode == .Alunos {
+                if alunoVM.isStudentsEmpty {
+                    emptyStateView(
+                        image: "person.3.fill",
+                        title: "Sem alunos",
+                        subtitle: "Você ainda não possui alunos"
+                    )
+                } else {
+                    ScrollView {
+                        LazyVGrid(columns: columns, spacing: 10) {
+                            // MARK: - Puxar do CloudKit
+                            ForEach(alunoVM.students) { aluno in
+                                VStack {
+                                    Image(systemName: "person.fill")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 70, height: 70, alignment: .center)
+                                        .clipShape(Circle())
+                                    
+                                    Text(aluno.name)
+                                        .font(.caption)
+                                        .foregroundColor(.primary)
+                                }
+                                .padding(8)
+                                .background(.white)
+                                .cornerRadius(10)
+                                .shadow(radius: 1)
+                            }
+                        }
+                        .padding(8)
+                    }
+                    .padding()
                 }
+                
+                // MARK: - GRUPOS
+            } else {
+                if alunoVM.isGroupsEmpty {
+                    emptyStateView(
+                        image: "person.3.fill",
+                        title: "Sem grupos",
+                        subtitle: "Você ainda não possui grupos"
+                    )
+                } else {
+                    ScrollView {
+                        VStack(spacing: 10) {
+                            ForEach(alunoVM.grupos) { grupo in
+                                groupCell(grupo)
+                                    .onTapGesture {
+                                        onNavigate(AlunosCoordinatorView.Route.detailGroup(grupo))
+                                    }
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                    .padding()
+                }
+            }
+        }
+        .navigationTitle("Alunos")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                Button { alunoVM.criarGrupo = true } label: {
+                    Image(systemName: "person.2.badge.plus.fill")
+                        .foregroundStyle(Color(.accent))
+                }
+            }
+            
+            ToolbarItem(placement: .confirmationAction) {
+                Button {
+                    onNavigate(.solicitation)
+                } label: {
+                    Image(systemName: "person.fill.checkmark.and.xmark")
+                        .foregroundStyle(Color(.accent))
+                }
+            }
+        }
+        .task {
+            await alunoVM.studentsLoad()
+            await alunoVM.groupLoad()
+        }
+        .sheet(isPresented: $alunoVM.criarGrupo) {
+            CriarGrupoView(onGrupoCriado: {
+                Task { await alunoVM.groupLoad() }
             })
-            .environmentObject(persistenceServices)
         }
     }
     
-    private func carregarGrupos() async {
-        guard let currentUser = AuthService.shared.currentUser else {
-            print("Nenhum usuário logado.")
-            return
-        }
-        
-        do {
-            let gruposCarregados = try await persistenceServices.fetchAllGroups(for: currentUser.id)
-            await MainActor.run {
-                grupos = gruposCarregados
-                isGroupsEmpty = gruposCarregados.isEmpty
+    // MARK: - Empty State
+    private func emptyStateView(image: String, title: String, subtitle: String) -> some View {
+        VStack {
+            Spacer(minLength: 100)
+            
+            ZStack {
+                Image(systemName: image)
+                    .foregroundColor(Color(.accent))
+                
+                Circle()
+                    .fill(Color(.accent))
+                    .opacity(0.3)
+                    .frame(width: 50, height: 50)
+                    .padding()
             }
-            print("\(gruposCarregados.count) grupos carregados")
-        } catch {
-            print("Erro ao carregar grupos: \(error.localizedDescription)")
+            
+            VStack(spacing: -15) {
+                Text(title)
+                    .font(.title3)
+                    .foregroundColor(.primary)
+                    .fontWeight(.bold)
+                    .padding()
+                
+                Text(subtitle)
+                    .font(.headline)
+                    .foregroundColor(.secondary)
+                    .fontWeight(.medium)
+            }
+            Spacer()
         }
+    }
+    
+    // MARK: - Grupo Cell
+    private func groupCell(_ grupo: GroupModel) -> some View {
+        HStack {
+            if let image = grupo.image {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 60, height: 60)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+            } else {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.gray.opacity(0.3))
+                    .frame(width: 60, height: 60)
+            }
+            
+            VStack(alignment: .leading) {
+                Text(grupo.name)
+                    .font(.headline)
+                
+                Text("\(grupo.members.count) participantes")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+            Spacer()
+        }
+        .padding()
+        .background(.white)
+        .cornerRadius(12)
+        .shadow(color: .black.opacity(0.08), radius: 4, x: 0, y: 2)
     }
 }
 
-#Preview {
-    AlunosView()
-}
 
+#Preview {
+    let services = PersistenceServices.shared
+    let viewModel = AlunosViewModel(persistenceServices: services)
+    
+    AlunosView(alunoVM: viewModel) {_ in 
+        
+    }
+        .environmentObject(services)
+}

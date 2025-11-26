@@ -11,7 +11,7 @@ import SwiftData
 @main
 struct OsVigaristasApp: App {
     @StateObject private var authService = AuthService.shared
-    @StateObject private var persistenceServices = PersistenceServices()
+    @StateObject private var persistenceServices = PersistenceServices.shared
 
     var body: some Scene {
         WindowGroup {
