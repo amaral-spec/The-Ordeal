@@ -5,10 +5,11 @@ struct ResumeCoordinatorView: View {
     @EnvironmentObject var persistenceServices: PersistenceServices
 
     enum Route: Hashable {
-        case list
+        case listChallenge
         case detailChallenge(ChallengeModel)
         case detailTask(TaskModel)
         case participants
+        case listTask
     }
 
     @State private var path: [Route] = []
@@ -60,8 +61,11 @@ struct ResumeCoordinatorView: View {
                 case .detailTask(let task):
                     VisualizarDadosView()
                         .environmentObject(resumeVM)
-                case .list:
+                case .listChallenge:
                     DesafiosList(resumoVM: resumeVM)
+                        .environmentObject(resumeVM)
+                case .listTask:
+                    TarefasList(resumoVM: resumeVM)
                         .environmentObject(resumeVM)
                     
                 case .participants:
