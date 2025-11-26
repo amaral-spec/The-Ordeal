@@ -1,59 +1,55 @@
 //
-//  DesafiosList.swift
+//  TarefasList.swift
 //  OsVigaristas
 //
-//  Created by Gabriel Amaral on 25/11/25.
+//  Created by Gabriel Amaral on 26/11/25.
 //
 
 import SwiftUI
 
-struct DesafiosList: View {
-    
+struct TarefasList: View {
     @ObservedObject var resumoVM: ResumeViewModel
-    let onNavigate: (ResumeCoordinatorView.Route) -> Void
-    
+
     var body: some View {
         ScrollView {
             VStack(spacing: 10) {
-                ForEach(resumoVM.challenges) { desafio in
+                ForEach(resumoVM.tasks) { tarefa in
+                    
                     HStack(spacing: 16) {
+                        
                         ZStack {
-                            if desafio.endDate < Date(){
+                            if tarefa.endDate < Date(){
                                 Circle()
                                     .fill(.gray)
                                     .frame(width: 45, height: 45)
                             } else {
                                 Circle()
-                                    .fill(Color("BlueCard"))
+                                    .fill(Color("GreenCard"))
                                     .frame(width: 45, height: 45)
                             }
                             
-                            Image(systemName: "flag.pattern.checkered.2.crossed")
+                            Image(systemName: "checklist.checked")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 35, height: 35)
+                                .frame(width: 25, height: 25)
                                 .foregroundColor(.white)
                         }
                         
-                        Text(desafio.title)
+                        Text(tarefa.title)
                             .font(.title3.bold())
                             .foregroundColor(.black)
                         
                         Spacer()
                         
-                        if desafio.endDate < Date(){
+                        if tarefa.endDate < Date(){
                             Text("Resultado")
                                 .font(.caption.italic())
                                 .foregroundColor(.black)
                         } else {
-                            let diasRestantes = Calendar.current.dateComponents([.day], from: Date(), to: desafio.endDate).day ?? 0
-                            Text("Faltam \(diasRestantes) dias!")
-                                .font(.caption)
+                            Text("Faça até \(resumoVM.formatarDiaMes(tarefa.endDate))!")
+                                .font(.caption.italic())
                                 .foregroundColor(.black)
                         }
-                    }
-                    .onTapGesture {
-                        onNavigate(.detailChallenge(desafio))
                     }
                     .padding()
                     .background(
@@ -66,15 +62,10 @@ struct DesafiosList: View {
             .padding(.horizontal, 16)
             .padding(.top, 12)
         }
-        .navigationTitle("Desafios")
+        .navigationTitle("Tarefas")
         .navigationBarTitleDisplayMode(.inline)
         .task {
-            await resumoVM.carregarDesafios()
+            await resumoVM.carregarTarefas()
         }
     }
 }
-
-
-//#Preview {
-//    DesafiosList()
-//}

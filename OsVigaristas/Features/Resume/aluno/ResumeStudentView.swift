@@ -13,14 +13,18 @@ struct ResumeStudentView: View {
 
             // MARK: Main Challenge
             Button {
-                onNavigate(.list)
+                onNavigate(.listChallenge)
             } label: {
                 ChallengeCardView(resumoVM: resumeVM)
             }
 
             // MARK: Grid Tarefas + Treino
             HStack(spacing: 12) {
-                TaskCardView(resumoVM: resumeVM)
+                Button {
+                    onNavigate(.listTask)
+                } label: {
+                    TaskCardView(resumoVM: resumeVM)
+                }
                 TrainingCardView()
             }
             Spacer()
