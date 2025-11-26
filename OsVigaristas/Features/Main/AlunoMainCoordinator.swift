@@ -27,9 +27,6 @@ struct StudentMainCoordinatorView: View {
                 ResumeCoordinatorView(isTeacher: false)
                     .environment(\.selectedStudentTab, $selectedTab)
             }
-            Tab("Treino", systemImage: "music.pages", value: .training) {
-                Text("Treino")
-            }
             Tab("Perfil", systemImage: "person.fill", value: .perfil) {
                 PerfilCoordinatorView(isProfessor: false)
                     .environmentObject(authVM)

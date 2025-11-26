@@ -16,8 +16,12 @@ class PersistenceServices: NSObject, ObservableObject {
     let db = CKContainer.default().publicCloudDatabase
     
     // MARK: CRUD: Usuarios
-    func fetchUserForProfile(recordID: CKRecord.ID) async throws -> UserModel {
-        let record = try await db.record(for: recordID)
+    func fetchUserForProfile() async throws -> UserModel {
+        guard let currentUser = AuthService.shared.currentUser else {
+            throw NSError(domain: "AuthError", code: 1, userInfo: [NSLocalizedDescriptionKey: "No user loggoed in"])
+        }
+        
+        let record = try await db.record(for: currentUser.id)
         
         let name = record["name"] as? String ?? ""
         let email = record["email"] as? String ?? ""
@@ -26,6 +30,17 @@ class PersistenceServices: NSObject, ObservableObject {
         let points = record["points"] as? Int ?? 0
         let lastTask: TaskModel?
         let lastChallenge: ChallengeModel?
+        let profileImageName = record["profileImageName"] as? String ?? "partitura"
+        var profileImage: UIImage?
+
+        // Profile image from CloudKit
+        if let asset = record["profileImage"] as? CKAsset,
+           let url = asset.fileURL,
+           let data = try? Data(contentsOf: url) {
+            profileImage = UIImage(data: data)
+        } else {
+            profileImage = UIImage(named: "partitura")
+        }
         
         let usuario = UserModel(from: record)
         usuario.id = record.recordID
@@ -33,8 +48,10 @@ class PersistenceServices: NSObject, ObservableObject {
         usuario.isTeacher = isTeacher
         usuario.streak = streak
         usuario.points = points
-        usuario.lastTask = try await fetchLatestTask(for: recordID, in: db)
-        usuario.lastChallenge = try await fetchLatestChallenge(for: recordID, in: db)
+        usuario.lastTask = try await fetchLatestTask(for: currentUser.id, in: db)
+        usuario.lastChallenge = try await fetchLatestChallenge(for: currentUser.id, in: db)
+        usuario.profileImageName = profileImageName
+        usuario.profileImage = profileImage
         return usuario
     }
     
@@ -72,19 +89,43 @@ class PersistenceServices: NSObject, ObservableObject {
         return users
     }
     
-    func editUser(recordID: CKRecord.ID, newName: String, newEmail: String, isTeacher: Bool) async throws {
-        let record = try await db.record(for: recordID)
-        
+    func editUser(newName: String, isTeacher: Bool) async throws {
+        guard let currentUser = AuthService.shared.currentUser else {
+            throw NSError(domain: "AuthError", code: 1, userInfo: [
+                NSLocalizedDescriptionKey: "No user logged in"
+            ])
+        }
+
+        let record = try await db.record(for: currentUser.id)
+
         record["name"] = newName as CKRecordValue
-        record["email"] = newEmail as CKRecordValue
         record["isTeacher"] = isTeacher as CKRecordValue
+
+        try await db.save(record)
+    }
+    
+    func updateProfileImage(_ image: UIImage) async throws {
+        guard let currentUser = AuthService.shared.currentUser else {
+            throw NSError(domain: "AuthError", code: 1, userInfo: [NSLocalizedDescriptionKey: "No user loggoed in"])
+        }
         
-        do {
-            try await db.save(record)
-            print("User edited successfully")
-        } catch {
-            print("Failed to update user")
-            throw error
+        // Create temp file for CKAsset
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString + ".png")
+        if let data = image.pngData() {
+            try? data.write(to: url)
+            
+            do {
+                let record = try await db.record(for: currentUser.id)
+                record["profileImage"] = CKAsset(fileURL: url)
+                
+                let savedRecord = try await db.save(record)
+                DispatchQueue.main.async {
+                    AuthService.shared.currentUser?.profileImage = image
+                    print("Profile image updated for \(savedRecord.recordID.recordName)")
+                }
+            } catch {
+                print("Failed to update profile image: \(error)")
+            }
         }
     }
     
@@ -249,11 +290,12 @@ class PersistenceServices: NSObject, ObservableObject {
         let grupos = try await fetchAllGroups()
 
         for grupo in grupos {
+            
             guard let solicitations = grupo.joinSolicitations,
                   !solicitations.isEmpty else {
                 continue // skip groups with no solicitations
             }
-
+            
             var users: [UserModel] = []
 
             for ref in solicitations {
@@ -481,7 +523,7 @@ class PersistenceServices: NSObject, ObservableObject {
     
     // MARK: Auxiliary functions
     func fetchLatestTask(for userRecordID: CKRecord.ID, in db: CKDatabase) async throws -> TaskModel? {
-        let predicate = NSPredicate(format: "student == %@", CKRecord.Reference(recordID: userRecordID, action: .none))
+        let predicate = NSPredicate(format: "student CONTAINS %@", CKRecord.Reference(recordID: userRecordID, action: .none))
         let taskQuery = CKQuery(recordType: "Task", predicate: predicate)
         
         // Performs queries
@@ -510,13 +552,7 @@ class PersistenceServices: NSObject, ObservableObject {
             return nil
         }
         
-        return TaskModel(
-            title: latestRecord["title"] as? String ?? "",
-            description: latestRecord["description"] as? String ?? "",
-            student: latestRecord["student"] as! [CKRecord.Reference],
-            startDate: latestRecord["startDate"] as? Date ?? Date(),
-            endDate: latestRecord["endDate"] as? Date ?? Date()
-        )
+        return TaskModel(from: latestRecord)
     }
     
     func fetchLatestChallenge(for userRecordID: CKRecord.ID, in db: CKDatabase) async throws -> ChallengeModel? {

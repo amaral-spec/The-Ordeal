@@ -1,10 +1,9 @@
 //
-//  CriarDesafioView.swift
-//  OsVigaristas
+// CriarDesafioView.swift
+// OsVigaristas
 //
-//  Created by Erika Hacimoto on 10/11/25.
+// Created by Erika Hacimoto on 10/11/25.
 //
-
 import SwiftUI
 import CloudKit
 struct CriarDesafioView: View {
@@ -28,14 +27,16 @@ struct CriarDesafioView: View {
             Form {
                 Section("Tipo de Desafio") {
                     Picker("Tipo", selection: $selectedChallengeType) {
-                        Text("Personalizado").tag(0)
                         Text("Echo").tag(1)
                         Text("Encadeia").tag(2)
                     }
                     .pickerStyle(.segmented)
                 }
+                
                 Section {
                     TextField("Nome do Desafio (Obrigatório)", text: $desafioNome)
+                    
+                    // TODO: Pegar descrição baseado no tipo de desafio
                     TextField("Descrição (Opcional)", text: $desafioDescricao)
                 }
                 Section("Grupo") {
@@ -45,7 +46,7 @@ struct CriarDesafioView: View {
                             Text(group.name).tag(group.id as CKRecord.ID?)
                         }
                     }
-                    .pickerStyle(.menu)
+                    .pickerStyle(.navigationLink)
                 }
                 Section {
                     LabeledContent("Recompensa: \(moedas) moedas") {
@@ -91,7 +92,7 @@ struct CriarDesafioView: View {
                                 group: groupRef,
                                 reward: moedas,
                                 startDate: selectedDate,
-                                endDate: selectedDate
+                                endDate: Calendar.current.date(byAdding: .day, value: 7, to: selectedDate)!
                             )
                             do {
                                 try await persistenceServices.createChallenge(challenge)

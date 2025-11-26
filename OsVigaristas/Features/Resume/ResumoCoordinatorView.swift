@@ -2,17 +2,21 @@ import SwiftUI
 import Foundation
 
 struct ResumeCoordinatorView: View {
-    @EnvironmentObject var persistenceServices: PersistenceServices
-
     enum Route: Hashable {
-        case list
+        case listChallenge
         case detailChallenge(ChallengeModel)
         case detailTask(TaskModel)
+        case participants
+        case listTask
     }
+    
+    @EnvironmentObject var persistenceServices: PersistenceServices
+
+    
 
     @State private var path: [Route] = []
-    let isTeacher: Bool
     @StateObject private var resumeVM: ResumeViewModel
+    let isTeacher: Bool
 
     init(isTeacher: Bool) {
         self.isTeacher = isTeacher
@@ -21,8 +25,18 @@ struct ResumeCoordinatorView: View {
 
     var body: some View {
         NavigationStack(path: $path) {
-            ResumeView(resumeVM: resumeVM) { route in
-                path.append(route)
+            VStack{
+                if (isTeacher) {
+                    ResumeTeacherView() { next in
+                        path.append(next)
+                    }
+                    .environmentObject(resumeVM)
+                } else {
+                    ResumeStudentView() { next in
+                        path.append(next)
+                    }
+                    .environmentObject(resumeVM)
+                }
             }
             .onAppear {
                 // Replace the temporary services with the environment one if needed
@@ -42,14 +56,26 @@ struct ResumeCoordinatorView: View {
             }
             .navigationDestination(for: Route.self) { route in
                 switch route {
-                case .detailChallenge(_):
-                    TaskDetailView()
+                case .detailChallenge(let challenge):
+                    ChallengeDetailView()
                         .environmentObject(resumeVM)
-                case .detailTask(_):
-                    TaskDetailView()
+
+                case .detailTask(let task):
+                    VisualizarDadosView()
                         .environmentObject(resumeVM)
-                case .list:
-                    EmptyView()
+                case .listChallenge:
+                    DesafiosList(resumoVM: resumeVM) { next in
+                        path.append(next)
+                    }
+                        .environmentObject(resumeVM)
+                case .listTask:
+                    TarefasList(resumoVM: resumeVM)
+                        .environmentObject(resumeVM)
+                    
+                case .participants:
+                    ListaParticipantesView()
+                        .environmentObject(resumeVM)
+                
                 }
             }
         }

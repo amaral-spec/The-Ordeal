@@ -8,22 +8,19 @@
 import Foundation
 import CloudKit
 
-struct Grupo: Identifiable, Hashable {
-    let id = UUID()
-    let nome: String
-}
-
 final class ResumeViewModel: ObservableObject {
     @Published var challenges: [ChallengeModel] = []
     @Published var tasks: [TaskModel] = []
-    @Published var isTeacher: Bool = true
+    
+    @Published var isTeacher: Bool = false
+    
     @Published var groupsByID: [CKRecord.ID : GroupModel] = [:]
     @Published private var isChallengeEmpty: Bool = true
     @Published private var isTaskEmpty: Bool = true
     
     private let persistenceServices: PersistenceServices
     
-    init(persistenceServices: PersistenceServices, isTeacher: Bool = false) {
+    init(persistenceServices: PersistenceServices, isTeacher: Bool) {
         self.persistenceServices = persistenceServices
         self.isTeacher = isTeacher
     }
@@ -57,5 +54,18 @@ final class ResumeViewModel: ObservableObject {
         } catch {
             print("Erro ao carregar tarefas: \(error.localizedDescription)")
         }
+    }
+    
+    func formatarDiaMes(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM"
+        return formatter.string(from: date)
+    }
+
+    func diasRestantes(ate endDate: Date) -> Int {
+        let calendar = Calendar.current
+        let start = calendar.startOfDay(for: Date())
+        let end = calendar.startOfDay(for: endDate)
+        return calendar.dateComponents([.day], from: start, to: end).day ?? 0
     }
 }

@@ -33,7 +33,7 @@ final class GroupModel: Identifiable, Equatable, Hashable {
         self.name = record["name"] as? String ?? ""
         self.members = record["members"] as? [CKRecord.Reference] ?? []
         self.groupCode = record["groupCode"] as? String ?? "000000"
-        self.joinSolicitations = nil
+        self.joinSolicitations = record["joinSolicitations"] as? [CKRecord.Reference] ?? []
         
         if let asset = record["image"] as? CKAsset,
            let fileURL = asset.fileURL,
