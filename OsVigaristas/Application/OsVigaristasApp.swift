@@ -15,8 +15,6 @@ struct OsVigaristasApp: App {
 
     var body: some Scene {
         WindowGroup {
-            //AppRootView()
-                RecebeuAudioGravarDesafioEncadeiaView()
             AppRootView()
                 //RecebeuAudioGravarDesafioEncadeiaView()
                 .environmentObject(authService) // Compartilha o estado global de login
