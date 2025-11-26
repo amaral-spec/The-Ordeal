@@ -2,8 +2,6 @@ import SwiftUI
 import Foundation
 
 struct ResumeCoordinatorView: View {
-    @EnvironmentObject var persistenceServices: PersistenceServices
-
     enum Route: Hashable {
         case listChallenge
         case detailChallenge(ChallengeModel)
@@ -11,6 +9,10 @@ struct ResumeCoordinatorView: View {
         case participants
         case listTask
     }
+    
+    @EnvironmentObject var persistenceServices: PersistenceServices
+
+    
 
     @State private var path: [Route] = []
     @StateObject private var resumeVM: ResumeViewModel
@@ -55,14 +57,16 @@ struct ResumeCoordinatorView: View {
             .navigationDestination(for: Route.self) { route in
                 switch route {
                 case .detailChallenge(let challenge):
-                    VisualizarDadosView()
+                    ChallengeDetailView()
                         .environmentObject(resumeVM)
 
                 case .detailTask(let task):
                     VisualizarDadosView()
                         .environmentObject(resumeVM)
                 case .listChallenge:
-                    DesafiosList(resumoVM: resumeVM)
+                    DesafiosList(resumoVM: resumeVM) { next in
+                        path.append(next)
+                    }
                         .environmentObject(resumeVM)
                 case .listTask:
                     TarefasList(resumoVM: resumeVM)
