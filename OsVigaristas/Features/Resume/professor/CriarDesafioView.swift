@@ -19,9 +19,11 @@ struct CriarDesafioView: View {
     var onDesafioCriado: (() -> Void)?
     @State private var groups: [GroupModel] = []
     @State private var selectedGroupID: CKRecord.ID? = nil
+    
     init(numChallenge: Binding<Int>) {
         self._numChallenge = numChallenge
     }
+    
     var body: some View {
         NavigationStack {
             Form {
@@ -98,6 +100,11 @@ struct CriarDesafioView: View {
                                 await MainActor.run {
                                     numChallenge += 1
                                     onDesafioCriado?()
+                                    
+                                    // Haptics
+                                    let generator = UINotificationFeedbackGenerator()
+                                    generator.notificationOccurred(.success)
+                                    
                                     dismiss()
                                 }
                             } catch {

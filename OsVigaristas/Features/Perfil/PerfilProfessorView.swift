@@ -37,8 +37,7 @@ struct PerfilProfessorView: View {
                 
                 Text(vm.user?.name ?? "Loading...")
                     .font(.title)
-                
-                Spacer()
+                    .padding(.bottom, 50)
                 
                 Button {
                     authVM.logout()
