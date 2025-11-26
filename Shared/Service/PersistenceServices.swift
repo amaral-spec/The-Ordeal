@@ -87,7 +87,7 @@ class PersistenceServices: NSObject, ObservableObject {
             let individualMember = try await db.record(for: userRef.recordID)
             // transforms record into userModel
             let userModel = UserModel(from: individualMember)
-            // Adds model to groupMembers
+            // Adds userModel to groupMembers
             groupMembers.append(userModel)
         }
         
