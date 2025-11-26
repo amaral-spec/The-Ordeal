@@ -20,6 +20,8 @@ final class UserModel: Identifiable {
     var points: Int
     var lastTask: TaskModel?
     var lastChallenge: ChallengeModel?
+    var profileImageName: String?
+    var profileImage: UIImage?
     
     init(credential: ASAuthorizationAppleIDCredential) {
         let userIdentifier = credential.user
@@ -43,6 +45,8 @@ final class UserModel: Identifiable {
         self.isTeacher = record["isTeacher"] as? Bool ?? false
         self.streak = record["streak"] as? Int ?? 0
         self.points = record["points"] as? Int ?? 0
+        self.profileImageName = record["profileImageName"] as? String ?? "partitura"
+        self.profileImage = record["profileImage"] as? UIImage ?? UIImage(named: "partitura")
         // Relações (TaskModel / ChallengeModel) podem ser recuperadas via referência, se necessário.
     }
     

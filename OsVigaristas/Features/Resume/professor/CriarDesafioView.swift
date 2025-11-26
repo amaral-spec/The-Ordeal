@@ -1,39 +1,30 @@
 //
-//  CriarDesafioView.swift
-//  OsVigaristas
+// CriarDesafioView.swift
+// OsVigaristas
 //
-//  Created by Erika Hacimoto on 10/11/25.
+// Created by Erika Hacimoto on 10/11/25.
 //
-
 import SwiftUI
 import CloudKit
-
 struct CriarDesafioView: View {
     @State private var selectedChallengeType: Int = 0
     @State private var selectedDate = Date()
     @State private var desafioNome: String = ""
     @State private var desafioDescricao: String = ""
     @State private var moedas: Int = 5
-    
     @Environment(\.dismiss) var dismiss
     @Binding var numChallenge: Int
     @EnvironmentObject var persistenceServices: PersistenceServices
-    
     @State private var isSaving = false
-    @State private var groups: [GroupModel] = []
-    @State private var showGroupSelector = false
-    @State private var selectedGroups: Set<CKRecord.ID> = []
-    
     var onDesafioCriado: (() -> Void)?
-    
+    @State private var groups: [GroupModel] = []
+    @State private var selectedGroupID: CKRecord.ID? = nil
     init(numChallenge: Binding<Int>) {
         self._numChallenge = numChallenge
     }
-    
     var body: some View {
         NavigationStack {
             Form {
-                
                 Section("Tipo de Desafio") {
                     Picker("Tipo", selection: $selectedChallengeType) {
                         Text("Personalizado").tag(0)
@@ -42,52 +33,32 @@ struct CriarDesafioView: View {
                     }
                     .pickerStyle(.segmented)
                 }
-                
                 Section {
                     TextField("Nome do Desafio (Obrigatório)", text: $desafioNome)
                     TextField("Descrição (Opcional)", text: $desafioDescricao)
                 }
-                
-                Section("Grupos") {
-                    Button {
-                        showGroupSelector = true
-                    } label: {
-                        HStack {
-                            Text("Selecionar grupos")
-                            Spacer()
-                            Image(systemName: "chevron.right")
+                Section("Grupo") {
+                    Picker("Escolha um grupo", selection: $selectedGroupID) {
+                        Text("Selecione...").tag(nil as CKRecord.ID?)
+                        ForEach(groups, id: \.id) { group in
+                            Text(group.name).tag(group.id as CKRecord.ID?)
                         }
-                        .foregroundColor(.black)
                     }
-                    
-                    if !selectedGroups.isEmpty {
-                        ForEach(selectedGroups.compactMap { id in
-                            groups.first(where: { $0.id == id })
-                        }, id: \.id) { group in
-                            Text(group.name)
-                        }
-                    } else {
-                        Text("Nenhum grupo selecionado")
-                            .foregroundColor(.secondary)
-                    }
+                    .pickerStyle(.menu)
                 }
-                
                 Section {
                     LabeledContent("Recompensa: \(moedas) moedas") {
                         Stepper("", value: $moedas, in: 0...50)
                             .labelsHidden()
                     }
                 }
-                
                 Section {
                     DatePicker("Data de início", selection: $selectedDate)
                         .datePickerStyle(.compact)
                 }
             }
-            
             .navigationTitle("Adicionar Desafio")
             .navigationBarTitleDisplayMode(.inline)
-            
             .task {
                 do {
                     groups = try await persistenceServices.fetchAllGroups()
@@ -95,67 +66,51 @@ struct CriarDesafioView: View {
                     print("Erro ao carregar grupos:", error.localizedDescription)
                 }
             }
-            
             .toolbar {
-                
                 ToolbarItem(placement: .cancellationAction) {
-                    Button { dismiss() } label: {
+                    Button {
+                        dismiss()
+                    } label: {
                         Label("Cancelar", systemImage: "xmark")
                     }
                 }
-                
                 ToolbarItem(placement: .confirmationAction) {
                     Button {
-                        
                         Task {
+                            guard let selectedID = selectedGroupID,
+                                  let group = groups.first(where: { $0.id == selectedID }) else {
+                                return
+                            }
                             isSaving = true
-                            
-                            for groupID in selectedGroups {
-                                if let group = groups.first(where: { $0.id == groupID }) {
-                                    
-                                    let groupRef = CKRecord.Reference(
-                                        recordID: group.id,
-                                        action: .none
-                                    )
-                                    
-                                    let challenge = ChallengeModel(
-                                        whichChallenge: selectedChallengeType,
-                                        title: desafioNome,
-                                        description: desafioDescricao,
-                                        group: groupRef,
-                                        reward: moedas,
-                                        startDate: selectedDate,
-                                        endDate: selectedDate
-                                    )
-                                    
-                                    do {
-                                        try await persistenceServices.createChallenge(challenge)
-                                    } catch {
-                                        print("Erro ao criar desafio para grupo \(group.name):", error.localizedDescription)
-                                    }
+                            let groupRef = CKRecord.Reference(recordID: group.id, action: .none)
+                            let challenge = ChallengeModel(
+                                whichChallenge: selectedChallengeType,
+                                title: desafioNome,
+                                description: desafioDescricao,
+                                group: groupRef,
+                                reward: moedas,
+                                startDate: selectedDate,
+                                endDate: Calendar.current.date(byAdding: .day, value: 7, to: selectedDate)!
+                            )
+                            do {
+                                try await persistenceServices.createChallenge(challenge)
+                                try? await Task.sleep(for: .seconds(1.0))
+                                await MainActor.run {
+                                    numChallenge += 1
+                                    onDesafioCriado?()
+                                    dismiss()
                                 }
+                            } catch {
+                                print("Erro ao criar desafio:", error.localizedDescription)
                             }
-                            
-                            await MainActor.run {
-                                numChallenge += 1
-                                onDesafioCriado?()
-                                dismiss()
-                            }
-                            
                             isSaving = false
                         }
-                        
                     } label: {
                         Label("Adicionar", systemImage: "checkmark")
                     }
-                    .disabled(desafioNome.isEmpty || selectedGroups.isEmpty || isSaving)
+                    .disabled(desafioNome.isEmpty || selectedGroupID == nil || isSaving)
                 }
             }
         }
-        .sheet(isPresented: $showGroupSelector) {
-            GroupSelector(groups: groups, selectedGroups: $selectedGroups)
-        }
     }
-    
 }
-

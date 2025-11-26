@@ -9,6 +9,8 @@ import SwiftUI
 
 struct PerfilView: View {
     @StateObject private var vm: PerfilViewModel
+    @EnvironmentObject var authVM: AuthViewModel
+    @State private var showingEditSheet = false
     
     init(persistenceServices: PersistenceServices) {
         _vm = StateObject(wrappedValue: PerfilViewModel(persistenceServices: persistenceServices))
@@ -18,12 +20,21 @@ struct PerfilView: View {
         NavigationStack {
             VStack(){
                 ScrollView(){
-                    Image("partitura")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 100, height: 100)
-                        .clipShape(Circle())
-                        .padding()
+                    if let image = vm.user?.profileImage {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 150, height: 150)
+                            .clipShape(Circle())
+                            .padding(.top, 30)
+                    } else {
+                        Image("partitura")
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 150, height: 150)
+                            .clipShape(Circle())
+                            .padding(.top, 30)
+                    }
                     
                     Text(vm.user?.name ?? "Loading...")
                         .font(.title)
@@ -47,8 +58,17 @@ struct PerfilView: View {
                         vm.isShowingPopup = true
                         vm.resetGroupJoinState()
                     } label: {
-                        HStack {
-                            Text("Entrar em um grupo")
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 30)
+                                .frame(width: 350, height: 50)
+                                .padding(10)
+                                .foregroundStyle(Color("AccentColor").opacity(0.3))
+                            
+                            HStack {
+                                Text("Entrar em um grupo")
+                                    .foregroundColor(.black)
+                            }
+                            .padding(.horizontal, 40)
                         }
                     }
                     .alert("Solicitar entrada em um grupo", isPresented: $vm.isShowingPopup) {
@@ -82,7 +102,7 @@ struct PerfilView: View {
                         }
                     }
                     
-                    
+                    // TODO: Modificar forma de demonstrar ao usuário que deu certo entrar no grupo
                     if let successMessage = vm.joinSuccessMessage {
                         Text("Success: \(successMessage)")
                             .foregroundColor(.green)
@@ -99,22 +119,41 @@ struct PerfilView: View {
                     }
                     .buttonStyle(.plain)
                     
-                    Button(action:{}){
-                        ZStack{
+                    Button {
+                        authVM.logout()
+                    } label: {
+                        ZStack {
                             RoundedRectangle(cornerRadius: 30)
                                 .frame(width: 350, height: 50)
                                 .padding(10)
-                                .foregroundStyle(.gray.opacity(0.3))
+                                .foregroundStyle(Color("AccentColor").opacity(0.3))
                             
-                            Text("Sair")
+                            HStack {
+                                Text("Logout")
+                                    .foregroundColor(.black)
+                            }
+                            .padding(.horizontal, 40)
                         }
                     }
                 }
             }
             .navigationTitle("Perfil")
+            .toolbarTitleDisplayMode(.inlineLarge)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Editar") {
+                        vm.editName = vm.user?.name ?? ""
+                        vm.editIsTeacher = vm.user?.isTeacher ?? false
+                        showingEditSheet = true
+                    }
+                }
+            }
         }
         .task {
             await vm.loadUser()
+        }
+        .sheet(isPresented: $showingEditSheet) {
+            EditProfileModal(vm: vm)
         }
     }
 }
