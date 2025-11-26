@@ -27,14 +27,16 @@ struct CriarDesafioView: View {
             Form {
                 Section("Tipo de Desafio") {
                     Picker("Tipo", selection: $selectedChallengeType) {
-                        Text("Personalizado").tag(0)
                         Text("Echo").tag(1)
                         Text("Encadeia").tag(2)
                     }
                     .pickerStyle(.segmented)
                 }
+                
                 Section {
                     TextField("Nome do Desafio (Obrigatório)", text: $desafioNome)
+                    
+                    // TODO: Pegar descrição baseado no tipo de desafio
                     TextField("Descrição (Opcional)", text: $desafioDescricao)
                 }
                 Section("Grupo") {
