@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct DesafiosList: View {
+    
     @ObservedObject var resumoVM: ResumeViewModel
+    let onNavigate: (ResumeCoordinatorView.Route) -> Void
     
     var body: some View {
         ScrollView {
             VStack(spacing: 10) {
                 ForEach(resumoVM.challenges) { desafio in
-                    
                     HStack(spacing: 16) {
-                        
                         ZStack {
                             if desafio.endDate < Date(){
                                 Circle()
@@ -51,6 +51,9 @@ struct DesafiosList: View {
                                 .font(.caption)
                                 .foregroundColor(.black)
                         }
+                    }
+                    .onTapGesture {
+                        onNavigate(.detailChallenge(desafio))
                     }
                     .padding()
                     .background(

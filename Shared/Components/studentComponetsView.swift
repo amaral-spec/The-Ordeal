@@ -8,35 +8,18 @@
 import SwiftUI
 import Foundation
 
-struct PinkIconImageView: View{
+struct IconImageView: View{
     var nomeIcone: String = "waveform"
+    
     var body: some View {
         ZStack{ //Imagem no meio estranha
             Circle()
                 .frame(width: 50, height: 50)
-                .foregroundColor(Color("RosinhaColor"))
+                .foregroundColor(Color("BlueChallengeBackground"))
             
             Image(systemName: nomeIcone)
-                .foregroundColor(Color("AccentColor"))
+                .foregroundColor(Color("BlueChallenge"))
                 .font(.system(size: 25))
-        }
-    
-        
-    }
-}
-
-struct PinkWaitingIconImageView: View{
-    var iconName: String = "clock.arrow.trianglehead.counterclockwise.rotate.90"
-    var body: some View {
-        ZStack{ //Imagem no meio estranha
-            Circle()
-                .frame(width: 50, height: 50)
-                .foregroundColor(Color("RosinhaColor"))
-            
-            Image(systemName: iconName)
-                .foregroundColor(Color("AccentColor"))
-                .font(.system(size: 25))
-            
         }
     
         
@@ -61,22 +44,17 @@ struct ImageMessageView: View {
 }
 
 struct RecordingButtonView: View{
-    var color: Color
+    var isRecording: Bool
+    
     var body: some View{
         
-        ZStack(alignment: .center){
-            
-            Circle()
-                .frame(width: 63, height: 63)
-                .foregroundColor(color)
-        
-            Image("custom.waveform.badge.record")
+            Image(systemName: isRecording ? "stop.circle.fill" : "record.circle.fill")
                 .resizable()
-                .foregroundColor(.white)
+                .foregroundColor(Color("BlueChallenge"))
                 .padding(.trailing, 1)
-                .frame(width: 50, height: 45)
-                .padding()
-        }
+                .frame(width: 64, height: 64)
+//                .padding()
+    
     }
 }
 
