@@ -6,6 +6,7 @@ struct ResumeCoordinatorView: View {
         case list
         case detailChallenge(ChallengeModel)
         case detailTask(TaskModel)
+        case participants
     }
     
     @EnvironmentObject var persistenceServices: PersistenceServices
@@ -44,14 +45,20 @@ struct ResumeCoordinatorView: View {
             }
             .navigationDestination(for: Route.self) { route in
                 switch route {
-                case .detailChallenge(_):
-                    ChallengeDetailView()
+                case .detailChallenge(let challenge):
+                    VisualizarDadosView()
                         .environmentObject(resumeVM)
-                case .detailTask(_):
-                    TaskDetailView()
+
+                case .detailTask(let task):
+                    VisualizarDadosView()
                         .environmentObject(resumeVM)
                 case .list:
                     EmptyView()
+                    
+                case .participants:
+                    ListaParticipantesView()
+                        .environmentObject(resumeVM)
+                
                 }
             }
         }

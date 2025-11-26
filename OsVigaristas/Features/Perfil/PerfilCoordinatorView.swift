@@ -13,49 +13,12 @@ struct PerfilCoordinatorView: View {
 
     var body: some View {
         if isProfessor {
-            Text("Perfil Professor")
-            Button("Logout") { authVM.logout() }
+            PerfilProfessorView(persistenceServices: persistenceServices)
 
         } else {
-            VStack {
-                TextField("Código do grupo", text: $groupCode)
-                    .textFieldStyle(.roundedBorder)
-                    .padding()
+            PerfilView(persistenceServices: persistenceServices)
+//            AlunoPerfilView(viewModel: PerfilViewModel(userType: .aluno))
 
-                if let group = fetchedGroup {
-                    Text("Grupo encontrado: \(group.name)")
-                        .foregroundColor(.green)
-                    Button("Entrar no grupo") {
-                        Task {
-                            do {
-                                try await persistenceServices.askToJoinGroup(to: fetchedGroup!)
-                                print("solicitacao enviada")
-                            } catch {
-                                print("Notificação não enviada!!! \(error)")
-                            }
-                        }
-                    }
-                } else if let error = fetchError {
-                    Text("Erro: \(error)")
-                        .foregroundColor(.red)
-                } else {
-                    Text("Nenhum grupo encontrado")
-                        .foregroundColor(.gray)
-                }
-
-                Button("Logout") { authVM.logout() }
-            }
-            .onChange(of: groupCode) { newValue in
-                Task {
-                    do {
-                        fetchedGroup = try await persistenceServices.fetchGroupByCode(code: newValue)
-                        fetchError = nil
-                    } catch {
-                        fetchedGroup = nil
-                        fetchError = error.localizedDescription
-                    }
-                }
-            }
         }
     }
 }
