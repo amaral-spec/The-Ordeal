@@ -17,46 +17,17 @@ struct ResumeTeacherView: View {
     @State private var selectedMode: Mode = .Desafio
     
     var body: some View {
-        VStack(spacing: 0) {
-            
-            // MARK: Picker
-            Picker("", selection: $selectedMode) {
-                ForEach(Mode.allCases, id: \.self) { mode in
-                    Text(mode.rawValue)
-                }
-            }
-            .pickerStyle(.segmented)
-            .padding()
-            
-            // MARK: Conteúdo
-            VStack {
-                if selectedMode == .Desafio {
-                    desafiosSection
-                } else {
-                    tarefasSection
-                }
-            }
-            .frame(maxHeight: .infinity, alignment: .top)
+        VStack(spacing: 15) {
+            ChallengeCardView(resumoVM: resumeVM)
+                .padding(.horizontal)
+                .padding(.top)
+            BigTaskCardView(resumoVM: resumeVM)
+                .padding(.horizontal)
+
+            Spacer()
         }
-        .navigationTitle("Resumo")
+        .navigationTitle("Início")
         .toolbarTitleDisplayMode(.inlineLarge)
-        
-        
-        // MARK: - Toolbar do Professor
-        .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                Button {
-                    if selectedMode == .Desafio {
-                        criarDesafio = true
-                    } else {
-                        criarTarefa = true
-                    }
-                } label: {
-                    Label("Adicionar", systemImage: "plus")
-                }
-            }
-        }
-        
         
         .task {
             await resumeVM.carregarDesafios()
@@ -83,42 +54,5 @@ struct ResumeTeacherView: View {
         }
     }
     
-    // MARK: - DESAFIOS
-    private var desafiosSection: some View {
-        Group {
-            if resumeVM.challenges.isEmpty {
-                EmptyStateView(
-                    icon: "flag.pattern.checkered.2.crossed",
-                    title: "Sem Desafios",
-                    message: "Você não possui nenhum desafio"
-                )
-            } else {
-                ListChallenge(
-                    challengeList: resumeVM.challenges,
-                    onTap: { onNavigate(.detailChallenge($0)) }
-                )
-                .environmentObject(resumeVM)
-            }
-        }
-    }
-    
-    // MARK: - TAREFAS
-    private var tarefasSection: some View {
-        Group {
-            if resumeVM.tasks.isEmpty {
-                EmptyStateView(
-                    icon: "checklist.checked",
-                    title: "Sem Tarefas",
-                    message: "Você não possui nenhuma tarefa"
-                )
-            } else {
-                ListTask(
-                    taskList: resumeVM.tasks,
-                    onTap: { onNavigate(.detailTask($0)) }
-                )
-                .environmentObject(resumeVM)
-            }
-        }
-    }
 }
 

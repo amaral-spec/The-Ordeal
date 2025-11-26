@@ -11,7 +11,7 @@ struct LoginView: View {
         VStack() {
             ZStack {
                 Circle()
-                    .foregroundStyle(Color(red: 0.65, green: 0.13, blue: 0.29))
+                    .foregroundStyle(Color("BlueCard"))
                     .frame(height: 130)
                     .padding()
                 
