@@ -73,7 +73,9 @@ struct ResumeCoordinatorView: View {
                     }
                         .environmentObject(resumeVM)
                 case .listTask:
-                    TarefasList(resumoVM: resumeVM)
+                    TarefasList(resumoVM: resumeVM){ next in
+                        path.append(next)
+                    }
                         .environmentObject(resumeVM)
                     
                 case .participants:

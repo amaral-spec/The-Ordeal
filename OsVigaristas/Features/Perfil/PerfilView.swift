@@ -117,7 +117,7 @@ struct PerfilView: View {
                                 .foregroundStyle(Color("AccentColor").opacity(0.3))
                             
                             HStack {
-                                Text("Logout")
+                                Text("Sair")
                                     .foregroundColor(.black)
                             }
                             .padding(.horizontal, 40)
