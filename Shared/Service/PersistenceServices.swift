@@ -78,9 +78,10 @@ class PersistenceServices: NSObject, ObservableObject {
         return users
     }
     
-    func fetchChallengeMembers(recordID: CKRecord.ID) async throws -> [UserModel] {
+    func fetchChallengeMembers(recordReference: CKRecord.Reference) async throws -> [UserModel] {
         var groupMembers: [UserModel] = []
-        let group = try await fetchGroup(recordID: recordID)
+        let groupId = recordReference.recordID
+        let group = try await fetchGroup(recordID: groupId)
         
         for userRef in group.members {
             // Loads record from CloudKit
