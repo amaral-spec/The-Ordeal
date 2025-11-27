@@ -15,48 +15,13 @@ struct TarefasList: View {
             VStack(spacing: 10) {
                 ForEach(resumoVM.tasks) { tarefa in
                     
-                    HStack(spacing: 16) {
+                    if(tarefa.endDate < Date()){
+                        ListCard(title: tarefa.title, subtitle: "Resultado", image: GrayTaskImage())
                         
-                        ZStack {
-                            if tarefa.endDate < Date(){
-                                Circle()
-                                    .fill(.gray)
-                                    .frame(width: 45, height: 45)
-                            } else {
-                                Circle()
-                                    .fill(Color("GreenCard"))
-                                    .frame(width: 45, height: 45)
-                            }
-                            
-                            Image(systemName: "checklist.checked")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 25, height: 25)
-                                .foregroundColor(.white)
-                        }
+                    } else{
+                        ListCard(title: tarefa.title, subtitle: "Faça até \(resumoVM.formatarDiaMes(tarefa.endDate))!", image: TaskImage())
                         
-                        Text(tarefa.title)
-                            .font(.title3.bold())
-                            .foregroundColor(.black)
-                        
-                        Spacer()
-                        
-                        if tarefa.endDate < Date(){
-                            Text("Resultado")
-                                .font(.caption.italic())
-                                .foregroundColor(.black)
-                        } else {
-                            Text("Faça até \(resumoVM.formatarDiaMes(tarefa.endDate))!")
-                                .font(.caption.italic())
-                                .foregroundColor(.black)
-                        }
                     }
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 20)
-                            .fill(Color.white)
-                            .shadow(color: .black.opacity(0.12), radius: 5, y: 3)
-                    )
                 }
             }
             .padding(.horizontal, 16)
@@ -69,3 +34,4 @@ struct TarefasList: View {
         }
     }
 }
+
