@@ -9,18 +9,30 @@ import SwiftUI
 
 struct TarefasList: View {
     @ObservedObject var resumoVM: ResumeViewModel
+    let onNavigate: (ResumeCoordinatorView.Route) -> Void
 
     var body: some View {
         ScrollView {
             VStack(spacing: 10) {
                 ForEach(resumoVM.tasks) { tarefa in
-                    
-                    if(tarefa.endDate < Date()){
-                        ListCard(title: tarefa.title, subtitle: "Resultado", image: GrayTaskImage())
-                        
-                    } else{
-                        ListCard(title: tarefa.title, subtitle: "Faça até \(resumoVM.formatarDiaMes(tarefa.endDate))!", image: TaskImage())
-                        
+                    if(resumoVM.isTeacher){
+                        if(tarefa.endDate < Date()){
+                            ListCard(title: tarefa.title, subtitle: "Resultado", image: GrayTaskImage())
+                                .onTapGesture {
+                                    onNavigate(.detailTask(tarefa))
+                                }
+                            
+                        } else{
+                            ListCard(title: tarefa.title, subtitle: "", image: TaskImage())
+                                .onTapGesture {
+                                    onNavigate(.detailTask(tarefa))
+                                }
+                        }
+                    } else {
+                        if(tarefa.endDate > Date()){
+                            ListCard(title: tarefa.title, subtitle: "Faça até \(resumoVM.formatarDiaMes(tarefa.endDate))!", image: TaskImage())
+                            
+                        }
                     }
                 }
             }
