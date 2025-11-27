@@ -53,6 +53,7 @@ struct DesafiosList: View {
                         }
                     }
                     .onTapGesture {
+                        resumoVM.members = []
                         onNavigate(.detailChallenge(desafio))
                     }
                     .padding()

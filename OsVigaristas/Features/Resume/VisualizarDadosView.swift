@@ -15,7 +15,9 @@ struct VisualizarDadosView: View {
     @State private var title: String
     @State private var participants: [String] = []
     
-    init(challengeModel: ChallengeModel? = nil, taskModel: TaskModel? = nil) {
+    let onNavigate: (ResumeCoordinatorView.Route) -> Void
+    
+    init(challengeModel: ChallengeModel? = nil, taskModel: TaskModel? = nil, onNavigate: @escaping (ResumeCoordinatorView.Route) -> Void) {
         if let challengeModel = challengeModel {
             self.challengeModel = challengeModel
             self.endDate = challengeModel.endDate
@@ -31,11 +33,12 @@ struct VisualizarDadosView: View {
             self.description = ""
             self.title = ""
         }
+        self.onNavigate = onNavigate
     }
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
+            VStack(alignment: .leading, spacing: 24) {
                 
                 // MARK: - CARD 1: Tempo Restante
                 VStack {
@@ -45,15 +48,16 @@ struct VisualizarDadosView: View {
                             .foregroundColor(Color("BlueCard"))
                             .font(.system(size: 35))
                         
-                        VStack(alignment: .leading, spacing: 2) {
+                        VStack(alignment: .leading, spacing: 4) {
                             Text("Termina em \(resumeVM.diasRestantes(ate: endDate)) dias!")
                                 .font(.title2.bold())
                                 .foregroundColor(.black)
                         }
+                        
                         Spacer()
                     }
                 }
-                .padding()
+                .padding(16)
                 .frame(maxWidth: .infinity)
                 .background(
                     RoundedRectangle(cornerRadius: 20)
@@ -63,17 +67,26 @@ struct VisualizarDadosView: View {
                 
                 
                 // MARK: - CARD 2: Descrição
-                Section("Dados do Desafio") {
-                    VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: 12) {
+                    
+                    Text("Dados do Desafio")
+                        .font(.title2.bold())
+                    
+                    VStack(alignment: .leading, spacing: 12) {
                         Text("Descrição")
-                            .font(.title2.bold())
+                            .font(.title3.bold())
                         
-                        Text(description)
-                            .font(.title2)
-                            .foregroundColor(.black.opacity(0.8))
-                            .multilineTextAlignment(.leading)
+                        if description.isEmpty {
+                            Text("Nenhuma descrição.")
+                                .font(.caption.italic())
+                        } else {
+                            Text(description)
+                                .font(.title3)
+                                .foregroundColor(.black.opacity(0.8))
+                                .multilineTextAlignment(.leading)
+                        }
                     }
-                    .padding()
+                    .padding(16)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(
                         RoundedRectangle(cornerRadius: 20)
@@ -81,36 +94,93 @@ struct VisualizarDadosView: View {
                             .shadow(color: .black.opacity(0.1), radius: 6, y: 3)
                     )
                 }
-                .font(.title2.bold())
                 
                 
                 // MARK: - CARD 3: Participantes
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("Participantes")
-                        .font(.title2.bold())
+                    Button {
+                        onNavigate(.participants)
+                    } label: {
+                        HStack {
+                            Text("Participantes")
+                                .font(.title2.bold())
+                                .foregroundStyle(.black)
+                            
+                            Image(systemName: "chevron.right")
+                                .foregroundStyle(Color("BlueCard"))
+                            
+                            Spacer()
+                        }
+                    }
                     
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 15) {
-                            ForEach(participants.indices, id: \.self) { index in
-                                VStack {
-                                    Circle()
-                                        .fill(Color.gray.opacity(0.3))
-                                        .frame(width: 60, height: 60)
+                    VStack(alignment: .leading) {
+                        
+                        if resumeVM.members.isEmpty {
+                            HStack {
+                                Spacer()
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle())
+                                    .scaleEffect(1.4)
+                                Spacer()
+                            }
+                            .padding(.vertical, 20)
+                            
+                        } else {
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 20) {
                                     
-                                    Text("Aluno \(index + 1)")
-                                        .font(.caption2)
-                                        .foregroundColor(.black.opacity(0.6))
+                                    ForEach(resumeVM.members) { member in
+                                        VStack(spacing: 8) {
+                                            
+                                            if let uiImage = member.profileImage {
+                                                Image(uiImage: uiImage)
+                                                    .resizable()
+                                                    .scaledToFill()
+                                                    .frame(width: 70, height: 70)
+                                                    .clipShape(Circle())
+                                            } else {
+                                                Image(systemName: "person.crop.circle.fill")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: 70, height: 70)
+                                                    .foregroundColor(.gray)
+                                            }
+                                        }
+                                    }
                                 }
                             }
+                            Button {
+                                // onNavigate(.comecarDesafio)
+                            } label: {
+                                Text("Começar desafio")
+                                    .foregroundColor(.white)
+                                    .font(.title3.bold())
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 18)
+                                    .background(
+                                        Capsule()
+                                            .fill(Color("BlueCard"))
+                                            .shadow(color: .black.opacity(0.15), radius: 5, y: 3)
+                                    )
+                            }
+                            .padding(.top, 15)
+                            .padding(.bottom, 20)
+
                         }
-                        .padding(.horizontal, 4)
                     }
+                    .frame(maxWidth: .infinity)
                 }
-                .frame(maxWidth: .infinity)
+
+                
             }
-            .padding()
+            .padding(20)
         }
         .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)
+        .task {
+            if let challengeModel {
+                await resumeVM.carregarParticipantesPorDesafio(challenge: challengeModel)
+            }
+        }
     }
 }
