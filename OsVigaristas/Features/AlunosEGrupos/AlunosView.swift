@@ -40,26 +40,15 @@ struct AlunosView: View {
                         LazyVGrid(columns: columns, spacing: 10) {
                             // MARK: - Puxar do CloudKit
                             ForEach(alunoVM.students) { aluno in
-                                VStack {
-                                    Image(systemName: "person.fill")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 70, height: 70, alignment: .center)
-                                        .clipShape(Circle())
-                                    
-                                    Text(aluno.name)
-                                        .font(.caption)
-                                        .foregroundColor(.primary)
-                                }
-                                .padding(8)
-                                .background(.white)
-                                .cornerRadius(10)
-                                .shadow(radius: 1)
+                                AlunosViewCard(aluno: aluno)
                             }
+                            .padding(8)
+                            .background(.white)
+                            .cornerRadius(10)
+                            .shadow(radius: 1)
                         }
-                        .padding(8)
                     }
-                    .padding()
+                    .padding(8)
                 }
                 
                 // MARK: - GRUPOS
@@ -181,12 +170,13 @@ struct AlunosView: View {
 }
 
 
+
 #Preview {
     let services = PersistenceServices.shared
     let viewModel = AlunosViewModel(persistenceServices: services)
     
-    AlunosView(alunoVM: viewModel) {_ in 
+    AlunosView(alunoVM: viewModel) {_ in
         
     }
-        .environmentObject(services)
+    .environmentObject(services)
 }
