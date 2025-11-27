@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Foundation
 
 struct TarefasList: View {
     @ObservedObject var resumoVM: ResumeViewModel
@@ -29,9 +30,8 @@ struct TarefasList: View {
                                 }
                         }
                     } else {
-                        if(tarefa.endDate > Date()){
+                        if(tarefa.endDate >= Date()){
                             ListCard(title: tarefa.title, subtitle: "Faça até \(resumoVM.formatarDiaMes(tarefa.endDate))!", image: TaskImage())
-                            
                         }
                     }
                 }

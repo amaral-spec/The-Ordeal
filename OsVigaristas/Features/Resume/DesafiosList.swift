@@ -17,17 +17,25 @@ struct DesafiosList: View {
             VStack(spacing: 10) {
                 ForEach(resumoVM.challenges) { desafio in
                     
-                    if desafio.endDate < Date(){
-                        ListCard(title: desafio.title, subtitle: "Resultado", image: GrayChallengeImage())
-                            .onTapGesture {
-                                onNavigate(.detailChallenge(desafio))
-                            }
+                    if(resumoVM.isTeacher){
+                        if(desafio.endDate < Date()){
+                            ListCard(title: desafio.title, subtitle: "Resultado", image: GrayChallengeImage())
+                                .onTapGesture {
+                                    onNavigate(.detailChallenge(desafio))
+                                }
+                            
+                        } else{
+                            ListCard(title: desafio.title, subtitle: "nome do grupo", image: ChallengeImage())
+                                .onTapGesture {
+                                    onNavigate(.detailChallenge(desafio))
+                                }
+                        }
                     } else {
                         let diasRestantes = Calendar.current.dateComponents([.day], from: Date(), to: desafio.endDate).day ?? 0
-                        ListCard(title: desafio.title, subtitle: "Faltam \(diasRestantes) dias!", image: ChallengeImage())
-                            .onTapGesture {
-                                onNavigate(.detailChallenge(desafio))
-                            }
+                        
+                        if(desafio.endDate >= Date()){
+                            ListCard(title: desafio.title, subtitle: "Faltam \(diasRestantes) dias!", image: ChallengeImage())
+                        }
                     }
                 }
             }
