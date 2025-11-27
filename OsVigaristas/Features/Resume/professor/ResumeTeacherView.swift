@@ -21,14 +21,19 @@ struct ResumeTeacherView: View {
             ChallengeCardView(resumoVM: resumeVM)
                 .padding(.horizontal)
                 .padding(.top)
+                .onTapGesture {
+                    onNavigate(.listChallenge)
+                }
             BigTaskCardView(resumoVM: resumeVM)
                 .padding(.horizontal)
+                .onTapGesture {
+                    onNavigate(.listTask)
+                }
 
             Spacer()
         }
         .navigationTitle("Início")
         .toolbarTitleDisplayMode(.inlineLarge)
-        
         .task {
             await resumeVM.carregarDesafios()
             await resumeVM.carregarTarefas()
