@@ -44,7 +44,7 @@ struct ResumeTeacherView: View {
         .navigationTitle("Início")
         .toolbarTitleDisplayMode(.inlineLarge)
         .task {
-            await resumeVM.loadChallenges()
+            await resumeVM.carregarDesafios()
             await resumeVM.carregarTarefas()
         }
         
@@ -52,7 +52,7 @@ struct ResumeTeacherView: View {
         // MARK: - Pull-to-refresh
         .refreshable {
             if selectedMode == .Desafio {
-                await resumeVM.loadChallenges()
+                await resumeVM.carregarDesafios()
             } else {
                 await resumeVM.carregarTarefas()
             }
