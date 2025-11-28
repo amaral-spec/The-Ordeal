@@ -43,7 +43,13 @@ struct RecordFromInitialChainedChallengeView: View {
                 
                 PlaybackWaveformView(progress: player.progress)
             }
-            .padding()
+            .padding(32) 
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color(.secondarySystemBackground))
+                    .padding(16)
+            )
+
 
             Spacer()
 

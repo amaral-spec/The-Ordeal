@@ -1,8 +1,10 @@
 import SwiftUI
+import CloudKit
 
 struct ChallengeDetailView: View {
     
     @State var startChallenge: Bool = false
+    @State var challengeM: ChallengeModel
     
     // MARK: - Example data (replace with real model)
     var daysRemaining: Int = 2
@@ -95,7 +97,7 @@ struct ChallengeDetailView: View {
         .navigationTitle("Tarefa do Barquinho")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $startChallenge) {
-            DoChallengeCoordinatorView()
+            DoChallengeCoordinatorView(challengeM: challengeM)
                 .interactiveDismissDisabled(true)
         }
     }
@@ -125,8 +127,22 @@ struct ChallengeDetailView: View {
 
 
 #Preview {
+    // Declare groupID before using it
+    let groupID = CKRecord.ID(recordName: "12345")
+    let groupRef = CKRecord.Reference(recordID: groupID, action: .none)
+
+    // Use a plain var for previews rather than @State
+    var challengeM = ChallengeModel(
+        whichChallenge: 1,
+        title: "Hello",
+        description: "Description that ive made up",
+        group: groupRef,
+        reward: 10,
+        startDate: Date.now,
+        endDate: Date.distantFuture
+    )
     
-    return NavigationStack {
-        ChallengeDetailView()
+    NavigationStack {
+        ChallengeDetailView(challengeM: challengeM)
     }
 }

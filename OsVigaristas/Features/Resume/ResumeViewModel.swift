@@ -25,7 +25,7 @@ final class ResumeViewModel: ObservableObject {
         self.isTeacher = isTeacher
     }
 
-    func carregarDesafios() async {
+    func loadChallenges() async {
         do {
             let desafiosCarregados = try await persistenceServices.fetchAllChallenges()
             await MainActor.run {

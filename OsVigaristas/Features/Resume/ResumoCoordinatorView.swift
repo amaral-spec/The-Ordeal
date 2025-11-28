@@ -57,7 +57,7 @@ struct ResumeCoordinatorView: View {
             .navigationDestination(for: Route.self) { route in
                 switch route {
                 case .detailChallenge(let challenge):
-                    ChallengeDetailView()
+                    ChallengeDetailView(challengeM: challenge)
                         .environmentObject(resumeVM)
 
                 case .detailTask(let task):

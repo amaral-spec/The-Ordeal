@@ -11,11 +11,23 @@ import Combine
 import AVFoundation
 
 
-final class DoChallengeViewModel: ObservableObject, Identifiable {
-    @Published var challenge: ChallengeModel?
+final class DoChallengeViewModel: ObservableObject {
+    
+    @Published var challengeM: ChallengeModel?
+    
     @Published var alreadyREC: Bool = false
     
     @Published var recordings: [URL] = []
+    
+    @Published var challengeSessionRecordID: CKRecord.ID?
+
+    
+    private let persistenceServices: PersistenceServices
+    
+    init(persistenceServices: PersistenceServices, challengeM: ChallengeModel) {
+        self.persistenceServices = persistenceServices
+        self.challengeM = challengeM
+    }
 
     func recordingsList() -> [URL] {
         // Locate the Recordings folder.
@@ -29,4 +41,67 @@ final class DoChallengeViewModel: ObservableObject, Identifiable {
         // Filter for .m4a audio files and sort descending by filename (newest first).
         return files.filter { $0.pathExtension == "m4a" }.sorted { $0.lastPathComponent > $1.lastPathComponent }
     }
+    
+    func fetchChallenge(ckrecord_id: CKRecord.ID) async {
+        do {
+            let fetched = try await persistenceServices.fetchChallenge(recordID: ckrecord_id)
+            await MainActor.run {
+                self.challengeM = fetched
+            }
+        } catch {
+            // You can log or surface the error if desired
+            print("Failed to fetch challenge: \(error)")
+        }
+    }
+    
+    func startChallenge() async {
+        guard let challenge = self.challengeM else { return }
+        guard let user = await AuthService.shared.currentUser else { return }
+
+        do {
+            let sessionID = try await persistenceServices.startChallengeSession(
+                challengeID: challenge.id,
+                userID: user.id
+            )
+            
+            await MainActor.run {
+                self.challengeSessionRecordID = sessionID
+            }
+
+            // Start heartbeat
+            startHeartbeat(sessionID: sessionID)
+
+        } catch {
+            print("Failed to start session: \(error)")
+        }
+    }
+
+    
+    func outChallenge() async {
+        stopHeartbeat()
+        
+        guard let sessionID = challengeSessionRecordID else { return }
+
+        do {
+            try await persistenceServices.deleteChallengeSession(sessionID: sessionID)
+        } catch {
+            print("Failed to end session: \(error)")
+        }
+    }
+
+    
+    private var heartbeatTimer: Timer?
+
+    func startHeartbeat(sessionID: CKRecord.ID) {
+        heartbeatTimer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { _ in
+            Task { try? await self.persistenceServices.updateChallengeSession(sessionID: sessionID) }
+        }
+    }
+
+    func stopHeartbeat() {
+        heartbeatTimer?.invalidate()
+        heartbeatTimer = nil
+    }
+
+    
 }
