@@ -14,6 +14,7 @@ struct ReceivedAudioRecordChainedChallengeView: View {
     
     @StateObject private var rec = MiniRecorder()
     @EnvironmentObject var doChallengeVM: DoChallengeViewModel
+    
     let onNavigation: (DoChallengeCoordinatorView.Route) -> Void
     
     var body: some View {

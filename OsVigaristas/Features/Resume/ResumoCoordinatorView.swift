@@ -79,7 +79,7 @@ struct ResumeCoordinatorView: View {
                         .environmentObject(resumeVM)
                     
                 case .participants:
-                    ListaParticipantesView()
+                    ListaParticipantesView(isTeacher: true)
                         .environmentObject(resumeVM)
                 }
             }

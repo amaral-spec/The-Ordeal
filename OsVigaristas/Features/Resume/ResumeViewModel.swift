@@ -11,7 +11,10 @@ import CloudKit
 final class ResumeViewModel: ObservableObject {
     @Published var challenges: [ChallengeModel] = []
     @Published var tasks: [TaskModel] = []
+    
     @Published var members: [UserModel] = []
+    
+    @Published var audios: [AudioRecordModel] = []
     
     @Published var isTeacher: Bool = false
     
@@ -19,6 +22,7 @@ final class ResumeViewModel: ObservableObject {
     @Published private var isChallengeEmpty: Bool = true
     @Published private var isTaskEmpty: Bool = true
     @Published private var isMemberEmpty: Bool = true
+    @Published private var isAudioEmpty: Bool = true
     
     private let persistenceServices: PersistenceServices
     
@@ -82,5 +86,18 @@ final class ResumeViewModel: ObservableObject {
         let start = calendar.startOfDay(for: Date())
         let end = calendar.startOfDay(for: endDate)
         return calendar.dateComponents([.day], from: start, to: end).day ?? 0
+    }
+    
+    func carregarAudios(challengeID: CKRecord.ID) async {
+        do  {
+            let audiosCarregados = try await persistenceServices.fetchChallengeAudio(challengeID: challengeID)
+            await MainActor.run {
+                audios = audiosCarregados
+                isAudioEmpty = audiosCarregados.isEmpty
+            }
+            print("\(audiosCarregados.count) áudios carregados.")
+        } catch {
+            print("Erro ao carregar participantes: \(error.localizedDescription)")
+        }
     }
 }

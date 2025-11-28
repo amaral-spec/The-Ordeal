@@ -8,7 +8,11 @@
 import SwiftUI
 
 struct ListaParticipantesView: View {
+    let isTeacher: Bool
+    
     @EnvironmentObject var resumeVM: ResumeViewModel
+    @StateObject var player: MiniPlayer
+
     @State var challengeModel: ChallengeModel?
     
     var body: some View {
@@ -40,6 +44,10 @@ struct ListaParticipantesView: View {
                         Spacer()
                     }
                     .padding(.vertical, 8)
+                    
+                    if isTeacher {
+                        //MARK: - AQUI LUD
+                    }
 
                     if index <= resumeVM.members.count - 1 {
                         Rectangle()
@@ -57,11 +65,8 @@ struct ListaParticipantesView: View {
         .task {
             if let challengeModel {
                 await resumeVM.carregarParticipantesPorDesafio(challenge: challengeModel)
+                await resumeVM.carregarAudios(challengeID: challengeModel.id)
             }
         }
     }
-}
-
-#Preview {
-    ListaParticipantesView()
 }
