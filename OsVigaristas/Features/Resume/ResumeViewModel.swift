@@ -13,6 +13,8 @@ final class ResumeViewModel: ObservableObject {
     @Published var tasks: [TaskModel] = []
     @Published var challengeGroups: [ ChallengeModel : String ] = [:]
     
+    @Published var members: [UserModel] = []
+    
     @Published var isTeacher: Bool = false
     
     @Published var groupsByID: [CKRecord.ID : GroupModel] = [:]
