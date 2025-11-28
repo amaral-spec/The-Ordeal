@@ -70,9 +70,13 @@ struct DoChallengeCoordinatorView: View {
         .alert("Enviar Desafio?", isPresented: $showConfirmAlert) {
             if #available(iOS 26.0, *) {
                 Button("Finalizar", role: .confirm) {
-                    Task { await doChallengeVM.outChallenge() }
-                    dismiss()
-                    
+                    Task {
+                        if let lastURL = doChallengeVM.recordings.last {
+                            await doChallengeVM.submitStudentAudio(url: lastURL)
+                        }
+                        await doChallengeVM.outChallenge()
+                        dismiss()
+                    }
                 }
             } else {
                 Button("Finalizar") {

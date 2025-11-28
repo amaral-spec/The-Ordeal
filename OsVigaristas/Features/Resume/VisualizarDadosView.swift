@@ -15,6 +15,7 @@ struct VisualizarDadosView: View {
     @State private var title: String
     @State private var participants: [String] = []
     
+    @State var startChallenge: Bool = false
     let onNavigate: (ResumeCoordinatorView.Route) -> Void
     
     init(challengeModel: ChallengeModel? = nil, taskModel: TaskModel? = nil, onNavigate: @escaping (ResumeCoordinatorView.Route) -> Void) {
@@ -150,7 +151,7 @@ struct VisualizarDadosView: View {
                                 }
                             }
                             Button {
-                                // onNavigate(.comecarDesafio)
+                                startChallenge = true
                             } label: {
                                 Text("Começar desafio")
                                     .foregroundColor(.white)
@@ -177,6 +178,10 @@ struct VisualizarDadosView: View {
         }
         .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)
+        .sheet(isPresented: $startChallenge) {
+            DoChallengeCoordinatorView(challengeM: challengeModel!)
+                .interactiveDismissDisabled(true)
+        }
         .task {
             if let challengeModel {
                 await resumeVM.carregarParticipantesPorDesafio(challenge: challengeModel)

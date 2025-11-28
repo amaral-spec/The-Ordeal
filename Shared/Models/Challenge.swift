@@ -17,7 +17,7 @@ final class ChallengeModel: Identifiable, Equatable, Hashable {
     var someoneIsDoingIt: Bool = false
     
     // Linkar audio com os alunos
-    var studentAudios: [CKRecord.ID: URL]
+    var studentAudios: [CKRecord.Reference: URL]
     
     var generalAudio: URL?
     
@@ -47,7 +47,7 @@ final class ChallengeModel: Identifiable, Equatable, Hashable {
     init(from record: CKRecord) {
         self.id = record.recordID
         
-        self.studentAudios = record["studentAudios"] as? [CKRecord.ID: URL] ?? [:]
+        self.studentAudios = record["studentAudios"] as? [CKRecord.Reference: URL] ?? [:]
         self.generalAudio = record["generalAudio"] as? URL ?? nil
         
         self.group = record["group"] as? CKRecord.Reference

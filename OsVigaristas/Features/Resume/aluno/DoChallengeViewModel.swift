@@ -103,5 +103,21 @@ final class DoChallengeViewModel: ObservableObject {
         heartbeatTimer = nil
     }
 
-    
+    func submitStudentAudio(url: URL) async {
+        guard let challenge = challengeM else { return }
+        guard let user = await AuthService.shared.currentUser else { return }
+        
+        do {
+            try await persistenceServices.saveAudioRecord(
+                challengeID: challenge.id,
+                userID: user.id,
+                audioURL: url
+            )
+            print("Audio enviado com sucesso!")
+        } catch {
+            print("Erro ao enviar áudio: \(error)")
+        }
+    }
+
+
 }

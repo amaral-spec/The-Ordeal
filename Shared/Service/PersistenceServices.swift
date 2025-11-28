@@ -449,6 +449,50 @@ class PersistenceServices: NSObject, ObservableObject {
         print("Challenge deleted successfully: \(challenge.title)")
     }
     
+    // MARK: CRUD: Audio
+    func saveAudioRecord(
+        challengeID: CKRecord.ID,
+        userID: CKRecord.ID,
+        audioURL: URL
+    ) async throws {
+        
+        let model = AudioRecordModel(
+            audioURL: audioURL,
+            challengeID: challengeID,
+            userID: userID
+        )
+        
+        let record = model.toRecord()
+        
+        try await db.save(record)
+        
+        print("AudioRecord salvo no CloudKit!")
+    }
+
+    func fetchChallengeAudio(challengeID: CKRecord.ID) async throws -> [AudioRecordModel] {
+        
+        let ref = CKRecord.Reference(recordID: challengeID, action: .none)
+        let predicate = NSPredicate(format: "challenge == %@", ref)
+        
+        let query = CKQuery(recordType: "AudioRecord", predicate: predicate)
+        
+        var models: [AudioRecordModel] = []
+        
+        let (results, _) = try await db.records(matching: query)
+        
+        for (_, result) in results {
+            if case .success(let record) = result,
+               let audioModel = AudioRecordModel(from: record) {
+                models.append(audioModel)
+            }
+        }
+        
+        return models
+    }
+
+
+
+    
     // MARK: CRUD: Tarefa
     func createTask(_ task: TaskModel) async throws {
         let record = CKRecord(recordType: "Task", recordID: task.id)
