@@ -12,7 +12,7 @@ struct StreakCardView: View {
         HStack(spacing: 16) {
             VStack(spacing: 4) {
                 Image(systemName: "flame.fill")
-                    .foregroundColor(.accentColor)
+                    .foregroundColor(Color("RedCard"))
                     .font(.system(size: 32))
 
                 Text("20")
@@ -28,7 +28,7 @@ struct StreakCardView: View {
                                 .font(.caption2)
 
                             Image(systemName: "checkmark.circle.fill")
-                                .foregroundColor(.accentColor)
+                                .foregroundColor(Color("RedCard"))
                         }
                     }
                 }

@@ -63,7 +63,7 @@ struct PerfilView: View {
                             HStack {
                                 Image(systemName: "flame.fill")
                                     .font(.largeTitle)
-                                    .foregroundStyle(Color.accentColor)
+                                    .foregroundStyle(Color("RedCard"))
                                 
                                 Text("\(vm.user?.streak ?? 0) dias de ofensiva!")
                                     .font(.title2)
