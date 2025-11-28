@@ -45,10 +45,19 @@ final class UserModel: Identifiable {
         self.isTeacher = record["isTeacher"] as? Bool ?? false
         self.streak = record["streak"] as? Int ?? 0
         self.points = record["points"] as? Int ?? 0
-        self.profileImageName = record["profileImageName"] as? String ?? "partitura"
-        self.profileImage = record["profileImage"] as? UIImage ?? UIImage(named: "partitura")
-        // Relações (TaskModel / ChallengeModel) podem ser recuperadas via referência, se necessário.
+        self.profileImageName = record["profileImageName"]
+
+        // Converte CKAsset em UIImage
+        if let asset = record["profileImage"] as? CKAsset,
+           let url = asset.fileURL,
+           let data = try? Data(contentsOf: url),
+           let image = UIImage(data: data) {
+            self.profileImage = image
+        } else {
+            self.profileImage = nil
+        }
     }
+
     
     func toCKRecord() -> CKRecord {
         let record = CKRecord(recordType: "User", recordID: id)

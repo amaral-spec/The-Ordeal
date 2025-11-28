@@ -30,7 +30,7 @@ class PersistenceServices: NSObject, ObservableObject {
         let points = record["points"] as? Int ?? 0
         let lastTask: TaskModel?
         let lastChallenge: ChallengeModel?
-        let profileImageName = record["profileImageName"] as? String ?? "partitura"
+        let profileImageName = record["profileImageName"]
         var profileImage: UIImage?
 
         // Profile image from CloudKit
@@ -38,8 +38,6 @@ class PersistenceServices: NSObject, ObservableObject {
            let url = asset.fileURL,
            let data = try? Data(contentsOf: url) {
             profileImage = UIImage(data: data)
-        } else {
-            profileImage = UIImage(named: "partitura")
         }
         
         let usuario = UserModel(from: record)
@@ -50,7 +48,7 @@ class PersistenceServices: NSObject, ObservableObject {
         usuario.points = points
         usuario.lastTask = try await fetchLatestTask(for: currentUser.id, in: db)
         usuario.lastChallenge = try await fetchLatestChallenge(for: currentUser.id, in: db)
-        usuario.profileImageName = profileImageName
+//        usuario.profileImageName = profileImageName
         usuario.profileImage = profileImage
         return usuario
     }
@@ -76,6 +74,23 @@ class PersistenceServices: NSObject, ObservableObject {
         }
 
         return users
+    }
+    
+    func fetchChallengeMembers(recordReference: CKRecord.Reference) async throws -> [UserModel] {
+        var groupMembers: [UserModel] = []
+        let groupId = recordReference.recordID
+        let group = try await fetchGroup(recordID: groupId)
+        
+        for userRef in group.members {
+            // Loads record from CloudKit
+            let individualMember = try await db.record(for: userRef.recordID)
+            // transforms record into userModel
+            let userModel = UserModel(from: individualMember)
+            // Adds userModel to groupMembers
+            groupMembers.append(userModel)
+        }
+        
+        return groupMembers
     }
     
     // Fetch all students (users where isTeacher == false)

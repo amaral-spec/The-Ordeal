@@ -11,12 +11,14 @@ import CloudKit
 final class ResumeViewModel: ObservableObject {
     @Published var challenges: [ChallengeModel] = []
     @Published var tasks: [TaskModel] = []
+    @Published var members: [UserModel] = []
     
     @Published var isTeacher: Bool = false
     
     @Published var groupsByID: [CKRecord.ID : GroupModel] = [:]
     @Published private var isChallengeEmpty: Bool = true
     @Published private var isTaskEmpty: Bool = true
+    @Published private var isMemberEmpty: Bool = true
     
     private let persistenceServices: PersistenceServices
     
@@ -53,6 +55,19 @@ final class ResumeViewModel: ObservableObject {
             print("\(tarefasCarregadas.count) tarefas carregadas")
         } catch {
             print("Erro ao carregar tarefas: \(error.localizedDescription)")
+        }
+    }
+    
+    func carregarParticipantesPorDesafio(challenge: ChallengeModel) async {
+        do {
+            let participantesCarregados = try await persistenceServices.fetchChallengeMembers(recordReference: challenge.group!)
+            await MainActor.run {
+                members = participantesCarregados
+                isMemberEmpty = participantesCarregados.isEmpty
+            }
+            print("\(participantesCarregados.count) participantes carregados")
+        } catch {
+            print("Erro ao carregar participantes: \(error.localizedDescription)")
         }
     }
     

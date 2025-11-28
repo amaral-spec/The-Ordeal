@@ -19,9 +19,14 @@ struct CriarDesafioView: View {
     var onDesafioCriado: (() -> Void)?
     @State private var groups: [GroupModel] = []
     @State private var selectedGroupID: CKRecord.ID? = nil
+    @State private var didCreateChallenge: Bool = false
+    @State private var failedCreateChallenge: Bool = false
+    
+    
     init(numChallenge: Binding<Int>) {
         self._numChallenge = numChallenge
     }
+    
     var body: some View {
         NavigationStack {
             Form {
@@ -100,10 +105,41 @@ struct CriarDesafioView: View {
                                 await MainActor.run {
                                     numChallenge += 1
                                     onDesafioCriado?()
-                                    dismiss()
+                                    
+                                    withAnimation {
+                                        didCreateChallenge = true
+                                    }
+                                    
+                                    // Haptics
+                                    let generator = UINotificationFeedbackGenerator()
+                                    generator.notificationOccurred(.success)
+                                    
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                                        withAnimation {
+                                            self.didCreateChallenge = false
+                                        }
+                                        dismiss()
+                                    }
                                 }
                             } catch {
                                 print("Erro ao criar desafio:", error.localizedDescription)
+                                
+                                withAnimation {
+                                    failedCreateChallenge = true
+                                }
+                                
+                                // Haptics
+                                let generator = UINotificationFeedbackGenerator()
+                                generator.notificationOccurred(.success)
+                                
+                                // Removes feedback after 2.0 seconds
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                                    withAnimation {
+                                        self.failedCreateChallenge = false
+                                    }
+                                    
+                                    dismiss()
+                                }
                             }
                             isSaving = false
                         }
@@ -112,6 +148,29 @@ struct CriarDesafioView: View {
                     }
                     .disabled(desafioNome.isEmpty || selectedGroupID == nil || isSaving)
                 }
+            }
+        }
+        .overlay(alignment: .top) {
+            if didCreateChallenge {
+                Text("Desafio criado!")
+                    .font(.headline)
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 20)
+                    .background(Color("BlueCard"))
+                    .cornerRadius(30)
+                    .padding(.top, 40)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                    .animation(.spring(duration: 0.4), value: didCreateChallenge)
+            } else if failedCreateChallenge {
+                Text("Erro ao criar desafio")
+                    .font(.headline)
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 20)
+                    .background(Color("RedCard"))
+                    .cornerRadius(30)
+                    .padding(.top, 40)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                    .animation(.spring(duration: 0.4), value: failedCreateChallenge)
             }
         }
     }

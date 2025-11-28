@@ -13,7 +13,7 @@ struct SignUpView: View {
             VStack {
                 ZStack {
                     Circle()
-                        .foregroundStyle(Color(red: 0.65, green: 0.13, blue: 0.29))
+                        .foregroundStyle(Color("BlueCard"))
                         .frame(height: 130)
                         .padding()
                     
@@ -61,7 +61,7 @@ struct SignUpView: View {
                         .foregroundColor(.white)
                         .padding()
                         .frame(maxWidth: .infinity)
-                        .background(Color(red: 0.65, green: 0.13, blue: 0.29))
+                        .background(Color("BlueCard"))
                         .cornerRadius(50)
                 }
                 .padding(.horizontal)
