@@ -16,6 +16,7 @@ struct DesafiosList: View {
         ScrollView {
             VStack(spacing: 10) {
                 ForEach(resumoVM.challenges) { desafio in
+                    let groupName = resumoVM.challengeGroups[desafio] ?? "Grupo não encontrado"
                     
                     if(resumoVM.isTeacher){
                         if(desafio.endDate < Date()){
@@ -24,8 +25,8 @@ struct DesafiosList: View {
                                     onNavigate(.detailChallenge(desafio))
                                 }
                             
-                        } else{
-                            ListCard(title: desafio.title, subtitle: "nome do grupo", image: ChallengeImage())
+                        } else {
+                            ListCard(title: desafio.title, subtitle: groupName, image: ChallengeImage())
                                 .onTapGesture {
                                     onNavigate(.detailChallenge(desafio))
                                 }
