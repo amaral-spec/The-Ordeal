@@ -76,6 +76,7 @@ struct ResumeCoordinatorView: View {
                     ListaParticipantesView()
                         .environmentObject(resumeVM)
                 
+                
                 }
             }
         }

@@ -4,7 +4,8 @@ struct ResumeStudentView: View {
     
     @EnvironmentObject var resumeVM: ResumeViewModel
     let onNavigate: (ResumeCoordinatorView.Route) -> Void
-    
+    @State var startTraining: Bool = false
+
     var body: some View {
         VStack(spacing: 12) {
 
@@ -25,7 +26,16 @@ struct ResumeStudentView: View {
                 } label: {
                     TaskCardView(resumoVM: resumeVM)
                 }
-                TrainingCardView()
+                
+                
+                //Button of training
+                Button{
+                    //StartTrainingView()
+                    startTraining = true
+                } label: {
+                    TrainingCardView()
+                  
+                }
             }
             Spacer()
         }
@@ -37,6 +47,10 @@ struct ResumeStudentView: View {
            
         }
 
+        .sheet(isPresented: $startTraining) {
+                TrainingCoordinatorView()
+                    .interactiveDismissDisabled(true)//Tira o deslizar para sair
+            }
     }
     
 }

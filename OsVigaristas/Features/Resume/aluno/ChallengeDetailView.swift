@@ -93,7 +93,7 @@ struct ChallengeDetailView: View {
         }
         .background(Color(.systemGray6))
         .navigationTitle("Tarefa do Barquinho")
-        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarTitleDisplayMode(.inline)//Sheet aqui
         .sheet(isPresented: $startChallenge) {
             DoChallengeCoordinatorView()
                 .interactiveDismissDisabled(true)
