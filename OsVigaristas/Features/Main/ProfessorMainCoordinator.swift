@@ -42,7 +42,7 @@ struct ProfessorMainCoordinatorView: View {
                 .searchable(text: $searchText)
             }
         }
-        .tint(Color(red: 0.65, green: 0.13, blue: 0.29))
+        .tint(Color("BlueCard"))
         //        .searchable(text: $searchText)
     }
 }

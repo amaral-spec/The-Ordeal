@@ -78,6 +78,23 @@ class PersistenceServices: NSObject, ObservableObject {
         return users
     }
     
+    func fetchChallengeMembers(recordReference: CKRecord.Reference) async throws -> [UserModel] {
+        var groupMembers: [UserModel] = []
+        let groupId = recordReference.recordID
+        let group = try await fetchGroup(recordID: groupId)
+        
+        for userRef in group.members {
+            // Loads record from CloudKit
+            let individualMember = try await db.record(for: userRef.recordID)
+            // transforms record into userModel
+            let userModel = UserModel(from: individualMember)
+            // Adds userModel to groupMembers
+            groupMembers.append(userModel)
+        }
+        
+        return groupMembers
+    }
+    
     // Fetch all students (users where isTeacher == false)
     func fetchAllStudents() async throws -> [UserModel] {
         let predicate = NSPredicate(format: "isTeacher == %@", NSNumber(value: false))

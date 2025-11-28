@@ -14,7 +14,6 @@ struct AppRootView: View {
     @EnvironmentObject var detector: InstrumentDetectionViewModel
     
     init() {
-//        print("OIIIIs")
     }
     
     var body: some View {

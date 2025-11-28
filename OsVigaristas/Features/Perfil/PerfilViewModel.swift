@@ -26,6 +26,8 @@ class PerfilViewModel: ObservableObject {
     @Published var isJoiningGroup: Bool = false
     @Published var joinSuccessMessage: String? = nil
     @Published var joinErrorMessage: String? = nil
+    @Published var didSendSolicitation: Bool = false
+    @Published var failedSendSolicitation: Bool = false
     
     // Profile editing properties
     @Published var isShowingEditProfile: Bool = false
@@ -108,10 +110,42 @@ class PerfilViewModel: ObservableObject {
         do {
             try await persistenceServices.askToJoinGroup(to: group)
             joinSuccessMessage = "Solicitação enviada com sucesso para o grupo \(group.name)!"
+            
+            withAnimation {
+                didSendSolicitation = true
+            }
+            
+            // Removes feedback after 2.0 seconds
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                withAnimation {
+                    self.didSendSolicitation = false
+                }
+            }
+            
+            // Haptics
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.success)
+            
             isShowingPopup = false // Close alert on success
             resetGroupJoinState()
         } catch {
             joinErrorMessage = "Falha ao enviar solicitação: \(error.localizedDescription)"
+            
+            withAnimation {
+                failedSendSolicitation = true
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                withAnimation {
+                    self.failedSendSolicitation = false
+                }
+            }
+            
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.success)
+            
+            isShowingPopup = false
+            resetGroupJoinState()
         }
         
         isJoiningGroup = false
