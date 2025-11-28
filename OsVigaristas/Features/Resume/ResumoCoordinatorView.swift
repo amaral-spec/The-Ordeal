@@ -60,7 +60,7 @@ struct ResumeCoordinatorView: View {
                     VisualizarDadosView(isChallenge: true, challengeModel: challenge) { next in
                         path.append(next)
                     }
-                        .environmentObject(resumeVM)
+                    .environmentObject(resumeVM)
 
                 case .detailTask(let task):
                     VisualizarDadosView(isChallenge: false) { next in

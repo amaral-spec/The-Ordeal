@@ -48,7 +48,7 @@ struct ChallengeCardView: View {
         }
         .frame(height: 220)
         .task {
-            await resumoVM.carregarDesafios()
+            await resumoVM.loadChallenges()
         }
     }
 }
