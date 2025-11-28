@@ -54,7 +54,7 @@ final class UserModel: Identifiable {
            let image = UIImage(data: data) {
             self.profileImage = image
         } else {
-            self.profileImage = nil
+            self.profileImage = UIImage(named: "partitura")
         }
     }
 

@@ -13,8 +13,10 @@ struct ListaParticipantesView: View {
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading) {
-                ForEach(resumeVM.members) { member in
+            VStack(alignment: .leading, spacing: 0) {
+                ForEach(resumeVM.members.indices, id: \.self) { index in
+                    let member = resumeVM.members[index]
+
                     HStack {
                         if let uiImage = member.profileImage {
                             Image(uiImage: uiImage)
@@ -29,10 +31,21 @@ struct ListaParticipantesView: View {
                                 .frame(width: 70, height: 70)
                                 .foregroundColor(.gray)
                         }
+
                         Text(member.name)
                             .padding(.horizontal)
                             .font(.title2)
                             .foregroundColor(.black.opacity(0.7))
+
+                        Spacer()
+                    }
+                    .padding(.vertical, 8)
+
+                    if index <= resumeVM.members.count - 1 {
+                        Rectangle()
+                            .frame(height: 1)
+                            .foregroundColor(.gray.opacity(0.3))
+                            .padding(.leading, 80)
                     }
                 }
             }
