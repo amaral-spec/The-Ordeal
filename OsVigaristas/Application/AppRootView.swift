@@ -13,7 +13,6 @@ struct AppRootView: View {
     @Environment(\.modelContext) var modelContext
 
     init() {
-//        print("OIIIIs")
     }
     
     var body: some View {

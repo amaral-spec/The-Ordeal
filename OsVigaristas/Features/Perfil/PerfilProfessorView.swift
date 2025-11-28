@@ -25,20 +25,23 @@ struct PerfilProfessorView: View {
                         .scaledToFill()
                         .frame(width: 150, height: 150)
                         .clipShape(Circle())
-                        .padding(.top, 30)
+                        .padding()
                 } else {
                     Image("partitura")
                         .resizable()
                         .scaledToFill()
                         .frame(width: 150, height: 150)
                         .clipShape(Circle())
-                        .padding(.top, 30)
+                        .padding()
                 }
                 
                 Text(vm.user?.name ?? "Loading...")
                     .font(.title)
+                    .padding()
                 
-                Spacer()
+                Text("Professor desde \(vm.user?.creationDate.formatted(date: .numeric, time: .omitted) ?? "Loading...")")
+                    .font(.caption)
+                    .padding()
                 
                 Button {
                     authVM.logout()
@@ -50,12 +53,13 @@ struct PerfilProfessorView: View {
                             .foregroundStyle(Color.accentColor.opacity(0.3))
                         
                         HStack {
-                            Text("Logout")
-                                .foregroundColor(.black)
+                            Text("Sair")
+                                .foregroundColor(.red)
                         }
                         .padding(.horizontal, 40)
                     }
                 }
+                Spacer()
             }
             .task { await vm.loadUser() }
             .navigationTitle("Perfil")

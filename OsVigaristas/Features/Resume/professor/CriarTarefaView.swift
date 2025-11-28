@@ -23,6 +23,8 @@ struct CriarTarefaView: View {
     var onTarefaCriada: (() -> Void)?
     @State private var participants: [UserModel] = []
     @State private var selectedUserID: CKRecord.ID? = nil
+    @State private var didCreateTask: Bool = false
+    @State private var failedCreateTask: Bool = false
     
     init(numTask: Binding<Int>) {
         self._numTask = numTask
@@ -30,7 +32,7 @@ struct CriarTarefaView: View {
     
     var body: some View {
         NavigationStack {
-            VStack() {
+            VStack {
                 Form {
                     Section {
                         TextField("Nome da Tarefa (Obrigatório)", text: $tarefaNome)
@@ -44,7 +46,7 @@ struct CriarTarefaView: View {
                                 Text(user.name).tag(user.id as CKRecord.ID?)
                             }
                         }
-                        .pickerStyle(.navigationLink)   
+                        .pickerStyle(.navigationLink)
                     }
                     Section {
                         LabeledContent("Início") {
@@ -99,10 +101,42 @@ struct CriarTarefaView: View {
                                 await MainActor.run {
                                     onTarefaCriada?()
                                     numTask += 1
-                                    dismiss()
+                                    
+                                    withAnimation {
+                                        didCreateTask = true
+                                    }
+                                    
+                                    // Haptics
+                                    let generator = UINotificationFeedbackGenerator()
+                                    generator.notificationOccurred(.success)
+                                    
+                                    // Removes feedback after 2.0 seconds
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                                        withAnimation {
+                                            self.didCreateTask = false
+                                        }
+                                        dismiss()
+                                    }
                                 }
                             } catch {
                                 print("Erro ao criar grupo: \(error.localizedDescription)")
+                                
+                                withAnimation {
+                                    failedCreateTask = true
+                                }
+                                
+                                // Haptics
+                                let generator = UINotificationFeedbackGenerator()
+                                generator.notificationOccurred(.success)
+                                
+                                // Removes feedback after 2.0 seconds
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                                    withAnimation {
+                                        self.failedCreateTask = false
+                                    }
+                                    
+                                    dismiss()
+                                }
                             }
                         }
                     } label: {
@@ -118,6 +152,29 @@ struct CriarTarefaView: View {
                      print("participantes carregados: ", participants.map(\.name))
                  } catch {
                      print("Erro ao carregar participantes: \(error.localizedDescription)")
+                 }
+             }
+             .overlay(alignment: .top) {
+                 if didCreateTask {
+                     Text("Tarefa criada!")
+                         .font(.headline)
+                         .padding(.vertical, 10)
+                         .padding(.horizontal, 20)
+                         .background(Color("BlueCard"))
+                         .cornerRadius(30)
+                         .padding(.top, 40)
+                         .transition(.move(edge: .top).combined(with: .opacity))
+                         .animation(.spring(duration: 0.4), value: didCreateTask)
+                 } else if failedCreateTask {
+                     Text("Erro ao criar tarefa")
+                         .font(.headline)
+                         .padding(.vertical, 10)
+                         .padding(.horizontal, 20)
+                         .background(Color("RedCard"))
+                         .cornerRadius(30)
+                         .padding(.top, 40)
+                         .transition(.move(edge: .top).combined(with: .opacity))
+                         .animation(.spring(duration: 0.4), value: failedCreateTask)
                  }
              }
         }

@@ -102,18 +102,6 @@ struct PerfilView: View {
                         }
                     }
                     
-                    // TODO: Modificar forma de demonstrar ao usuário que deu certo entrar no grupo
-                    if let successMessage = vm.joinSuccessMessage {
-                        Text("Success: \(successMessage)")
-                            .foregroundColor(.green)
-                            .padding(.top)
-                    }
-                    if let errorMessage = vm.joinErrorMessage {
-                        Text("Erro: \(errorMessage)")
-                            .foregroundColor(.red)
-                            .padding(.top)
-                    }
-                    
                     Button(action:{}){
                         Row(texto: "Histórico de tarefas")
                     }
@@ -129,7 +117,7 @@ struct PerfilView: View {
                                 .foregroundStyle(Color("AccentColor").opacity(0.3))
                             
                             HStack {
-                                Text("Logout")
+                                Text("Sair")
                                     .foregroundColor(.black)
                             }
                             .padding(.horizontal, 40)
@@ -154,6 +142,29 @@ struct PerfilView: View {
         }
         .sheet(isPresented: $showingEditSheet) {
             EditProfileModal(vm: vm)
+        }
+        .overlay(alignment: .top) {
+            if vm.didSendSolicitation {
+                Text("Solicitação enviada!")
+                    .font(.headline)
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 20)
+                    .background(Color("BlueCard"))
+                    .cornerRadius(30)
+                    .padding(.top, 40)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                    .animation(.spring(duration: 0.4), value: vm.didSendSolicitation)
+            } else if vm.failedSendSolicitation {
+                Text("Erro ao enviar solicitação")
+                    .font(.headline)
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 20)
+                    .background(Color("RedCard"))
+                    .cornerRadius(30)
+                    .padding(.top, 40)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                    .animation(.spring(duration: 0.4), value: vm.didSendSolicitation)
+            }
         }
     }
 }
