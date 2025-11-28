@@ -12,11 +12,11 @@ struct TrainingCoordinatorView: View {
         case startTraining
         case stopwatch
         case takePhoto
-        
+        //case openCamera
     }
-    
+    //@EnvironmentObject private var detector: InstrumentDetectionViewModel
     @Environment(\.dismiss) private var dismiss
-    
+    //@State private var instrumentItem: UIImage? = nil
     @State private var path: [Route] = []
     
 
@@ -54,7 +54,8 @@ struct TrainingCoordinatorView: View {
         case .takePhoto:
             TakeThePhotoView {
                 dismiss()
-            }
+            }   // .environmentObject(detector) // << ADD THIS
+            
         }
     }
 }

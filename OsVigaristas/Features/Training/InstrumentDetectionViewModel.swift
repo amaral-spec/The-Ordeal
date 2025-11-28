@@ -8,9 +8,9 @@ class InstrumentDetectionViewModel: ObservableObject {
     
     // State properties for the viewmodel, storing the data that needs to be displayed in contentview
     // SelectedImage is optional because in the initial launch there is no image selected
-    var selectedImage: UIImage?
+    @Published var selectedImage: UIImage?
     // The string that will be updated in the UI whenever a new image is selected
-    var classificationLabel: String = "Tire uma foto do seu instrumento para validar seu treino!"
+    @Published var classificationLabel: String = "Tire uma foto do seu instrumento para validar seu treino!"
     
     // Holds the actual model
     // VNCoreMLModel is a Vision module. Vision is Apple's framework for computer vision tasks

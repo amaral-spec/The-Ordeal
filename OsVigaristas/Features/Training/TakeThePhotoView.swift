@@ -55,18 +55,7 @@ struct TakeThePhotoView: View {
                             .padding()
                     }
                 }else { //Botao para fechar a view e concluir o treino
-                    ZStack {
-//                        Rectangle()
-//                            .frame(width: 200, height: 80)
-//                            .cornerRadius(10)
-//                            .foregroundColor(.blue)
-//                        
-//                        Image(systemName: "camera")
-//                            .fontWeight(.bold)
-//                        //.frame(width: 200, height: 50)
-//                            .font(Font.largeTitle.bold())
-//                            .foregroundColor(Color.white)
-                    }
+                    
                 }
                    
             }
@@ -83,6 +72,8 @@ struct TakeThePhotoView: View {
         
         .onChange(of: instrumentItem) {
             if let image = instrumentItem{
+                detector.selectedImage = image   // <-- ADICIONE ISSO
+
                 Task {
                   detector.detect(image: image)
                 }
@@ -95,13 +86,20 @@ struct TakeThePhotoView: View {
                 isAInstrument = true
             }
         }
+        .onChange(of: instrumentItem) {
+            print("Chegou imagem:", instrumentItem != nil)
+        }
         
         .toolbar{
             ToolbarItem(placement: .confirmationAction){
                 Button("confirmar", systemImage: "checkmark"){
-                    finalizarSheet()
+                    if(isAInstrument)
+                    {
+                        finalizarSheet()
+                    }
                 }
-                .tint(Color(.blue))
+                //.tint(Color(.blue))
+                .tint(isAInstrument ? Color("AccentColor") : Color(.gray))
             }
         }
     }

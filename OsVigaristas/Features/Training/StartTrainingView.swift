@@ -29,7 +29,8 @@ struct StartTrainingView: View {
             } label:{
                 ZStack{
                     RoundedRectangle(cornerRadius: 100)
-                        .frame(width: .infinity, height: 50)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 50)
                         .padding()
                         .padding(.horizontal)
                     //.cornerSize(10)
