@@ -29,6 +29,7 @@ struct ResumeStudentView: View {
             }
             Spacer()
         }
+        .background(Color(.green/*secondarySystemBackground*/))
         .padding(.top, 12)
         .padding(.horizontal, 16)
         .navigationTitle("Resumo")

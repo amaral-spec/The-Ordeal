@@ -18,7 +18,7 @@ struct PerfilProfessorView: View {
     
     var body: some View {
         NavigationStack {
-            VStack() {
+            VStack {
                 if let image = vm.user?.profileImage {
                     Image(uiImage: image)
                         .resizable()
@@ -47,7 +47,7 @@ struct PerfilProfessorView: View {
                         RoundedRectangle(cornerRadius: 30)
                             .frame(width: 350, height: 50)
                             .padding(10)
-                            .foregroundStyle(Color("AccentColor").opacity(0.3))
+                            .foregroundStyle(Color.accentColor.opacity(0.3))
                         
                         HStack {
                             Text("Logout")
@@ -74,4 +74,8 @@ struct PerfilProfessorView: View {
             EditProfileModal(vm: vm)
         }
     }
+}
+
+#Preview {
+    PerfilProfessorView(persistenceServices: PersistenceServices.shared)
 }

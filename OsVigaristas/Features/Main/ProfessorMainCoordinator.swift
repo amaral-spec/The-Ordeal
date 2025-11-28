@@ -42,7 +42,11 @@ struct ProfessorMainCoordinatorView: View {
                 .searchable(text: $searchText)
             }
         }
-        .tint(Color(red: 0.65, green: 0.13, blue: 0.29))
+        .tint(Color.accentColor)
         //        .searchable(text: $searchText)
     }
+}
+
+#Preview {
+    ProfessorMainCoordinatorView()
 }

@@ -38,6 +38,7 @@ struct ResumeTeacherView: View {
             }
             .frame(maxHeight: .infinity, alignment: .top)
         }
+        .background(Color(.secondarySystemBackground))
         .navigationTitle("Resumo")
         .toolbarTitleDisplayMode(.inlineLarge)
         

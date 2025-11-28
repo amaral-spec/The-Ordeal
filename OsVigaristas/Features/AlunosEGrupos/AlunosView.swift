@@ -25,6 +25,7 @@ struct AlunosView: View {
         }
         .pickerStyle(.segmented)
         .padding()
+        .background(Color(.secondarySystemBackground))
         
         VStack(spacing: -15) {
             // MARK: - ALUNOS
@@ -60,6 +61,7 @@ struct AlunosView: View {
                         .padding(8)
                     }
                     .padding()
+                    .background(Color(.secondarySystemBackground))
                 }
                 
                 // MARK: - GRUPOS
@@ -146,6 +148,8 @@ struct AlunosView: View {
             }
             Spacer()
         }
+        .frame(width: 410)
+        .background(Color(.secondarySystemBackground))
     }
     
     // MARK: - Grupo Cell
@@ -184,9 +188,10 @@ struct AlunosView: View {
 #Preview {
     let services = PersistenceServices.shared
     let viewModel = AlunosViewModel(persistenceServices: services)
-    
-    AlunosView(alunoVM: viewModel) {_ in 
-        
+
+    AlunosView(alunoVM: viewModel) {_ in
+
     }
         .environmentObject(services)
 }
+

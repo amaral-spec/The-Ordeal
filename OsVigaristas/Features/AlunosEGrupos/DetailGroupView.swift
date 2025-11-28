@@ -39,7 +39,7 @@ struct DetailGroupView: View {
                         .foregroundColor(.white)
                         .padding()
                         .frame(maxWidth: 350, maxHeight: 52)
-                        .background(Color(red: 0.65, green: 0.13, blue: 0.29))
+                        .background(Color("AccentColor"))
                         .cornerRadius(50)
                 }
                 .frame(maxWidth: .infinity, minHeight: 70)
@@ -49,9 +49,10 @@ struct DetailGroupView: View {
             .navigationTitle("Detalhes do Grupo")
             .navigationBarTitleDisplayMode(.inline)
         }
+        .background(Color(.secondarySystemBackground))
     }
 }
 
-//#Preview {
-//    DetalheGrupoView()
-//}
+#Preview {
+    DetailGroupView(grupo: GroupModel(name: "Exemplo de Grupo"))
+}

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TarefasList: View {
     @ObservedObject var resumoVM: ResumeViewModel
-
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 10) {
@@ -69,3 +69,8 @@ struct TarefasList: View {
         }
     }
 }
+
+#Preview {
+    TarefasList(resumoVM: ResumeViewModel(persistenceServices: PersistenceServices(), isTeacher: false))
+}
+

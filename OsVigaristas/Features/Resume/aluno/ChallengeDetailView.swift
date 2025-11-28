@@ -91,7 +91,7 @@ struct ChallengeDetailView: View {
             }
             .padding(.top)
         }
-        .background(Color(.systemGray6))
+        .background(Color(.secondarySystemBackground))
         .navigationTitle("Tarefa do Barquinho")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $startChallenge) {

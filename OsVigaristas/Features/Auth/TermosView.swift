@@ -29,12 +29,12 @@ struct TermosView: View {
         HStack {
             ZStack {
                 RoundedRectangle(cornerRadius: 4)
-                    .stroke(Color(red: 0.65, green: 0.13, blue: 0.29))
+                    .stroke(Color.accentColor)
                     .frame(width: 24, height: 24)
                 
                 if aceite {
                     Image(systemName: "checkmark")
-                        .foregroundColor(Color(red: 0.65, green: 0.13, blue: 0.29))
+                        .foregroundColor(Color.accentColor)
                         .font(.system(size: 16, weight: .bold))
                 }
             }
@@ -56,8 +56,8 @@ struct TermosView: View {
                 .foregroundColor(.white)
                 .padding()
                 .frame(maxWidth: .infinity)
-                .background(aceite ? Color(red: 0.65, green: 0.13, blue: 0.29) : Color.gray)
-                .cornerRadius(10)
+                .background(aceite ? Color.accentColor : Color.gray)
+                .cornerRadius(50)
             
         }
         .disabled(!aceite)

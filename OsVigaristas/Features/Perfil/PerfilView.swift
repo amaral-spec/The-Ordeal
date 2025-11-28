@@ -41,7 +41,7 @@ struct PerfilView: View {
                     
                     Text("Aluno desde \(vm.user?.creationDate.formatted(date: .numeric, time: .omitted) ?? "Loading...")")
                         .font(.caption)
-                        .foregroundColor(Color("AccentColor"))
+                        .foregroundColor(Color.accentColor)
                     
                     HStack{
                         CardPerfil(texto: "\(vm.user?.points ?? 0) B")
@@ -62,7 +62,7 @@ struct PerfilView: View {
                             RoundedRectangle(cornerRadius: 30)
                                 .frame(width: 350, height: 50)
                                 .padding(10)
-                                .foregroundStyle(Color("AccentColor").opacity(0.3))
+                                .foregroundStyle(Color.accentColor.opacity(0.3))
                             
                             HStack {
                                 Text("Entrar em um grupo")
