@@ -30,7 +30,7 @@ class PersistenceServices: NSObject, ObservableObject {
         let points = record["points"] as? Int ?? 0
         let lastTask: TaskModel?
         let lastChallenge: ChallengeModel?
-        let profileImageName = record["profileImageName"] as? String ?? "partitura"
+        let profileImageName = record["profileImageName"]
         var profileImage: UIImage?
 
         // Profile image from CloudKit
@@ -38,8 +38,6 @@ class PersistenceServices: NSObject, ObservableObject {
            let url = asset.fileURL,
            let data = try? Data(contentsOf: url) {
             profileImage = UIImage(data: data)
-        } else {
-            profileImage = UIImage(named: "partitura")
         }
         
         let usuario = UserModel(from: record)
@@ -50,7 +48,7 @@ class PersistenceServices: NSObject, ObservableObject {
         usuario.points = points
         usuario.lastTask = try await fetchLatestTask(for: currentUser.id, in: db)
         usuario.lastChallenge = try await fetchLatestChallenge(for: currentUser.id, in: db)
-        usuario.profileImageName = profileImageName
+//        usuario.profileImageName = profileImageName
         usuario.profileImage = profileImage
         return usuario
     }
@@ -234,23 +232,7 @@ class PersistenceServices: NSObject, ObservableObject {
         return grupo
     }
     
-    func editGroup(recordID: CKRecord.ID, newName: String, newMembers: [CKRecord.Reference]) async throws {
-        // Note to development team: when implementing this function, you first need
-        // to call fetchGroup to populate the fields, and then pass this function
-        
-        let record = try await db.record(for: recordID)
-        
-        record["name"] = newName as CKRecordValue
-        record["members"] = newMembers as CKRecordValue
-        
-        do {
-            try await db.save(record)
-            print("Grupo editado com sucesso")
-        } catch {
-            print("Falha ao editar grupo")
-            throw error
-        }
-    }
+     
     
     func deleteGroup(_ group: GroupModel) async throws {
         // Creates references and predicates for the group
@@ -481,6 +463,50 @@ class PersistenceServices: NSObject, ObservableObject {
         print("Challenge deleted successfully: \(challenge.title)")
     }
     
+    // MARK: CRUD: Audio
+    func saveAudioRecord(
+        challengeID: CKRecord.ID,
+        userID: CKRecord.ID,
+        audioURL: URL
+    ) async throws {
+        
+        let model = AudioRecordModel(
+            audioURL: audioURL,
+            challengeID: challengeID,
+            userID: userID
+        )
+        
+        let record = model.toRecord()
+        
+        try await db.save(record)
+        
+        print("AudioRecord salvo no CloudKit!")
+    }
+
+    func fetchChallengeAudio(challengeID: CKRecord.ID) async throws -> [AudioRecordModel] {
+        
+        let ref = CKRecord.Reference(recordID: challengeID, action: .none)
+        let predicate = NSPredicate(format: "challenge == %@", ref)
+        
+        let query = CKQuery(recordType: "AudioRecord", predicate: predicate)
+        
+        var models: [AudioRecordModel] = []
+        
+        let (results, _) = try await db.records(matching: query)
+        
+        for (_, result) in results {
+            if case .success(let record) = result,
+               let audioModel = AudioRecordModel(from: record) {
+                models.append(audioModel)
+            }
+        }
+        
+        return models
+    }
+
+
+
+    
     // MARK: CRUD: Tarefa
     func createTask(_ task: TaskModel) async throws {
         let record = CKRecord(recordType: "Task", recordID: task.id)
@@ -655,5 +681,56 @@ class PersistenceServices: NSObject, ObservableObject {
         
         return (groups, challenges, tasks)
     }
+    
+    // MARK: Challenge Session
+    func startChallengeSession(challengeID: CKRecord.ID, userID: CKRecord.ID) async throws -> CKRecord.ID {
+        let record = CKRecord(recordType: "ChallengeSession")
 
+        record["challenge"] = CKRecord.Reference(recordID: challengeID, action: .none)
+        record["user"] = CKRecord.Reference(recordID: userID, action: .none)
+        record["timestamp"] = Date() as CKRecordValue
+        record["isDoing"] = true as CKRecordValue
+
+        let saved = try await db.save(record)
+        return saved.recordID
+    }
+
+    
+    func updateChallengeSession(sessionID: CKRecord.ID) async throws {
+        let record = try await db.record(for: sessionID)
+        record["timestamp"] = Date() as CKRecordValue
+        try await db.save(record)
+    }
+
+    func isChallengeLocked(challengeID: CKRecord.ID) async -> Bool {
+        let challengeRef = CKRecord.Reference(recordID: challengeID, action: .none)
+
+        // timeout de 90s
+        let limit = Date().addingTimeInterval(-90)
+
+        let predicate = NSPredicate(
+            format: "challenge == %@ AND isDoing == true AND timestamp > %@",
+            challengeRef,
+            limit as CVarArg
+        )
+
+        let query = CKQuery(recordType: "ChallengeSession", predicate: predicate)
+
+        do {
+            let (results, _) = try await db.records(matching: query)
+            return results.count > 0
+        } catch {
+            print("Error checking lock:", error)
+            return false
+        }
+    }
+
+
+    func deleteChallengeSession(sessionID: CKRecord.ID) async throws {
+        try await db.deleteRecord(withID: sessionID)
+    }
+
+    
 }
+
+

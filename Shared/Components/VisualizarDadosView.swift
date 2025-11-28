@@ -6,6 +6,8 @@
 import SwiftUI
 
 struct VisualizarDadosView: View {
+    let isChallenge: Bool
+    
     @EnvironmentObject var resumeVM: ResumeViewModel
     @State var challengeModel: ChallengeModel?
     @State var taskModel: TaskModel?
@@ -15,9 +17,10 @@ struct VisualizarDadosView: View {
     @State private var title: String
     @State private var participants: [String] = []
     
+    @State var startChallenge: Bool = false
     let onNavigate: (ResumeCoordinatorView.Route) -> Void
     
-    init(challengeModel: ChallengeModel? = nil, taskModel: TaskModel? = nil, onNavigate: @escaping (ResumeCoordinatorView.Route) -> Void) {
+    init(isChallenge: Bool, challengeModel: ChallengeModel? = nil, taskModel: TaskModel? = nil, onNavigate: @escaping (ResumeCoordinatorView.Route) -> Void) {
         if let challengeModel = challengeModel {
             self.challengeModel = challengeModel
             self.endDate = challengeModel.endDate
@@ -34,6 +37,7 @@ struct VisualizarDadosView: View {
             self.title = ""
         }
         self.onNavigate = onNavigate
+        self.isChallenge = isChallenge
     }
     
     var body: some View {
@@ -43,11 +47,15 @@ struct VisualizarDadosView: View {
                 // MARK: - CARD 1: Tempo Restante
                 VStack {
                     HStack(spacing: 12) {
-                        
-                        Image(systemName: "calendar.badge.exclamationmark")
-                            .foregroundColor(Color("BlueCard"))
-                            .font(.system(size: 35))
-                        
+                        if isChallenge {
+                            Image(systemName: "calendar.badge.exclamationmark")
+                                .foregroundColor(Color("BlueCard"))
+                                .font(.system(size: 35))
+                        } else {
+                            Image(systemName: "calendar.badge.exclamationmark")
+                                .foregroundStyle(Color("GreenCard"))
+                                .font(.system(size: 35))
+                        }
                         VStack(alignment: .leading, spacing: 4) {
                             Text("Termina em \(resumeVM.diasRestantes(ate: endDate)) dias!")
                                 .font(.title2.bold())
@@ -102,9 +110,15 @@ struct VisualizarDadosView: View {
                         onNavigate(.participants)
                     } label: {
                         HStack {
-                            Text("Participantes")
-                                .font(.title2.bold())
-                                .foregroundStyle(.black)
+                            if isChallenge {
+                                Text("Participantes")
+                                    .font(.title2.bold())
+                                    .foregroundStyle(.black)
+                            } else {
+                                Text("Resultado individual")
+                                    .font(.title2.bold())
+                                    .foregroundStyle(.black)
+                            }
                             
                             Image(systemName: "chevron.right")
                                 .foregroundStyle(Color("BlueCard"))
@@ -149,23 +163,24 @@ struct VisualizarDadosView: View {
                                     }
                                 }
                             }
-                            Button {
-                                // onNavigate(.comecarDesafio)
-                            } label: {
-                                Text("Começar desafio")
-                                    .foregroundColor(.white)
-                                    .font(.title3.bold())
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.vertical, 18)
-                                    .background(
-                                        Capsule()
-                                            .fill(Color("BlueCard"))
-                                            .shadow(color: .black.opacity(0.15), radius: 5, y: 3)
-                                    )
+                            if isChallenge {
+                                Button {
+                                    startChallenge = true
+                                } label: {
+                                    Text("Começar desafio")
+                                        .foregroundColor(.white)
+                                        .font(.title3.bold())
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.vertical, 18)
+                                        .background(
+                                            Capsule()
+                                                .fill(Color("BlueCard"))
+                                                .shadow(color: .black.opacity(0.15), radius: 5, y: 3)
+                                        )
+                                }
+                                .padding(.top, 15)
+                                .padding(.bottom, 20)
                             }
-                            .padding(.top, 15)
-                            .padding(.bottom, 20)
-
                         }
                     }
                     .frame(maxWidth: .infinity)
@@ -177,9 +192,17 @@ struct VisualizarDadosView: View {
         }
         .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)
+        .sheet(isPresented: $startChallenge) {
+            DoChallengeCoordinatorView(challengeM: challengeModel!)
+                .interactiveDismissDisabled(true)
+        }
         .task {
-            if let challengeModel {
-                await resumeVM.carregarParticipantesPorDesafio(challenge: challengeModel)
+            if isChallenge {
+                if let challengeModel {
+                    await resumeVM.carregarParticipantesPorDesafio(challenge: challengeModel)
+                }
+            } else {
+                // chamar funcao que carrega participante de cada tarefa
             }
         }
     }

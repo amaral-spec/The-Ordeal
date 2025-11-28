@@ -12,11 +12,11 @@ struct OldCard: View {
     
     var body: some View {
         ZStack {
-            Image("partitura")
-                .resizable()
-                .frame(width: 370, height: 190)
-                .cornerRadius(30)
-                .zIndex(0)
+//            Image("partitura")
+//                .resizable()
+//                .frame(width: 370, height: 190)
+//                .cornerRadius(30)
+//                .zIndex(0)
             
             HStack {
                 VStack {
@@ -54,19 +54,19 @@ struct OldCard: View {
             )
             .cornerRadius(30)
             
-            Rectangle()
-                .foregroundColor(.clear)
-                .frame(width: 370, height: 90, alignment: .bottom)
-                .background(
-                    Image("partitura")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 370, height: 95, alignment: .bottom)
-                        .clipped()
-                )
-                .frame(width: 370, height: 190, alignment: .bottom)
-                .zIndex(2)
-                .blur(radius: 25)
+//            Rectangle()
+//                .foregroundColor(.clear)
+//                .frame(width: 370, height: 90, alignment: .bottom)
+//                .background(
+//                    Image("partitura")
+//                        .resizable()
+//                        .aspectRatio(contentMode: .fill)
+//                        .frame(width: 370, height: 95, alignment: .bottom)
+//                        .clipped()
+//                )
+//                .frame(width: 370, height: 190, alignment: .bottom)
+//                .zIndex(2)
+//                .blur(radius: 25)
         }
     }
 }

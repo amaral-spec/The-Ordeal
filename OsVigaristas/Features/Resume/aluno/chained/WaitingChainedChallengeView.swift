@@ -9,6 +9,8 @@ import SwiftUI
 
 struct WaitingChainedChallengeView: View {
 
+    @EnvironmentObject var doChallengeVM: DoChallengeViewModel
+    @EnvironmentObject var persistenceServices: PersistenceServices
     let onNavigation: (DoChallengeCoordinatorView.Route) -> Void
     
 
@@ -23,22 +25,32 @@ struct WaitingChainedChallengeView: View {
             )
             Spacer()
         }
-        .onAppear() {
-            Task {
-                try? await Task.sleep(nanoseconds: 1_000_000_000)
-                
-                let integerRandom = Int.random(in: 0..<2)
-                
-                onNavigation(.initialChained)
-                
-//                if (integerRandom == 1) {
-//                    onNavigation(.initialChained)
-//                } else {
-//                    onNavigation(.receiveChained)
-//                }
-                
+        .task {
+            guard let challenge = doChallengeVM.challengeM else { return }
+
+            // 1. Verifica se está livre
+            let locked = await persistenceServices.isChallengeLocked(challengeID: challenge.id)
+
+            if locked == false {
+                // 2. Desafio está livre → iniciar sessão
+                await doChallengeVM.startChallenge()
+
+                // 3. Verificar se há respostas anteriores
+                let hasNoStudentAudios = challenge.studentAudios.isEmpty
+
+                if hasNoStudentAudios {
+                    // Caso NÃO tenha respostas → vai para InitialChained
+                    onNavigation(.initialChained)
+                } else {
+                    // Caso JÁ tenha respostas → vai para ReceivedAudio
+                    onNavigation(.receiveChained)
+                }
+
+            } else {
+                print("Desafio ocupado, aguardando...")
             }
         }
+
         .navigationTitle("Encadeia")
         .navigationBarTitleDisplayMode(.inline)
     }
