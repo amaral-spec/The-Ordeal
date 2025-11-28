@@ -9,6 +9,7 @@ import SwiftUI
 import Foundation
 
 struct TarefasList: View {
+    @State private var criarTarefa = false
     @ObservedObject var resumoVM: ResumeViewModel
     let onNavigate: (ResumeCoordinatorView.Route) -> Void
 
@@ -43,6 +44,21 @@ struct TarefasList: View {
         .navigationBarTitleDisplayMode(.inline)
         .task {
             await resumoVM.carregarTarefas()
+        }
+        .toolbar(){
+            if(resumoVM.isTeacher){
+                ToolbarItem(placement: .confirmationAction) {
+                    Button {
+                        criarTarefa = true
+                    } label: {
+                        Image(systemName: "plus")
+                            .foregroundStyle(Color(.black))
+                    }
+                }
+            }
+        }
+        .sheet(isPresented: $criarTarefa) {
+            CriarTarefaView(numTask: .constant(0))
         }
     }
 }

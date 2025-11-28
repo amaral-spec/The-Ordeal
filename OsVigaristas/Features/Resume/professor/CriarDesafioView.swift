@@ -54,12 +54,6 @@ struct CriarDesafioView: View {
                     .pickerStyle(.navigationLink)
                 }
                 Section {
-                    LabeledContent("Recompensa: \(moedas) moedas") {
-                        Stepper("", value: $moedas, in: 0...50)
-                            .labelsHidden()
-                    }
-                }
-                Section {
                     DatePicker("Data de início", selection: $selectedDate)
                         .datePickerStyle(.compact)
                 }
@@ -79,6 +73,7 @@ struct CriarDesafioView: View {
                         dismiss()
                     } label: {
                         Label("Cancelar", systemImage: "xmark")
+                            .foregroundStyle(Color("BlueCard"))
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
@@ -95,7 +90,7 @@ struct CriarDesafioView: View {
                                 title: desafioNome,
                                 description: desafioDescricao,
                                 group: groupRef,
-                                reward: moedas,
+                                reward: 0,
                                 startDate: selectedDate,
                                 endDate: Calendar.current.date(byAdding: .day, value: 7, to: selectedDate)!
                             )
@@ -145,6 +140,7 @@ struct CriarDesafioView: View {
                         }
                     } label: {
                         Label("Adicionar", systemImage: "checkmark")
+                            .background(Color("BlueCard"))
                     }
                     .disabled(desafioNome.isEmpty || selectedGroupID == nil || isSaving)
                 }

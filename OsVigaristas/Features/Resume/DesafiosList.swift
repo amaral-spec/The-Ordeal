@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DesafiosList: View {
-    
+    @State private var criarDesafio = false
     @ObservedObject var resumoVM: ResumeViewModel
     let onNavigate: (ResumeCoordinatorView.Route) -> Void
     
@@ -46,6 +46,21 @@ struct DesafiosList: View {
         .navigationBarTitleDisplayMode(.inline)
         .task {
             await resumoVM.carregarDesafios()
+        }
+        .toolbar(){
+            if(resumoVM.isTeacher){
+                ToolbarItem(placement: .confirmationAction) {
+                    Button {
+                        criarDesafio = true
+                    } label: {
+                        Image(systemName: "plus")
+                            .foregroundStyle(Color(.black))
+                    }
+                }
+            }
+        }
+        .sheet(isPresented: $criarDesafio) {
+            CriarDesafioView(numChallenge: .constant(0))
         }
     }
 }

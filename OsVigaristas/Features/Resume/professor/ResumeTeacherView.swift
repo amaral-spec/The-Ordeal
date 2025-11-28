@@ -22,12 +22,21 @@ struct ResumeTeacherView: View {
                 .padding(.horizontal)
                 .padding(.top)
                 .onTapGesture {
-                    onNavigate(.listChallenge)
+                    if resumeVM.challenges.isEmpty {
+                        criarDesafio = true
+                    } else {
+                        onNavigate(.listChallenge)
+                    }
                 }
+            
             BigTaskCardView(resumoVM: resumeVM)
                 .padding(.horizontal)
                 .onTapGesture {
-                    onNavigate(.listTask)
+                    if resumeVM.tasks.isEmpty {
+                        criarTarefa = true
+                    } else {
+                        onNavigate(.listTask)
+                    }
                 }
 
             Spacer()
