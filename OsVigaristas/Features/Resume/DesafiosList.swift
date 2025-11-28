@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DesafiosList: View {
-    
+    @State private var criarDesafio = false
     @ObservedObject var resumoVM: ResumeViewModel
     let onNavigate: (ResumeCoordinatorView.Route) -> Void
     
@@ -16,20 +16,27 @@ struct DesafiosList: View {
         ScrollView {
             VStack(spacing: 10) {
                 ForEach(resumoVM.challenges) { desafio in
+                    let groupName = resumoVM.challengeGroups[desafio] ?? "Grupo não encontrado"
                     
-                    if desafio.endDate < Date(){
-                        ListCard(title: desafio.title, subtitle: "Resultado", image: GrayChallengeImage())
-                            .onTapGesture {
-                                resumoVM.members = []
-                                onNavigate(.detailChallenge(desafio))
-                            }
+                    if(resumoVM.isTeacher){
+                        if(desafio.endDate < Date()){
+                            ListCard(title: desafio.title, subtitle: "Resultado", image: GrayChallengeImage())
+                                .onTapGesture {
+                                    onNavigate(.detailChallenge(desafio))
+                                }
+                            
+                        } else {
+                            ListCard(title: desafio.title, subtitle: groupName, image: ChallengeImage())
+                                .onTapGesture {
+                                    onNavigate(.detailChallenge(desafio))
+                                }
+                        }
                     } else {
                         let diasRestantes = Calendar.current.dateComponents([.day], from: Date(), to: desafio.endDate).day ?? 0
-                        ListCard(title: desafio.title, subtitle: "Faltam \(diasRestantes) dias!", image: ChallengeImage())
-                            .onTapGesture {
-                                resumoVM.members = []
-                                onNavigate(.detailChallenge(desafio))
-                            }
+                        
+                        if(desafio.endDate >= Date()){
+                            ListCard(title: desafio.title, subtitle: "Faltam \(diasRestantes) dias!", image: ChallengeImage())
+                        }
                     }
                 }
             }
@@ -40,6 +47,21 @@ struct DesafiosList: View {
         .navigationBarTitleDisplayMode(.inline)
         .task {
             await resumoVM.loadChallenges()
+        }
+        .toolbar(){
+            if(resumoVM.isTeacher){
+                ToolbarItem(placement: .confirmationAction) {
+                    Button {
+                        criarDesafio = true
+                    } label: {
+                        Image(systemName: "plus")
+                            .foregroundStyle(Color(.black))
+                    }
+                }
+            }
+        }
+        .sheet(isPresented: $criarDesafio) {
+            CriarDesafioView(numChallenge: .constant(0))
         }
     }
 }
