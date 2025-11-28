@@ -27,14 +27,15 @@ struct PerfilView: View {
                             .frame(width: 150, height: 150)
                             .clipShape(Circle())
                             .padding(.top, 30)
-                    } else {
-                        Image("partitura")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 150, height: 150)
-                            .clipShape(Circle())
-                            .padding(.top, 30)
                     }
+//                    } else {
+//                        Image("partitura")
+//                            .resizable()
+//                            .scaledToFill()
+//                            .frame(width: 150, height: 150)
+//                            .clipShape(Circle())
+//                            .padding(.top, 30)
+//                    }
                     
                     Text(vm.user?.name ?? "Loading...")
                         .font(.title)

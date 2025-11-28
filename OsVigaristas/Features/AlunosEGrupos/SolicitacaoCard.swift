@@ -13,10 +13,11 @@ struct SolicitacaoCard: View {
                 if let uiImage = user.profileImage {
                     Image(uiImage: uiImage)
                         .resizable()
-                } else {
-                    Image("partitura")
-                        .resizable()
                 }
+//                } else {
+//                    Image("partitura")
+//                        .resizable()
+//                }
             }
             .scaledToFill()
             .frame(width: 60, height: 60)

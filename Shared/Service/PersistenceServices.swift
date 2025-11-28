@@ -30,7 +30,7 @@ class PersistenceServices: NSObject, ObservableObject {
         let points = record["points"] as? Int ?? 0
         let lastTask: TaskModel?
         let lastChallenge: ChallengeModel?
-        let profileImageName = record["profileImageName"] as? String ?? "partitura"
+        let profileImageName = record["profileImageName"]
         var profileImage: UIImage?
 
         // Profile image from CloudKit
@@ -38,8 +38,6 @@ class PersistenceServices: NSObject, ObservableObject {
            let url = asset.fileURL,
            let data = try? Data(contentsOf: url) {
             profileImage = UIImage(data: data)
-        } else {
-            profileImage = UIImage(named: "partitura")
         }
         
         let usuario = UserModel(from: record)
@@ -50,7 +48,7 @@ class PersistenceServices: NSObject, ObservableObject {
         usuario.points = points
         usuario.lastTask = try await fetchLatestTask(for: currentUser.id, in: db)
         usuario.lastChallenge = try await fetchLatestChallenge(for: currentUser.id, in: db)
-        usuario.profileImageName = profileImageName
+//        usuario.profileImageName = profileImageName
         usuario.profileImage = profileImage
         return usuario
     }

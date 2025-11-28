@@ -18,10 +18,11 @@ struct AlunosViewCard: View {
                 if let uiImage = aluno.profileImage {
                     Image(uiImage: uiImage)
                         .resizable()
-                } else {
-                    Image("partitura")
-                        .resizable()
                 }
+//                } else {
+//                    Image("partitura")
+//                        .resizable()
+//                }
             }
             .scaledToFill()
             .frame(width: 70, height: 70)
