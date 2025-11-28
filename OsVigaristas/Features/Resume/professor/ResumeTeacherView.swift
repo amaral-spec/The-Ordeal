@@ -1,4 +1,3 @@
-
 import Foundation
 import SwiftUI
 
@@ -41,6 +40,7 @@ struct ResumeTeacherView: View {
 
             Spacer()
         }
+        .background(Color(.secondarySystemBackground))
         .navigationTitle("Início")
         .toolbarTitleDisplayMode(.inlineLarge)
         .task {

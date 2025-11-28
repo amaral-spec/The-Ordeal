@@ -12,14 +12,10 @@ struct SignUpView: View {
         ScrollView {
             VStack {
                 ZStack {
-                    Circle()
-                        .foregroundStyle(Color("BlueCard"))
-                        .frame(height: 130)
+                    Image("Logo")
+                        .scaleEffect(0.5)
+                        .frame(height: 280)
                         .padding()
-                    
-                    Image(systemName: "music.note")
-                        .font(.system(size: 70))
-                        .foregroundStyle(.white)
                 }
                 
                 Text("Sing up")
@@ -61,7 +57,7 @@ struct SignUpView: View {
                         .foregroundColor(.white)
                         .padding()
                         .frame(maxWidth: .infinity)
-                        .background(Color("BlueCard"))
+                        .background(Color.accentColor)
                         .cornerRadius(50)
                 }
                 .padding(.horizontal)

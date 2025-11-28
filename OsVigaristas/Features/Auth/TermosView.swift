@@ -15,14 +15,10 @@ struct TermosView: View {
     var body: some View {
         VStack {
             ZStack {
-                Circle()
-                    .foregroundStyle(Color("BlueCard"))
-                    .frame(height: 130)
+                Image("Logo")
+                    .scaleEffect(0.5)
+                    .frame(height: 150)
                     .padding()
-                
-                Image(systemName: "music.note")
-                    .font(.system(size: 70))
-                    .foregroundStyle(.white)
             }
         }
         
@@ -33,12 +29,12 @@ struct TermosView: View {
         HStack {
             ZStack {
                 RoundedRectangle(cornerRadius: 4)
-                    .stroke(Color("BlueCard"))
+                    .stroke(Color.accentColor)
                     .frame(width: 24, height: 24)
                 
                 if aceite {
                     Image(systemName: "checkmark")
-                        .foregroundColor(Color("BlueCard"))
+                        .foregroundColor(Color.accentColor)
                         .font(.system(size: 16, weight: .bold))
                 }
             }
@@ -60,8 +56,8 @@ struct TermosView: View {
                 .foregroundColor(.white)
                 .padding()
                 .frame(maxWidth: .infinity)
-                .background(aceite ? Color("BlueCard") : Color.gray)
-                .cornerRadius(10)
+                .background(aceite ? Color.accentColor : Color.gray)
+                .cornerRadius(50)
             
         }
         .disabled(!aceite)

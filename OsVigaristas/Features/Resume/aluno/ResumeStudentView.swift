@@ -31,6 +31,8 @@ struct ResumeStudentView: View {
         }
         .padding(.top, 12)
         .padding(.horizontal, 16)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(.secondarySystemBackground).ignoresSafeArea())
         .navigationTitle("Resumo")
         .toolbarTitleDisplayMode(.inlineLarge)
         .toolbar {
@@ -39,4 +41,14 @@ struct ResumeStudentView: View {
 
     }
     
+}
+
+#Preview {
+    ResumeStudentView { _ in }
+        .environmentObject(
+            ResumeViewModel(
+                persistenceServices: PersistenceServices(),
+                isTeacher: false
+            )
+        )
 }
