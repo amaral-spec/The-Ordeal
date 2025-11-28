@@ -40,7 +40,11 @@ struct StudentMainCoordinatorView: View {
                 .searchable(text: $searchText)
             }
         }
-        .tint(Color("BlueCard"))
+        .tint(Color.accentColor)
 //        .searchable(text: $searchText)
     }
+}
+
+#Preview {
+    StudentMainCoordinatorView()
 }
