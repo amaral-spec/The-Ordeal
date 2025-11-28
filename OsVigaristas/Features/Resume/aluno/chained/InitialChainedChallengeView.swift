@@ -26,7 +26,6 @@ struct InitialChainedChallengeView: View {
             Spacer()
             Button {
                 if rec.isRecording {
-                    doChallengeVM.alreadyREC = true
                     rec.stop()
                     onNavigation(.recordChained)
                 } else {

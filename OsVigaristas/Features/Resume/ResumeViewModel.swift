@@ -18,6 +18,7 @@ final class ResumeViewModel: ObservableObject {
     @Published var groupsByID: [CKRecord.ID : GroupModel] = [:]
     @Published private var isChallengeEmpty: Bool = true
     @Published private var isTaskEmpty: Bool = true
+    @Published private var isMemberEmpty: Bool = true
     
     private let persistenceServices: PersistenceServices
     
@@ -28,7 +29,7 @@ final class ResumeViewModel: ObservableObject {
 
     func carregarDesafios() async {
         var challengeGroupsDict: [ChallengeModel : String] = [:]
-        
+
         do {
             let desafiosCarregados = try await persistenceServices.fetchAllChallenges()
             
@@ -63,6 +64,19 @@ final class ResumeViewModel: ObservableObject {
             print("\(tarefasCarregadas.count) tarefas carregadas")
         } catch {
             print("Erro ao carregar tarefas: \(error.localizedDescription)")
+        }
+    }
+    
+    func carregarParticipantesPorDesafio(challenge: ChallengeModel) async {
+        do {
+            let participantesCarregados = try await persistenceServices.fetchChallengeMembers(recordReference: challenge.group!)
+            await MainActor.run {
+                members = participantesCarregados
+                isMemberEmpty = participantesCarregados.isEmpty
+            }
+            print("\(participantesCarregados.count) participantes carregados")
+        } catch {
+            print("Erro ao carregar participantes: \(error.localizedDescription)")
         }
     }
     

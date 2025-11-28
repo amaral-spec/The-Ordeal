@@ -14,18 +14,13 @@ struct AlunosViewCard: View {
     
     var body: some View {
         VStack {
-            Group {
-                if let uiImage = aluno.profileImage {
-                    Image(uiImage: uiImage)
-                        .resizable()
-                } else {
-                    Image("partitura")
-                        .resizable()
-                }
+            if let uiImage = aluno.profileImage {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 70, height: 70)
+                    .clipShape(Circle())
             }
-            .scaledToFill()
-            .frame(width: 70, height: 70)
-            .clipShape(Circle())
             
             Text(aluno.name)
                 .font(.caption)

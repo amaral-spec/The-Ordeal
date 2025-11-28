@@ -26,14 +26,16 @@ struct PerfilProfessorView: View {
                         .frame(width: 150, height: 150)
                         .clipShape(Circle())
                         .padding()
-                } else {
-                    Image("partitura")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 150, height: 150)
-                        .clipShape(Circle())
-                        .padding()
                 }
+//                } else {
+                    
+//                    Image("partitura")
+//                        .resizable()
+//                        .scaledToFill()
+//                        .frame(width: 150, height: 150)
+//                        .clipShape(Circle())
+//                        .padding()
+//                }
                 
                 Text(vm.user?.name ?? "Loading...")
                     .font(.title)

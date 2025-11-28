@@ -46,7 +46,7 @@ struct DesafiosList: View {
         .navigationTitle("Desafios")
         .navigationBarTitleDisplayMode(.inline)
         .task {
-            await resumoVM.carregarDesafios()
+            await resumoVM.loadChallenges()
         }
         .toolbar(){
             if(resumoVM.isTeacher){
