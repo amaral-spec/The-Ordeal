@@ -36,22 +36,46 @@ struct PerfilView: View {
                             .padding(.top, 30)
                     }
                     
-                    Text(vm.user?.name ?? "Loading...")
-                        .font(.title)
+//                    VStack(spacing: -20) {
+                        Text(vm.user?.name ?? "Loading...")
+                        .font(.title.bold())
+                            .padding()
+                        
+//                        Text("Aluno desde \(vm.user?.creationDate.formatted(date: .numeric, time: .omitted) ?? "Loading...")")
+//                            .font(.callout)
+//                            .foregroundStyle(Color.accentColor)
+//                            .padding()
+//                    }
                     
-                    Text("Aluno desde \(vm.user?.creationDate.formatted(date: .numeric, time: .omitted) ?? "Loading...")")
-                        .font(.caption)
-                        .foregroundColor(Color.accentColor)
+//                    HStack{
+//                        CardPerfil(texto: "\(vm.user?.points ?? 0) B")
+//                        CardPerfil(texto: "\(vm.user?.streak ?? 0) F")
+//                    }
+//                    .padding(.top, 20)
                     
-                    HStack{
-                        CardPerfil(texto: "\(vm.user?.points ?? 0) B")
-                        CardPerfil(texto: "\(vm.user?.streak ?? 0) F")
-                    }
-                    .padding(.top, 20)
-                    
-                    HStack{
-                        CardPerfil(texto: "Última tarefa: \n\(vm.user?.lastTask?.endDate.formatted(date: .numeric, time: .omitted) ?? "No data")")
-                        CardPerfil(texto: "Último desafio: \n\(vm.user?.lastChallenge?.endDate.formatted(date: .numeric, time: .omitted) ?? "No data")")
+                    VStack(spacing: -10) {
+                        ZStack{
+                            RoundedRectangle(cornerRadius: 45)
+                                .frame(width: .infinity, height: 75)
+                                .foregroundStyle(.white)
+                            
+                            HStack {
+                                Image(systemName: "flame.fill")
+                                    .font(.largeTitle)
+                                    .foregroundStyle(Color.accentColor)
+                                
+                                Text("\(vm.user?.streak ?? 0) dias de ofensiva!")
+                                    .font(.title2)
+                            }
+                            .padding(.trailing, 90)
+                        }
+                        .padding(25)
+                        
+                        HStack(spacing: 15) {
+                            CardPerfil(texto: "Última tarefa: \n\(vm.user?.lastTask?.endDate.formatted(date: .numeric, time: .omitted) ?? "No data")")
+                            CardPerfil(texto: "Último desafio: \n\(vm.user?.lastChallenge?.endDate.formatted(date: .numeric, time: .omitted) ?? "No data")")
+                        }
+                        .padding([.horizontal], 25)
                     }
                     
                     Button {
@@ -102,10 +126,16 @@ struct PerfilView: View {
                         }
                     }
                     
-                    Button(action:{}){
-                        Row(texto: "Histórico de tarefas")
+                    VStack(spacing: 20) {
+                        Button(action:{}){
+                            Row(texto: "Meus grupos")
+                        }
+                        .buttonStyle(.plain)
+                        Button(action:{}){
+                            Row(texto: "Histórico de tarefas")
+                        }
+                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(.plain)
                     
                     Button {
                         authVM.logout()
@@ -114,16 +144,19 @@ struct PerfilView: View {
                             RoundedRectangle(cornerRadius: 30)
                                 .frame(width: 350, height: 50)
                                 .padding(10)
-                                .foregroundStyle(Color("AccentColor").opacity(0.3))
+                                .foregroundStyle(Color.white)
                             
                             HStack {
                                 Text("Sair")
-                                    .foregroundColor(.black)
+                                    .foregroundColor(.red)
                             }
                             .padding(.horizontal, 40)
                         }
                     }
+                    Spacer()
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color(.secondarySystemBackground).ignoresSafeArea())
             }
             .navigationTitle("Perfil")
             .toolbarTitleDisplayMode(.inlineLarge)
@@ -173,10 +206,10 @@ struct CardPerfil: View {
     @State var texto: String
     var body: some View {
         ZStack{
-            RoundedRectangle(cornerRadius: 30)
-                .frame(width: 150, height: 100)
-                .padding(10)
-                .foregroundStyle(.gray.opacity(0.3))
+            RoundedRectangle(cornerRadius: 25)
+                .frame(width: .infinity, height: 100)
+//                .padding(5)
+                .foregroundStyle(.white)
             
             Text(texto)
                 .multilineTextAlignment(.center)
@@ -189,9 +222,9 @@ struct Row: View {
     var body: some View {
         ZStack{
             RoundedRectangle(cornerRadius: 30)
-                .frame(width: 350, height: 50)
-                .padding(10)
-                .foregroundStyle(.gray.opacity(0.3))
+                .frame(width: .infinity, height: 50)
+                .padding([.horizontal], 25)
+                .foregroundStyle(.white)
             
             HStack {
                 Text(texto)
@@ -200,9 +233,12 @@ struct Row: View {
                 Image(systemName: "chevron.right")
                     .font(.caption)
                     .foregroundColor(.secondary)
-            }.padding(.horizontal, 40)
+            }
+            .padding(.horizontal, 40)
         }
     }
 }
 
-
+#Preview {
+    PerfilView(persistenceServices: PersistenceServices.shared)
+}

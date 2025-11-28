@@ -39,7 +39,7 @@ struct DetailGroupView: View {
                         .foregroundColor(.white)
                         .padding()
                         .frame(maxWidth: 350, maxHeight: 52)
-                        .background(Color("AccentColor"))
+                        .background(Color.accentColor)
                         .cornerRadius(50)
                 }
                 .frame(maxWidth: .infinity, minHeight: 70)
