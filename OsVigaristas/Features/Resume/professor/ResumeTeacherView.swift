@@ -16,7 +16,7 @@ struct ResumeTeacherView: View {
     @State private var selectedMode: Mode = .Desafio
     
     var body: some View {
-        VStack(spacing: 15) {
+        ScrollView() {
             ChallengeCardView(resumoVM: resumeVM)
                 .padding(.horizontal)
                 .padding(.top)
@@ -27,6 +27,7 @@ struct ResumeTeacherView: View {
                         onNavigate(.listChallenge)
                     }
                 }
+                .padding(.bottom, 15)
             
             BigTaskCardView(resumoVM: resumeVM)
                 .padding(.horizontal)
@@ -37,6 +38,7 @@ struct ResumeTeacherView: View {
                         onNavigate(.listTask)
                     }
                 }
+            
 
             Spacer()
         }
@@ -47,15 +49,10 @@ struct ResumeTeacherView: View {
             await resumeVM.carregarDesafios()
             await resumeVM.carregarTarefas()
         }
-        
-        
         // MARK: - Pull-to-refresh
         .refreshable {
-            if selectedMode == .Desafio {
-                await resumeVM.carregarDesafios()
-            } else {
-                await resumeVM.carregarTarefas()
-            }
+            await resumeVM.carregarDesafios()
+            await resumeVM.carregarTarefas()
         }
         
         
