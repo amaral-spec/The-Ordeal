@@ -11,8 +11,8 @@ struct ListaParticipantesView: View {
     let isTeacher: Bool
     
     @EnvironmentObject var resumeVM: ResumeViewModel
-    @StateObject var player: MiniPlayer
-
+    @StateObject var player: MiniPlayer = MiniPlayer()
+    
     @State var challengeModel: ChallengeModel?
     
     var body: some View {
@@ -20,7 +20,7 @@ struct ListaParticipantesView: View {
             VStack(alignment: .leading, spacing: 0) {
                 ForEach(resumeVM.members.indices, id: \.self) { index in
                     let member = resumeVM.members[index]
-
+                    
                     HStack {
                         if let uiImage = member.profileImage {
                             Image(uiImage: uiImage)
@@ -35,20 +35,28 @@ struct ListaParticipantesView: View {
                                 .frame(width: 70, height: 70)
                                 .foregroundColor(.gray)
                         }
-
+                        
                         Text(member.name)
                             .padding(.horizontal)
                             .font(.title2)
                             .foregroundColor(.black.opacity(0.7))
-
+                        
                         Spacer()
                     }
                     .padding(.vertical, 8)
                     
                     if isTeacher {
-                        //MARK: - AQUI LUD
+                        if let audio = resumeVM.audioFor(member: member) {
+                            MemberAudioRow(member: member, audio: audio)
+                        } else {
+                            // Sem áudio
+                            Text("Nenhum áudio enviado")
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                                .padding(.leading, 20)
+                        }
                     }
-
+                    
                     if index <= resumeVM.members.count - 1 {
                         Rectangle()
                             .frame(height: 1)
@@ -60,6 +68,13 @@ struct ListaParticipantesView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
             .padding(.horizontal, 10)
+        }
+        .refreshable {
+            if let challengeModel {
+                await resumeVM.carregarParticipantesPorDesafio(challenge: challengeModel)
+                await resumeVM.carregarAudios(challengeID: challengeModel.id)
+                print("oiii")
+            }
         }
         .navigationTitle("Participantes")
         .task {

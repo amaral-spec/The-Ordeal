@@ -6,13 +6,11 @@ struct ResumeCoordinatorView: View {
         case listChallenge
         case detailChallenge(ChallengeModel)
         case detailTask(TaskModel)
-        case participants
+        case participants(ChallengeModel)
         case listTask
     }
     
     @EnvironmentObject var persistenceServices: PersistenceServices
-
-    
 
     @State private var path: [Route] = []
     @StateObject private var resumeVM: ResumeViewModel
@@ -78,8 +76,8 @@ struct ResumeCoordinatorView: View {
                     }
                         .environmentObject(resumeVM)
                     
-                case .participants:
-                    ListaParticipantesView(isTeacher: true)
+                case .participants(let challenge):
+                    ListaParticipantesView(isTeacher: true, challengeModel: challenge)
                         .environmentObject(resumeVM)
                 }
             }

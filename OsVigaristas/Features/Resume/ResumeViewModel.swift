@@ -101,3 +101,11 @@ final class ResumeViewModel: ObservableObject {
         }
     }
 }
+
+extension ResumeViewModel {
+    func audioFor(member: UserModel) -> AudioRecordModel? {
+        audios.first { audio in
+            audio.userRef.recordID == member.id
+        }
+    }
+}

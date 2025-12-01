@@ -71,8 +71,8 @@ struct DoChallengeCoordinatorView: View {
             if #available(iOS 26.0, *) {
                 Button("Finalizar", role: .confirm) {
                     Task {
-                        if let lastURL = doChallengeVM.recordings.last {
-                            await doChallengeVM.submitStudentAudio(url: lastURL)
+                        if let firstURL = doChallengeVM.recordings.first {
+                            await doChallengeVM.submitStudentAudio(url: firstURL)
                         }
                         await doChallengeVM.outChallenge()
                         dismiss()

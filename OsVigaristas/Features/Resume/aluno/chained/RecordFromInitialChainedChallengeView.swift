@@ -16,7 +16,7 @@ struct RecordFromInitialChainedChallengeView: View {
     @EnvironmentObject var player: MiniPlayer
     
     // Use a computed property so we can safely access the environment object.
-    private var lastURL: URL? {
+    private var firstURL: URL? {
         doChallengeVM.recordings.first
     }
     
@@ -30,16 +30,16 @@ struct RecordFromInitialChainedChallengeView: View {
             
             HStack {
                 Button {
-                    if player.playingURL == lastURL && player.isPlaying {
+                    if player.playingURL == firstURL && player.isPlaying {
                         player.pause()
                     } else {
-                        player.play(lastURL)
+                        player.play(firstURL)
                     }
                 } label: {
-                    Image(systemName: (player.playingURL == lastURL && player.isPlaying) ? "pause.fill" : "play.fill")
+                    Image(systemName: (player.playingURL == firstURL && player.isPlaying) ? "pause.fill" : "play.fill")
                 }
                 .buttonStyle(.plain)
-                .disabled(lastURL == nil)
+                .disabled(firstURL == nil)
                 
                 PlaybackWaveformView(progress: player.progress)
             }
