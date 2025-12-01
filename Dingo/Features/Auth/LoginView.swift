@@ -15,10 +15,13 @@ struct LoginView: View {
                     .frame(height: 150)
                     .padding()
             }
-            
-            Text("Login or sing up")
+            Text("Seja bem vindo ao Dingo\n")
                 .font(.system(size: 30))
-                .padding(.vertical, 90)
+                .padding(.vertical, 16)
+            
+//            Text("Login ou registre-se")
+//                .font(.system(size: 26))
+//                .padding(.top, 60)
             
             SignInWithAppleButton(
                 .signIn,
