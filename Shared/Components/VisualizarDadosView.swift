@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import CloudKit
 
 struct VisualizarDadosView: View {
     let isChallenge: Bool
@@ -44,6 +45,7 @@ struct VisualizarDadosView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 
+                
                 // MARK: - CARD 1: Tempo Restante
                 VStack {
                     HStack(spacing: 12) {
@@ -51,15 +53,30 @@ struct VisualizarDadosView: View {
                             Image(systemName: "calendar.badge.exclamationmark")
                                 .foregroundColor(Color("BlueCard"))
                                 .font(.system(size: 35))
+                            
+                            if challengeModel?.endDate ?? Date() < Date() {
+                                Text("Terminou!")
+                                    .font(.title2.bold())
+                                    .foregroundColor(.black)
+                            } else {
+                                Text("Termina em \(resumeVM.diasRestantes(ate: endDate)) dias!")
+                                    .font(.title2.bold())
+                                    .foregroundColor(.black)
+                            }
                         } else {
                             Image(systemName: "calendar.badge.exclamationmark")
                                 .foregroundStyle(Color("GreenCard"))
                                 .font(.system(size: 35))
-                        }
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Termina em \(resumeVM.diasRestantes(ate: endDate)) dias!")
-                                .font(.title2.bold())
-                                .foregroundColor(.black)
+                            
+                            if taskModel?.endDate ?? Date() < Date() {
+                                Text("Terminou!")
+                                    .font(.title2.bold())
+                                    .foregroundColor(.black)
+                            } else {
+                                Text("Termina em \(resumeVM.diasRestantes(ate: endDate)) dias!")
+                                    .font(.title2.bold())
+                                    .foregroundColor(.black)
+                            }
                         }
                         
                         Spacer()
@@ -74,10 +91,12 @@ struct VisualizarDadosView: View {
                 )
                 
                 
+                
+                
                 // MARK: - CARD 2: Descrição
                 VStack(alignment: .leading, spacing: 12) {
                     
-                    Text("Dados do Desafio")
+                    Text(isChallenge ? "Dados do desafio" : "Dados da tarefa")
                         .font(.title2.bold())
                     
                     VStack(alignment: .leading, spacing: 12) {
@@ -102,25 +121,21 @@ struct VisualizarDadosView: View {
                             .shadow(color: .black.opacity(0.1), radius: 6, y: 3)
                     )
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                
                 
                 
                 // MARK: - CARD 3: Participantes
                 VStack(alignment: .leading, spacing: 12) {
                     Button {
                         if let challengeModel = challengeModel {
-                            onNavigate(.participants(challengeModel))
+                            onNavigate(.participantsChallenge(challengeModel))
                         }
                     } label: {
                         HStack {
-                            if isChallenge {
-                                Text("Participantes")
-                                    .font(.title2.bold())
-                                    .foregroundStyle(.black)
-                            } else {
-                                Text("Resultado individual")
-                                    .font(.title2.bold())
-                                    .foregroundStyle(.black)
-                            }
+                            Text(isChallenge ? "Participantes" : "Resultado individual")
+                                .font(.title2.bold())
+                                .foregroundStyle(.black)
                             
                             Image(systemName: "chevron.right")
                                 .foregroundStyle(Color("BlueCard"))
@@ -129,42 +144,68 @@ struct VisualizarDadosView: View {
                         }
                     }
                     
+                    
                     VStack(alignment: .leading) {
                         
-                        if resumeVM.members.isEmpty {
+                        if resumeVM.members.isEmpty && isChallenge || (!isChallenge && resumeVM.alunosTarefas.isEmpty) {
+                            
                             HStack {
                                 Spacer()
                                 ProgressView()
                                     .progressViewStyle(CircularProgressViewStyle())
                                     .scaleEffect(1.4)
+                                    .tint(
+                                        isChallenge ? Color("BlueCard") : Color("GreenCard")
+                                    )
                                 Spacer()
                             }
                             .padding(.vertical, 20)
                             
                         } else {
+                            
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(spacing: 20) {
                                     
-                                    ForEach(resumeVM.members) { member in
-                                        VStack(spacing: 8) {
-                                            
-                                            if let uiImage = member.profileImage {
-                                                Image(uiImage: uiImage)
-                                                    .resizable()
-                                                    .scaledToFill()
-                                                    .frame(width: 70, height: 70)
-                                                    .clipShape(Circle())
-                                            } else {
-                                                Image(systemName: "person.crop.circle.fill")
-                                                    .resizable()
-                                                    .scaledToFit()
-                                                    .frame(width: 70, height: 70)
-                                                    .foregroundColor(.gray)
+                                    if isChallenge {
+                                        ForEach(resumeVM.members) { member in
+                                            VStack {
+                                                if let uiImage = member.profileImage {
+                                                    Image(uiImage: uiImage)
+                                                        .resizable()
+                                                        .scaledToFill()
+                                                        .frame(width: 70, height: 70)
+                                                        .clipShape(Circle())
+                                                } else {
+                                                    Image(systemName: "person.crop.circle.fill")
+                                                        .resizable()
+                                                        .scaledToFit()
+                                                        .frame(width: 70, height: 70)
+                                                        .foregroundColor(.gray)
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        ForEach(resumeVM.alunosTarefas) { alunoTarefa in
+                                            VStack {
+                                                if let uiImage = alunoTarefa.profileImage {
+                                                    Image(uiImage: uiImage)
+                                                        .resizable()
+                                                        .scaledToFill()
+                                                        .frame(width: 70, height: 70)
+                                                        .clipShape(Circle())
+                                                } else {
+                                                    Image(systemName: "person.crop.circle.fill")
+                                                        .resizable()
+                                                        .scaledToFit()
+                                                        .frame(width: 70, height: 70)
+                                                        .foregroundColor(.gray)
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
+                            
                             if isChallenge {
                                 Button {
                                     startChallenge = true
@@ -187,7 +228,8 @@ struct VisualizarDadosView: View {
                     }
                     .frame(maxWidth: .infinity)
                 }
-
+                .frame(maxWidth: .infinity, alignment: .leading)
+                
                 
             }
             .padding(20)
@@ -204,7 +246,9 @@ struct VisualizarDadosView: View {
                     await resumeVM.carregarParticipantesPorDesafio(challenge: challengeModel)
                 }
             } else {
-                // chamar funcao que carrega participante de cada tarefa
+                if let taskModel {
+                    await resumeVM.carregarAlunosTarefa(task: taskModel)
+                }
             }
         }
     }

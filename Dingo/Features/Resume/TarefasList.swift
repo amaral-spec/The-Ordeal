@@ -21,12 +21,14 @@ struct TarefasList: View {
                         if(tarefa.endDate < Date()){
                             ListCard(title: tarefa.title, subtitle: "Resultado", image: GrayTaskImage())
                                 .onTapGesture {
+                                    resumoVM.alunosTarefas = []
                                     onNavigate(.detailTask(tarefa))
                                 }
                             
                         } else{
                             ListCard(title: tarefa.title, subtitle: "", image: TaskImage())
                                 .onTapGesture {
+                                    resumoVM.alunosTarefas = []
                                     onNavigate(.detailTask(tarefa))
                                 }
                         }

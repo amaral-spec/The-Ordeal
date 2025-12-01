@@ -11,9 +11,8 @@ struct ListaParticipantesView: View {
     let isTeacher: Bool
     
     @EnvironmentObject var resumeVM: ResumeViewModel
-    @StateObject var player: MiniPlayer = MiniPlayer()
-    
     @State var challengeModel: ChallengeModel?
+    @State var taskModel: TaskModel?
     
     var body: some View {
         ScrollView {

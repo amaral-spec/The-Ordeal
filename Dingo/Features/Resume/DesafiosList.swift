@@ -22,12 +22,14 @@ struct DesafiosList: View {
                         if(desafio.endDate < Date()){
                             ListCard(title: desafio.title, subtitle: "Resultado", image: GrayChallengeImage())
                                 .onTapGesture {
+                                    resumoVM.members = []
                                     onNavigate(.detailChallenge(desafio))
                                 }
                             
                         } else {
                             ListCard(title: desafio.title, subtitle: groupName, image: ChallengeImage())
                                 .onTapGesture {
+                                    resumoVM.members = []
                                     onNavigate(.detailChallenge(desafio))
                                 }
                         }

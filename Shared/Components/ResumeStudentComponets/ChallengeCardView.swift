@@ -12,15 +12,16 @@ struct ChallengeCardView: View {
 
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 25)
-                .fill(resumoVM.challenges.isEmpty ? .gray : Color("BlueCard"))
-            
             if resumoVM.challenges.isEmpty {
+                RoundedRectangle(cornerRadius: 25)
+                    .fill(.gray)
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle())
                     .scaleEffect(1.6)
                     .tint(.white)
             } else {
+                RoundedRectangle(cornerRadius: 25)
+                    .fill(Color("BlueCard"))
                 VStack {
                     HStack {
                         Text("Desafio")
@@ -34,17 +35,20 @@ struct ChallengeCardView: View {
                                 .foregroundColor(.white.opacity(0.9))
                         }
                     }
-                    
                     Spacer()
-                    
+
                     Image("flag.pattern.checkered.2.crossed.circle.fill")
-                        .font(.system(size: 140))
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 140, height: 140)
                         .foregroundColor(.white)
-                    
+
                     Spacer()
                 }
                 .padding()
             }
+
+            
         }
         .frame(height: 220)
         .task {
@@ -52,4 +56,3 @@ struct ChallengeCardView: View {
         }
     }
 }
-

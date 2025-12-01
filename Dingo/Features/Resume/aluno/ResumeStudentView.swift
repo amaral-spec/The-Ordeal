@@ -6,10 +6,11 @@ struct ResumeStudentView: View {
     let onNavigate: (ResumeCoordinatorView.Route) -> Void
     
     var body: some View {
-        VStack(spacing: 12) {
+        VStack() {
 
             // MARK: Streak Card
             StreakCardView()
+            
 
             // MARK: Main Challenge
             Button {
@@ -19,19 +20,18 @@ struct ResumeStudentView: View {
             }
 
             // MARK: Grid Tarefas + Treino
-            HStack(spacing: 12) {
+            HStack() {
                 Button {
                     onNavigate(.listTask)
                 } label: {
                     TaskCardView(resumoVM: resumeVM)
                 }
                 TrainingCardView()
+                    .padding(.trailing, 12)
             }
             Spacer()
         }
         .padding(.top, 12)
-        .padding(.horizontal, 16)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.secondarySystemBackground).ignoresSafeArea())
         .navigationTitle("Resumo")
         .toolbarTitleDisplayMode(.inlineLarge)
