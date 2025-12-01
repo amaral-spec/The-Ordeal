@@ -26,7 +26,7 @@ struct VisualizarDadosView: View {
             self.challengeModel = challengeModel
             self.endDate = challengeModel.endDate
             self.description = challengeModel.description
-            self.title = challengeModel.whichChallenge == 1 ? "Echo" : "Encadeia"
+            self.title = challengeModel.title
         } else if let taskModel = taskModel {
             self.taskModel = taskModel
             self.endDate = taskModel.endDate
@@ -128,7 +128,9 @@ struct VisualizarDadosView: View {
                 // MARK: - CARD 3: Participantes
                 VStack(alignment: .leading, spacing: 12) {
                     Button {
-                        onNavigate(.participantsChallenge)
+                        if let challengeModel = challengeModel {
+                            onNavigate(.participantsChallenge(challengeModel))
+                        }
                     } label: {
                         HStack {
                             Text(isChallenge ? "Participantes" : "Resultado individual")

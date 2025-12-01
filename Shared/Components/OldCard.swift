@@ -46,7 +46,7 @@ struct OldCard: View {
                 LinearGradient(
                     stops: [
                         Gradient.Stop(color: .black.opacity(0.85), location: 0.00),
-                        Gradient.Stop(color: Color(red: 0.28, green: 0.28, blue: 0.28).opacity(0.1), location: 1.00),
+                        Gradient.Stop(color: .accentColor.opacity(0.1), location: 1.00),
                     ],
                     startPoint: UnitPoint(x: 0.5, y: 0.75),
                     endPoint: UnitPoint(x: 0.5, y: 0)
