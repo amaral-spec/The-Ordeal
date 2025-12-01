@@ -1,28 +1,28 @@
-name: OsVigaristas
+name: Dingo
 options:
   bundleIdPrefix: eumesmo
   deploymentTarget:
     iOS: "18.0"
-  productName: Os Vigaristas
+  productName: Dingo
   createIntermediateGroups: true
 
 targets:
-  OsVigaristas:
+  Dingo:
     type: application
     platform: iOS
     sources:
       - path: Shared
-      - path: OsVigaristas
+      - path: Dingo
       - path: Shared
     resources:
-      - path: OsVigaristas/Assets.xcassets
+      - path: Dingo/Assets.xcassets
 
     settings:
       base:
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         PRODUCT_BUNDLE_IDENTIFIER: eumesmo.OsVigaristas
         CURRENT_PROJECT_VERSION: 1
-        INFO_PLIST_FILE: OsVigaristas/Info.plist
+        INFO_PLIST_FILE: Dingo/Info.plist
         
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UIRequiresFullScreen: YES
@@ -33,11 +33,14 @@ targets:
         TARGETED_DEVICE_FAMILY: "1" # iPhone only
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         GENERATE_INFOPLIST_FILE: YES
-        CODE_SIGN_ENTITLEMENTS: OsVigaristas/OsVigaristas.entitlements
+        CODE_SIGN_ENTITLEMENTS: Dingo/Dingo.entitlements
+        
+        INFOPLIST_KEY_CFBundleDevelopmentRegion: "pt-BR"
+        INFOPLIST_KEY_CFBundleLocalizations: ["pt-BR"]
 
 
     entitlements:
-      path: OsVigaristas/OsVigaristas.entitlements
+      path: Dingo/Dingo.entitlements
       properties:
         com.apple.developer.applesignin:
           - Default

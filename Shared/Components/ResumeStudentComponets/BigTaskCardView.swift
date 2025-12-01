@@ -7,7 +7,7 @@ struct BigTaskCardView: View {
 
     var body: some View {
         ZStack {
-            if resumoVM.challenges.isEmpty {
+            if resumoVM.tasks.isEmpty {
                 RoundedRectangle(cornerRadius: 25)
                     .fill(.gray)
             } else {
@@ -36,7 +36,7 @@ struct BigTaskCardView: View {
         }
         .frame(height: 220)
         .task {
-            await resumoVM.carregarDesafios()
+            await resumoVM.carregarTarefas()
         }
     }
 }
