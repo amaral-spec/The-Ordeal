@@ -18,66 +18,75 @@ struct PerfilProfessorView: View {
     
     var body: some View {
         NavigationStack {
-            VStack() {
-                if let image = vm.user?.profileImage {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 150, height: 150)
-                        .clipShape(Circle())
-                        .padding()
-                }
-//                } else {
+            VStack {
+                ScrollView {
+                    if let image = vm.user?.profileImage {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 150, height: 150)
+                            .clipShape(Circle())
+                            .padding()
+                    } else {
+                        Image("partitura")
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 150, height: 150)
+                            .clipShape(Circle())
+                            .padding()
+                    }
                     
-//                    Image("partitura")
-//                        .resizable()
-//                        .scaledToFill()
-//                        .frame(width: 150, height: 150)
-//                        .clipShape(Circle())
-//                        .padding()
-//                }
-                
-                Text(vm.user?.name ?? "Loading...")
-                    .font(.title)
-                    .padding()
-                
-                Text("Professor desde \(vm.user?.creationDate.formatted(date: .numeric, time: .omitted) ?? "Loading...")")
-                    .font(.caption)
-                    .padding()
-                
-                Button {
-                    authVM.logout()
-                } label: {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 30)
-                            .frame(width: 350, height: 50)
-                            .padding(10)
-                            .foregroundStyle(Color("AccentColor").opacity(0.3))
+                    VStack(spacing: -20) {
+                        Text(vm.user?.name ?? "Loading...")
+                            .font(.title.bold())
+                            .padding()
                         
-                        HStack {
-                            Text("Sair")
-                                .foregroundColor(.red)
+                        Text("Professor desde \(vm.user?.creationDate.formatted(date: .numeric, time: .omitted) ?? "Loading...")")
+                            .font(.callout)
+                            .foregroundStyle(Color.accentColor)
+                            .padding()
+                    }
+                    
+                    Button {
+                        authVM.logout()
+                    } label: {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 30)
+                                .frame(width: 350, height: 50)
+                                .padding(10)
+                                .foregroundStyle(Color.white)
+                            
+                            HStack {
+                                Text("Sair")
+                                    .foregroundColor(.red)
+                            }
+                            .padding(.horizontal, 40)
                         }
-                        .padding(.horizontal, 40)
+                    }
+                    Spacer()
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color(.secondarySystemBackground).ignoresSafeArea())
+                .task { await vm.loadUser() }
+                .navigationTitle("Perfil")
+                .toolbarTitleDisplayMode(.inlineLarge)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("Editar") {
+                            vm.editName = vm.user?.name ?? ""
+                            vm.editIsTeacher = vm.user?.isTeacher ?? false
+                            showingEditSheet = true
+                        }
                     }
                 }
-                Spacer()
             }
-            .task { await vm.loadUser() }
-            .navigationTitle("Perfil")
-            .toolbarTitleDisplayMode(.inlineLarge)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Editar") {
-                        vm.editName = vm.user?.name ?? ""
-                        vm.editIsTeacher = vm.user?.isTeacher ?? false
-                        showingEditSheet = true
-                    }
-                }
+            .sheet(isPresented: $showingEditSheet) {
+                EditProfileModal(vm: vm)
             }
-        }
-        .sheet(isPresented: $showingEditSheet) {
-            EditProfileModal(vm: vm)
         }
     }
+}
+
+#Preview {
+    PerfilProfessorView(persistenceServices: PersistenceServices.shared)
 }

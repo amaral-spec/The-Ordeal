@@ -135,7 +135,7 @@ struct TaskDetailView: View {
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(.systemGray6))
+        .background(Color(.secondarySystemBackground))
         .navigationTitle("Tarefa do Barquinho")
         .navigationBarTitleDisplayMode(.inline)
     }

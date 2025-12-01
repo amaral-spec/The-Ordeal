@@ -68,7 +68,8 @@ struct CriarTarefaView: View {
                      Button {
                          dismiss()
                      } label: {
-                         Label("Cancelar", systemImage: "xmark")
+                         Image( systemName: "xmark")
+                             .foregroundStyle(Color("GreenCard"))
                      }
                  }
                 ToolbarItem(placement: .confirmationAction) {
@@ -142,6 +143,7 @@ struct CriarTarefaView: View {
                     } label: {
                         Label("Adicionar", systemImage: "checkmark")
                     }
+                    .tint(Color("GreenCard"))
                     .disabled(tarefaNome.isEmpty || selectedUserID == nil || isSaving)
                 }
             }

@@ -11,6 +11,8 @@ import CloudKit
 final class ResumeViewModel: ObservableObject {
     @Published var challenges: [ChallengeModel] = []
     @Published var tasks: [TaskModel] = []
+
+    @Published var challengeGroups: [ ChallengeModel : String ] = [:]
     
     @Published var members: [UserModel] = []
     
@@ -31,10 +33,19 @@ final class ResumeViewModel: ObservableObject {
         self.isTeacher = isTeacher
     }
 
-    func loadChallenges() async {
+    func carregarDesafios() async {
+        var challengeGroupsDict: [ChallengeModel : String] = [:]
+
         do {
             let desafiosCarregados = try await persistenceServices.fetchAllChallenges()
+            
+            for desafio in desafiosCarregados {
+                let groupByChallenge = try await persistenceServices.fetchGroup(recordID: desafio.group!.recordID)
+                challengeGroupsDict[desafio] = groupByChallenge.name
+            }
+            
             await MainActor.run {
+                challengeGroups = challengeGroupsDict
                 challenges = desafiosCarregados
                 isChallengeEmpty = desafiosCarregados.isEmpty
             }
