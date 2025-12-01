@@ -20,7 +20,7 @@ targets:
     settings:
       base:
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
-        PRODUCT_BUNDLE_IDENTIFIER: eumesmo.OsVigaristas
+        PRODUCT_BUNDLE_IDENTIFIER: com.dingoapp
         CURRENT_PROJECT_VERSION: 1
         INFO_PLIST_FILE: OsVigaristas/Info.plist
         

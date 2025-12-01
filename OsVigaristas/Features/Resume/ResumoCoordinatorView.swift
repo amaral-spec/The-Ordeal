@@ -6,7 +6,8 @@ struct ResumeCoordinatorView: View {
         case listChallenge
         case detailChallenge(ChallengeModel)
         case detailTask(TaskModel)
-        case participants
+        case participantsChallenge(ChallengeModel)
+        case participantsTask(TaskModel)
         case listTask
     }
     
@@ -63,24 +64,29 @@ struct ResumeCoordinatorView: View {
                     .environmentObject(resumeVM)
 
                 case .detailTask(let task):
-                    VisualizarDadosView(isChallenge: false) { next in
+                    VisualizarDadosView(isChallenge: false, taskModel: task) { next in
                        path.append(next)
                     }
                         .environmentObject(resumeVM)
+                    
                 case .listChallenge:
                     DesafiosList(resumoVM: resumeVM) { next in
                         path.append(next)
                     }
                         .environmentObject(resumeVM)
+                    
                 case .listTask:
                     TarefasList(resumoVM: resumeVM){ next in
                         path.append(next)
                     }
                         .environmentObject(resumeVM)
                     
-                case .participants:
-                    ListaParticipantesView(isTeacher: true)
+                case .participantsChallenge(let challenge):
+                    ListaParticipantesView(isTeacher: true, challengeModel: challenge)
                         .environmentObject(resumeVM)
+                    
+                case .participantsTask(let task):
+                    ListaParticipantesView(isTeacher: true, taskModel: task)
                 }
             }
         }

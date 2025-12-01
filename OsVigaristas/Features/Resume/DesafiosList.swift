@@ -22,12 +22,14 @@ struct DesafiosList: View {
                         if(desafio.endDate < Date()){
                             ListCard(title: desafio.title, subtitle: "Resultado", image: GrayChallengeImage())
                                 .onTapGesture {
+                                    resumoVM.members = []
                                     onNavigate(.detailChallenge(desafio))
                                 }
                             
                         } else {
                             ListCard(title: desafio.title, subtitle: groupName, image: ChallengeImage())
                                 .onTapGesture {
+                                    resumoVM.members = []
                                     onNavigate(.detailChallenge(desafio))
                                 }
                         }
@@ -46,7 +48,7 @@ struct DesafiosList: View {
         .navigationTitle("Desafios")
         .navigationBarTitleDisplayMode(.inline)
         .task {
-            await resumoVM.loadChallenges()
+            await resumoVM.carregarDesafios()
         }
         .toolbar(){
             if(resumoVM.isTeacher){
