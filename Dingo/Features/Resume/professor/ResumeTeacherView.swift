@@ -38,8 +38,6 @@ struct ResumeTeacherView: View {
                         onNavigate(.listTask)
                     }
                 }
-            
-
             Spacer()
         }
         .background(Color(.secondarySystemBackground))
@@ -54,7 +52,6 @@ struct ResumeTeacherView: View {
             await resumeVM.carregarDesafios()
             await resumeVM.carregarTarefas()
         }
-        
         
         // MARK: - Sheets
         .sheet(isPresented: $criarDesafio) {

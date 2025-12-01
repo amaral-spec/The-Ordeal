@@ -69,7 +69,7 @@ struct CriarTarefaView: View {
                          dismiss()
                      } label: {
                          Image( systemName: "xmark")
-                             .foregroundStyle(Color("GreenCard"))
+                             .foregroundStyle(.black)
                      }
                  }
                 ToolbarItem(placement: .confirmationAction) {

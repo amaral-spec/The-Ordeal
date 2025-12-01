@@ -6,41 +6,43 @@ struct ResumeStudentView: View {
     let onNavigate: (ResumeCoordinatorView.Route) -> Void
     
     var body: some View {
-        VStack(spacing: 12) {
-
+        ScrollView() {
             // MARK: Streak Card
             StreakCardView()
 
             // MARK: Main Challenge
-            Button {
-                onNavigate(.listChallenge)
-            } label: {
-                ChallengeCardView(resumoVM: resumeVM)
-            }
-
-            // MARK: Grid Tarefas + Treino
-            HStack(spacing: 12) {
-                Button {
-                    onNavigate(.listTask)
-                } label: {
-                    TaskCardView(resumoVM: resumeVM)
+            ChallengeCardView(resumoVM: resumeVM)
+                .padding(.horizontal)
+                .onTapGesture {
+                    if resumeVM.challenges.isEmpty {
+                        onNavigate(.listChallenge)
+                    }
                 }
+            
+            // MARK: Grid Tarefas + Treino
+            HStack(spacing: 16) {
+                TaskCardView(resumoVM: resumeVM)
+                    .onTapGesture {
+                        if resumeVM.tasks.isEmpty {
+                            onNavigate(.listTask)
+                        }
+                    }
+                    
+                
                 TrainingCardView()
+//                    .padding(.leading)
+                    
             }
-            Spacer()
+            .padding(.horizontal)
+            
         }
-        .padding(.top, 12)
-        .padding(.horizontal, 16)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(.secondarySystemBackground).ignoresSafeArea())
+        .refreshable {
+            Void()
+        }
+        .background(Color(.secondarySystemBackground))
         .navigationTitle("Resumo")
         .toolbarTitleDisplayMode(.inlineLarge)
-        .toolbar {
-           
-        }
-
     }
-    
 }
 
 #Preview {
