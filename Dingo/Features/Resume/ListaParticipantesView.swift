@@ -199,7 +199,6 @@ struct ListaParticipantesView: View {
             if let challengeModel {
                 await resumeVM.carregarParticipantesPorDesafio(challenge: challengeModel)
                 await resumeVM.carregarAudios(challengeID: challengeModel.id)
-                print("oiii")
             }
         }
         .navigationTitle("Participantes")

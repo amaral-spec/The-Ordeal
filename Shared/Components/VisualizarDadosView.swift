@@ -208,24 +208,23 @@ struct VisualizarDadosView: View {
                                 }
                             }
                             
-                            if isChallenge {
-                                if resumeVM.isTeacher {
-                                    Button {
-                                        startChallenge = true
-                                    } label: {
-                                        Text("Começar desafio")
-                                            .foregroundColor(.white)
-                                            .font(.title3.bold())
-                                            .frame(maxWidth: .infinity)
-                                            .padding(.vertical, 18)
-                                            .background(
-                                                Capsule()
-                                                    .fill(Color("BlueCard"))
-                                                    .shadow(color: .black.opacity(0.15), radius: 5, y: 3)
-                                            )
-                                    }
-                                    .padding(.top, 15)
-                                    .padding(.bottom, 20)
+                            if isChallenge && !resumeVM.isTeacher {
+                                Button {
+                                    startChallenge = true
+                                } label: {
+                                    Text("Começar desafio")
+                                        .foregroundColor(.white)
+                                        .font(.title3.bold())
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.vertical, 18)
+                                        .background(
+                                            Capsule()
+                                                .fill(Color("BlueCard"))
+                                                .shadow(color: .black.opacity(0.15), radius: 5, y: 3)
+                                        )
+                                        .padding(.top, 15)
+                                        .padding(.bottom, 20)
+
                                 }
                             }
                         }

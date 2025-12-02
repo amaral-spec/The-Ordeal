@@ -1,45 +1,36 @@
-import Foundation
+
 import SwiftUI
 
-struct ResumeTeacherView: View {
-    
-    @State private var criarDesafio = false
-    @State private var criarTarefa = false
+struct ResumeTeacherView: View, CardNavigationHandler {
 
     @EnvironmentObject var resumeVM: ResumeViewModel
     let onNavigate: (ResumeCoordinatorView.Route) -> Void
-    
-    enum Mode: String, CaseIterable {
-        case Desafio, Tarefa
-    }
-    
-    @State private var selectedMode: Mode = .Desafio
-    
-    var body: some View {
-        ScrollView() {
-            ChallengeCardView(resumoVM: resumeVM)
-                .padding(.horizontal)
-                .padding(.top)
-                .onTapGesture {
-                    if resumeVM.challenges.isEmpty {
-                        criarDesafio = true
-                    } else {
-                        onNavigate(.listChallenge)
-                    }
-                }
-                .padding(.bottom, 15)
-            
-            BigTaskCardView(resumoVM: resumeVM)
-                .padding(.horizontal)
-                .onTapGesture {
-                    if resumeVM.tasks.isEmpty {
-                        criarTarefa = true
-                    } else {
-                        onNavigate(.listTask)
-                    }
-                }
-            
 
+    // MARK: - Navigation Handler (protocol)
+    func navigateToChallengeList() {
+        onNavigate(.listChallenge)
+    }
+
+    func navigateToTaskList() {
+        onNavigate(.listTask)
+    }
+
+    var body: some View {
+        ScrollView {
+            
+            BigChallengeCardView(
+                resumoVM: resumeVM,
+                navigationHandler: self
+            )
+            .padding(.horizontal)
+            .padding(.top)
+            .padding(.bottom, 15)
+
+            BigTaskCardView(
+                resumoVM: resumeVM,
+                navigationHandler: self
+            )
+            .padding(.horizontal)
             Spacer()
         }
         .background(Color(.secondarySystemBackground))
@@ -49,21 +40,9 @@ struct ResumeTeacherView: View {
             await resumeVM.carregarDesafios()
             await resumeVM.carregarTarefas()
         }
-        // MARK: - Pull-to-refresh
         .refreshable {
             await resumeVM.carregarDesafios()
             await resumeVM.carregarTarefas()
         }
-        
-        
-        // MARK: - Sheets
-        .sheet(isPresented: $criarDesafio) {
-            CriarDesafioView(numChallenge: .constant(0))
-        }
-        .sheet(isPresented: $criarTarefa) {
-            CriarTarefaView(numTask: .constant(0))
-        }
     }
-    
 }
-
