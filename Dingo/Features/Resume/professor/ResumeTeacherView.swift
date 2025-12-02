@@ -31,6 +31,7 @@ struct ResumeTeacherView: View, CardNavigationHandler {
                 navigationHandler: self
             )
             .padding(.horizontal)
+
             Spacer()
         }
         .background(Color(.secondarySystemBackground))
@@ -44,5 +45,6 @@ struct ResumeTeacherView: View, CardNavigationHandler {
             await resumeVM.carregarDesafios()
             await resumeVM.carregarTarefas()
         }
+
     }
 }
