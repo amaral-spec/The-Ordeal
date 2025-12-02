@@ -16,7 +16,7 @@ struct PerfilCoordinatorView: View {
             PerfilProfessorView(persistenceServices: persistenceServices)
 
         } else {
-            PerfilView(persistenceServices: persistenceServices)
+            PerfilStudentView(persistenceServices: persistenceServices)
 //            AlunoPerfilView(viewModel: PerfilViewModel(userType: .aluno))
 
         }

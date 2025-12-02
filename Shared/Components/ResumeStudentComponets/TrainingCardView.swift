@@ -12,29 +12,30 @@ import SwiftUI
 struct TrainingCardView: View {
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 20)
+            RoundedRectangle(cornerRadius: 25)
                 .fill(Color("RedCard"))
-                .frame(height: 160)
             
             VStack {
                 HStack {
                     Text("Treino")
-                        .font(.headline)
+                        .font(.title3.bold())
                         .foregroundColor(.white)
                     Spacer()
                 }
                 Spacer()
+                
+                Image("custom.music.pages.circle.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 100, height: 100)
+                    .foregroundColor(.white)
+                
+                Spacer()
             }
-            .padding(16)
-
-            Image("custom.music.pages.circle.fill")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 90, height: 90)
-                .padding(.top, 20)
-                .foregroundColor(.white)
+            .padding()
+            
         }
-        .frame(height: 160)
+        .frame(height: 200)
     }
 }
 

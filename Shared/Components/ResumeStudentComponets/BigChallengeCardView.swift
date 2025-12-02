@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ChallengeCardView: View {
+struct BigChallengeCardView: View {
     @ObservedObject var resumoVM: ResumeViewModel
 
     var body: some View {

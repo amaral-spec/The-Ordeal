@@ -206,7 +206,7 @@ struct VisualizarDadosView: View {
                                 }
                             }
                             
-                            if isChallenge {
+                            if isChallenge && !resumeVM.isTeacher {
                                 Button {
                                     startChallenge = true
                                 } label: {

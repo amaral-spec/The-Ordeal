@@ -10,6 +10,7 @@ import CloudKit
 
 final class ResumeViewModel: ObservableObject {
     @Published var challenges: [ChallengeModel] = []
+    
     @Published var tasks: [TaskModel] = []
 
     @Published var members: [UserModel] = []
@@ -27,11 +28,19 @@ final class ResumeViewModel: ObservableObject {
     @Published private var isAudioEmpty: Bool = true
     @Published private var isAlunosTarefasEmpty: Bool = true
     
-    private let persistenceServices: PersistenceServices
+    let persistenceServices: PersistenceServices
     
     init(persistenceServices: PersistenceServices, isTeacher: Bool) {
         self.persistenceServices = persistenceServices
         self.isTeacher = isTeacher
+    }
+    
+    func currentOpenTasks() -> [TaskModel] {
+        tasks.filter { $0.endDate >= Date() }
+    }
+    
+    func currentOpenChallenges() -> [ChallengeModel] {
+        challenges.filter { $0.endDate >= Date() }
     }
 
     func carregarDesafios() async {

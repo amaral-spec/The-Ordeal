@@ -12,7 +12,7 @@ struct TarefasList: View {
     @State private var criarTarefa = false
     @ObservedObject var resumoVM: ResumeViewModel
     let onNavigate: (ResumeCoordinatorView.Route) -> Void
-
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 10) {
@@ -35,6 +35,10 @@ struct TarefasList: View {
                     } else {
                         if(tarefa.endDate >= Date()){
                             ListCard(title: tarefa.title, subtitle: "Faça até \(resumoVM.formatarDiaMes(tarefa.endDate))!", image: TaskImage())
+                                .onTapGesture {
+                                    resumoVM.alunosTarefas = []
+                                    onNavigate(.detailTask(tarefa))
+                                }
                         }
                     }
                 }
