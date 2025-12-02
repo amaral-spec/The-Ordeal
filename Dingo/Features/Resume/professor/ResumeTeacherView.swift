@@ -46,12 +46,12 @@ struct ResumeTeacherView: View, CardNavigationHandler {
             await resumeVM.carregarTarefas()
         }
         // MARK: - Sheets
-        .sheet(isPresented: $criarDesafio) {
-            CriarDesafioView(numChallenge: .constant(0))
-        }
-        .sheet(isPresented: $criarTarefa) {
-            CriarTarefaView(numTask: .constant(0))
-        }
+//        .sheet(isPresented: $criarDesafio) {
+//            CriarDesafioView(numChallenge: .constant(0))
+//        }
+//        .sheet(isPresented: $criarTarefa) {
+//            CriarTarefaView(numTask: .constant(0))
+//        }
 
     }
 }
