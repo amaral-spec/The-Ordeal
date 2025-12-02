@@ -22,6 +22,7 @@ class PerfilViewModel: ObservableObject {
     @Published var isShowingPopup: Bool = false
     @Published var groupCodeInput: String = "" // Used for TextField binding
     @Published var fetchedGroup: GroupModel? = nil
+    @Published var fetchedAllGroups: [GroupModel] = []
     @Published var fetchError: String? = nil
     @Published var isJoiningGroup: Bool = false
     @Published var joinSuccessMessage: String? = nil
@@ -80,6 +81,15 @@ class PerfilViewModel: ObservableObject {
                 Task { await self.fetchGroup(code: code) }
             }
     }
+    
+    func fetchAllGroups() async {
+        do {
+            self.fetchedAllGroups = try await persistenceServices.fetchAllGroups()
+        } catch {
+            self.fetchError = "Erro ao buscar grupos: \(error.localizedDescription)"
+        }
+    }
+    
     
     func fetchGroup(code: String) async {
         // Clear old messages

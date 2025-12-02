@@ -44,15 +44,14 @@ struct EditProfileModal: View {
                                     .frame(width: 150, height: 150)
                                     .clipShape(Circle())
                                     .padding(.bottom, 40)
+                            } else {
+                                Image("partitura")
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 120, height: 120)
+                                    .clipShape(Circle())
+                                    .padding(.bottom, 40)
                             }
-//                            } else {
-//                                Image("partitura")
-//                                    .resizable()
-//                                    .scaledToFill()
-//                                    .frame(width: 120, height: 120)
-//                                    .clipShape(Circle())
-//                                    .padding(.bottom, 40)
-//                            }
                         }
                         .onChange(of: photoItem) { _, newValue in
                             Task {
