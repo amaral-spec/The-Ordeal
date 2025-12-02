@@ -8,13 +8,10 @@
 import SwiftUI
 
 struct PerfilStudentView: View {
-    @StateObject private var vm: PerfilViewModel
+    @EnvironmentObject var vm: PerfilViewModel
     @EnvironmentObject var authVM: AuthViewModel
     @State private var showingEditSheet = false
-    
-    init(persistenceServices: PersistenceServices) {
-        _vm = StateObject(wrappedValue: PerfilViewModel(persistenceServices: persistenceServices))
-    }
+    let onNavigate: (PerfilCoordinatorView.Route) -> Void
     
     var body: some View {
         NavigationStack {
@@ -27,32 +24,19 @@ struct PerfilStudentView: View {
                             .frame(width: 150, height: 150)
                             .clipShape(Circle())
                             .padding(.top, 30)
+                    } else {
+                        Image("partitura")
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 150, height: 150)
+                            .clipShape(Circle())
+                            .padding(.top, 30)
                     }
-//                    } else {
-//                        Image("partitura")
-//                            .resizable()
-//                            .scaledToFill()
-//                            .frame(width: 150, height: 150)
-//                            .clipShape(Circle())
-//                            .padding(.top, 30)
-//                    }
                     
 //                    VStack(spacing: -20) {
                         Text(vm.user?.name ?? "Loading...")
                         .font(.title.bold())
                             .padding()
-                        
-//                        Text("Aluno desde \(vm.user?.creationDate.formatted(date: .numeric, time: .omitted) ?? "Loading...")")
-//                            .font(.callout)
-//                            .foregroundStyle(Color.accentColor)
-//                            .padding()
-//                    }
-                    
-//                    HStack{
-//                        CardPerfil(texto: "\(vm.user?.points ?? 0) B")
-//                        CardPerfil(texto: "\(vm.user?.streak ?? 0) F")
-//                    }
-//                    .padding(.top, 20)
                     
                     VStack(spacing: -10) {
                         ZStack{
@@ -128,15 +112,16 @@ struct PerfilStudentView: View {
                     }
                     
                     VStack(spacing: 20) {
-                        Button(action:{}){
-                            Row(texto: "Meus grupos")
-                        }
-                        .buttonStyle(.plain)
                         
-                        Button(action:{}){
-                            Row(texto: "Histórico de tarefas")
-                        }
-                        .buttonStyle(.plain)
+                        Row(texto: "Meus grupos")
+                            .onTapGesture {
+                                onNavigate(.meusGrupos)
+                            }
+                        
+//                        Button(action:{}){
+//                            Row(texto: "Histórico de tarefas")
+//                        }
+//                        .buttonStyle(.plain)
                     }
                     
                     Button {
@@ -248,6 +233,4 @@ struct Row: View {
     }
 }
 
-#Preview {
-    PerfilStudentView(persistenceServices: PersistenceServices.shared)
-}
+
