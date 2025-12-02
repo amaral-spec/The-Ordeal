@@ -4,6 +4,7 @@ struct ResumeStudentView: View, CardNavigationHandler {
 
     @EnvironmentObject var resumeVM: ResumeViewModel
     let onNavigate: (ResumeCoordinatorView.Route) -> Void
+    @State var startTraining: Bool = false
 
     // MARK: - Navegação do protocolo
     func navigateToChallengeList() {
@@ -15,12 +16,11 @@ struct ResumeStudentView: View, CardNavigationHandler {
     }
 
     var body: some View {
-        ScrollView {
-
+        ScrollView() {
             // MARK: Streak Card
             StreakCardView()
                 .padding(.horizontal)
-
+          
             // MARK: Challenge Card (Aluno)
             BigChallengeCardView(
                 resumoVM: resumeVM,
@@ -34,8 +34,16 @@ struct ResumeStudentView: View, CardNavigationHandler {
                     resumoVM: resumeVM,
                     navigationHandler: self
                 )
-
-                TrainingCardView()
+                //Button of training
+                Button{
+                    //StartTrainingView()
+                    startTraining = true
+                } label: {
+                    TrainingCardView()
+                    
+                }
+//                    .padding(.leading)
+                    
             }
             .padding(.horizontal)
 
@@ -45,6 +53,14 @@ struct ResumeStudentView: View, CardNavigationHandler {
         .background(Color(.secondarySystemBackground).ignoresSafeArea())
         .navigationTitle("Resumo")
         .toolbarTitleDisplayMode(.inlineLarge)
+        .toolbar {
+            
+        }
+        
+        .sheet(isPresented: $startTraining) {
+            TrainingCoordinatorView()
+                .interactiveDismissDisabled(true)//Tira o deslizar para sair
+        }
         .task {
             async let desafios: () = resumeVM.carregarDesafios()
             async let tarefas: () = resumeVM.carregarTarefas()
@@ -57,6 +73,7 @@ struct ResumeStudentView: View, CardNavigationHandler {
         }
     }
 }
+
 
 #Preview {
     ResumeStudentView { _ in }
