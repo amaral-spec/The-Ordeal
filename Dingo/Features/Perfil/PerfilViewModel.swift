@@ -34,6 +34,7 @@ class PerfilViewModel: ObservableObject {
     @Published var editName: String = ""
     @Published var editIsTeacher: Bool = false
     @Published var isSavingChanges: Bool = false
+    @Published var editValidationError: String? = nil
     
     private let persistenceServices: PersistenceServices
     private var groupCodeCancellable: AnyCancellable? // For debouncing
@@ -170,16 +171,23 @@ class PerfilViewModel: ObservableObject {
 
     func saveUserEdits() async {
         guard !isSavingChanges else { return }
+        
+        let trimmed = editName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else {
+            editValidationError = "O nome não pode ser vazio."
+            return
+        }
+        editValidationError = nil
         isSavingChanges = true
 
         do {
             try await persistenceServices.editUser(
-                newName: editName,
+                newName: trimmed,
                 isTeacher: editIsTeacher
             )
 
             // Update UI locally
-            user?.name = editName
+            user?.name = trimmed
             user?.isTeacher = editIsTeacher
 
             isShowingEditProfile = false
