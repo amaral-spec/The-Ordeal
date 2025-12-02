@@ -11,7 +11,11 @@ import Foundation
 struct TarefasList: View {
     @State private var criarTarefa = false
     @ObservedObject var resumoVM: ResumeViewModel
+    
     let onNavigate: (ResumeCoordinatorView.Route) -> Void
+    
+    @State var startTask: Bool = false
+    @State var chooseTask: TaskModel? = nil
     
     var body: some View {
         ScrollView {
@@ -37,7 +41,8 @@ struct TarefasList: View {
                             ListCard(title: tarefa.title, subtitle: "Faça até \(resumoVM.formatarDiaMes(tarefa.endDate))!", image: TaskImage())
                                 .onTapGesture {
                                     resumoVM.alunosTarefas = []
-                                    onNavigate(.detailTask(tarefa))
+                                    chooseTask = tarefa
+                                    startTask = true
                                 }
                         }
                     }
@@ -65,6 +70,9 @@ struct TarefasList: View {
         }
         .sheet(isPresented: $criarTarefa) {
             CriarTarefaView(numTask: .constant(0))
+        }
+        .sheet(isPresented: $startTask) {
+            DoTaskCoordinatorView(taskM: chooseTask!)
         }
     }
 }

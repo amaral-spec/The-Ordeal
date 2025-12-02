@@ -464,13 +464,32 @@ class PersistenceServices: NSObject, ObservableObject {
     }
     
     // MARK: CRUD: Audio
-    func saveAudioRecord(
+    func saveAudioRecordTask(
+        taskID: CKRecord.ID,
+        userID: CKRecord.ID,
+        audioURL: URL
+    ) async throws {
+        
+        let model = AudioRecordTaskModel(
+            audioURL: audioURL,
+            taskID: taskID,
+            userID: userID
+        )
+        
+        let record = model.toRecord()
+        
+        try await db.save(record)
+        
+        print("AudioRecord salvo no CloudKit!")
+    }
+    
+    func saveAudioRecordChallenge(
         challengeID: CKRecord.ID,
         userID: CKRecord.ID,
         audioURL: URL
     ) async throws {
         
-        let model = AudioRecordModel(
+        let model = AudioRecordChallengeModel(
             audioURL: audioURL,
             challengeID: challengeID,
             userID: userID
@@ -483,20 +502,20 @@ class PersistenceServices: NSObject, ObservableObject {
         print("AudioRecord salvo no CloudKit!")
     }
 
-    func fetchChallengeAudio(challengeID: CKRecord.ID) async throws -> [AudioRecordModel] {
+    func fetchChallengeAudio(challengeID: CKRecord.ID) async throws -> [AudioRecordChallengeModel] {
         
         let ref = CKRecord.Reference(recordID: challengeID, action: .none)
         let predicate = NSPredicate(format: "challenge == %@", ref)
         
-        let query = CKQuery(recordType: "AudioRecord", predicate: predicate)
+        let query = CKQuery(recordType: "AudioRecordChallenge", predicate: predicate)
         
-        var models: [AudioRecordModel] = []
+        var models: [AudioRecordChallengeModel] = []
         
         let (results, _) = try await db.records(matching: query)
         
         for (_, result) in results {
             if case .success(let record) = result,
-               let audioModel = AudioRecordModel(from: record) {
+               let audioModel = AudioRecordChallengeModel(from: record) {
                 models.append(audioModel)
             }
         }
@@ -504,6 +523,26 @@ class PersistenceServices: NSObject, ObservableObject {
         return models
     }
 
+    func fetchTaskAudio(taskID: CKRecord.ID) async throws -> [AudioRecordTaskModel] {
+        
+        let ref = CKRecord.Reference(recordID: taskID, action: .none)
+        let predicate = NSPredicate(format: "task == %@", ref)
+        
+        let query = CKQuery(recordType: "AudioRecordTask", predicate: predicate)
+        
+        var models: [AudioRecordTaskModel] = []
+        
+        let (results, _) = try await db.records(matching: query)
+        
+        for (_, result) in results {
+            if case .success(let record) = result,
+               let audioModel = AudioRecordTaskModel(from: record) {
+                models.append(audioModel)
+            }
+        }
+        
+        return models
+    }
 
 
     

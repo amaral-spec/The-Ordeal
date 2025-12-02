@@ -9,34 +9,34 @@
 import CloudKit
 import Foundation
 
-final class AudioRecordModel: Identifiable, Hashable {
+final class AudioRecordTaskModel: Identifiable, Hashable, AudioRecordProtocol {
     
     let id: CKRecord.ID
     let audioURL: URL
-    let challengeRef: CKRecord.Reference
+    let taskRef: CKRecord.Reference
     let userRef: CKRecord.Reference
     let createdAt: Date
     
     init(
         id: CKRecord.ID = CKRecord.ID(recordName: UUID().uuidString),
         audioURL: URL,
-        challengeID: CKRecord.ID,
+        taskID: CKRecord.ID,
         userID: CKRecord.ID,
         createdAt: Date = Date()
     ) {
         self.id = id
         self.audioURL = audioURL
-        self.challengeRef = CKRecord.Reference(recordID: challengeID, action: .none)
+        self.taskRef = CKRecord.Reference(recordID: taskID, action: .none)
         self.userRef = CKRecord.Reference(recordID: userID, action: .none)
         self.createdAt = createdAt
     }
     
     /// Convert this model to a CKRecord for saving into CloudKit
     func toRecord() -> CKRecord {
-        let record = CKRecord(recordType: "AudioRecord", recordID: id)
+        let record = CKRecord(recordType: "AudioRecordTask", recordID: id)
         
         record["audio"] = CKAsset(fileURL: audioURL)
-        record["challenge"] = challengeRef
+        record["task"] = taskRef
         record["user"] = userRef
         record["createdAt"] = createdAt as CKRecordValue
         
@@ -48,7 +48,7 @@ final class AudioRecordModel: Identifiable, Hashable {
         guard
             let asset = record["audio"] as? CKAsset,
             let audioURL = asset.fileURL,
-            let challengeRef = record["challenge"] as? CKRecord.Reference,
+            let taskRef = record["task"] as? CKRecord.Reference,
             let userRef = record["user"] as? CKRecord.Reference,
             let createdAt = record["createdAt"] as? Date
         else {
@@ -58,13 +58,13 @@ final class AudioRecordModel: Identifiable, Hashable {
         self.init(
             id: record.recordID,
             audioURL: audioURL,
-            challengeID: challengeRef.recordID,
+            taskID: taskRef.recordID,
             userID: userRef.recordID,
             createdAt: createdAt
         )
     }
     
-    static func ==(lhs: AudioRecordModel, rhs: AudioRecordModel) -> Bool {
+    static func ==(lhs: AudioRecordTaskModel, rhs: AudioRecordTaskModel) -> Bool {
         lhs.id == rhs.id
     }
     

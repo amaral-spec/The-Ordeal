@@ -7,44 +7,42 @@
 
 import SwiftUI
 
-struct DoChallengeCoordinatorView: View {
+struct DoTaskCoordinatorView: View {
     enum Route: Hashable {
-        case waitingChained
-        case initialChained
-        case receiveChained
-        case recordChained
+        case initialTask
+        case recordTask
     }
     
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var persistenceServices: PersistenceServices
     
-    @State private var path: [Route] = [.waitingChained]
+    @State private var path: [Route] = [.initialTask]
     
     @State private var showCancelAlert: Bool = false
     @State private var showConfirmAlert: Bool = false
     
-    @StateObject private var doChallengeVM: DoChallengeViewModel
+    @StateObject private var doTaskVM: DoTaskViewModel
     @StateObject private var rec = MiniRecorder()
     @StateObject private var player = MiniPlayer()
     
-    @State private var currentRoute: Route = .waitingChained
+    @State private var currentRoute: Route = .initialTask
     @State private var micDenied = false
 
-
-    init(challengeM: ChallengeModel) {
-        _doChallengeVM = StateObject(wrappedValue: DoChallengeViewModel(persistenceServices: PersistenceServices.shared, challengeM: challengeM))
+    init(taskM: TaskModel) {
+        _doTaskVM = StateObject(wrappedValue: DoTaskViewModel(persistenceServices: PersistenceServices.shared, taskM: taskM))
     }
 
     var body: some View {
 
         NavigationStack(path: $path) {
-            screen(for: .waitingChained)
+            screen(for: .initialTask)
                 .navigationDestination(for: Route.self) { route in
                     screen(for: route)
                 }
         }
-        .environmentObject(doChallengeVM)
+        .tint(Color("GreenCard"))
+        .environmentObject(doTaskVM)
         .environmentObject(rec)
         .environmentObject(player)
         .task {
@@ -54,37 +52,30 @@ struct DoChallengeCoordinatorView: View {
                 micDenied = (ok == false)
             }
         }
-        .alert("Cancelar desafio?", isPresented: $showCancelAlert) {
+        .alert("Cancelar Tarefa?", isPresented: $showCancelAlert) {
             Button("Manter", role: .cancel) { }
-            Button("Cancelar desafio", role: .destructive) {
-                
-                if currentRoute != .waitingChained {
-                    Task { await doChallengeVM.outChallenge() }
-                }
-                
+            Button("Cancelar tarefa", role: .destructive) {
                 dismiss()
             }
         } message: {
             Text("Tem certeza que deseja cancelar? Seu progresso atual será descartado.")
         }
-        .alert("Enviar Desafio?", isPresented: $showConfirmAlert) {
+        .alert("Enviar Tarefa?", isPresented: $showConfirmAlert) {
             if #available(iOS 26.0, *) {
                 Button("Finalizar", role: .confirm) {
                     Task {
-                        if let firstURL = doChallengeVM.recordings.first {
-                            await doChallengeVM.submitStudentAudio(url: firstURL)
+                        if let firstURL = doTaskVM.recordings.first {
+                            await doTaskVM.submitStudentAudio(url: firstURL)
                         }
-                        await doChallengeVM.outChallenge()
                         dismiss()
                     }
                 }
             } else {
                 Button("Finalizar") {
                     Task {
-                        if let firstURL = doChallengeVM.recordings.first {
-                            await doChallengeVM.submitStudentAudio(url: firstURL)
+                        if let firstURL = doTaskVM.recordings.first {
+                            await doTaskVM.submitStudentAudio(url: firstURL)
                         }
-                        await doChallengeVM.outChallenge()
                         dismiss()
                     }
                 }
@@ -110,35 +101,18 @@ struct DoChallengeCoordinatorView: View {
     @ViewBuilder
     private func screen(for route: Route) -> some View {
         switch route {
-        case .waitingChained:
-            WaitingChainedChallengeView { next in
-                currentRoute = next
-                path.append(next)
-            }
-            .toolbar { cancelToolbar }
-            .navigationBarBackButtonHidden(true)
-            .environmentObject(doChallengeVM)
             
-        case .initialChained:
-            InitialChainedChallengeView { next in
+        case .initialTask:
+            InitialTaskView { next in
                 currentRoute = next
                 path.append(next)
             }
             .toolbar { cancelToolbar }
             .navigationBarBackButtonHidden(true)
-            .environmentObject(doChallengeVM)
-            
-        case .receiveChained:
-            ReceivedAudioRecordChainedChallengeView { next in
-                currentRoute = next
-                path.append(next)
-            }
-            .toolbar { cancelToolbar }
-            .navigationBarBackButtonHidden(true)
-            .environmentObject(doChallengeVM)
+            .environmentObject(doTaskVM)
 
-        case .recordChained:
-            RecordFromInitialChainedChallengeView { next in
+        case .recordTask:
+            RecordFromInitialTaskView { next in
                 currentRoute = next
                 path.append(next)
             }
@@ -167,6 +141,7 @@ struct DoChallengeCoordinatorView: View {
                 Label("Confirmar", systemImage: "checkmark")
             }
             .buttonStyle(.borderedProminent)      // Torna o botão primário
-            .tint(Color("BlueChallenge"))         }
+            .tint(Color("GreeCard"))
+        }
     }
 }
