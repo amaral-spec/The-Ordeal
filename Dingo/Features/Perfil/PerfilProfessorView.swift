@@ -96,6 +96,7 @@ struct PerfilProfessorView: View {
     }
 }
 
+
 #Preview {
     PerfilProfessorView(persistenceServices: PersistenceServices.shared)
 }
