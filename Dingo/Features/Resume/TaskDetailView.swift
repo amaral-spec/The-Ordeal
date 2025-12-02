@@ -141,9 +141,12 @@ struct TaskDetailView: View {
     }
 }
 
-//#Preview {
-//    NavigationStack {
-//        TaskDetailView()
-//            .environmentObject(ResumeViewModel(isTeacher: false))
-//    }
-//}
+#Preview {
+    let services = PersistenceServices.shared
+    let vm = ResumeViewModel(persistenceServices: services, isTeacher: false)
+    return NavigationStack {
+        TaskDetailView()
+            .environmentObject(vm)
+            .environmentObject(services)
+    }
+}

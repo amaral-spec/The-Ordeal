@@ -1,46 +1,61 @@
 import SwiftUI
 
-struct ResumeStudentView: View {
-    
+struct ResumeStudentView: View, CardNavigationHandler {
+
     @EnvironmentObject var resumeVM: ResumeViewModel
     let onNavigate: (ResumeCoordinatorView.Route) -> Void
-    
+
+    // MARK: - Navegação do protocolo
+    func navigateToChallengeList() {
+        onNavigate(.listChallenge)
+    }
+
+    func navigateToTaskList() {
+        onNavigate(.listTask)
+    }
+
     var body: some View {
-        VStack(spacing: 12) {
+        ScrollView {
 
             // MARK: Streak Card
             StreakCardView()
+                .padding(.horizontal)
 
-            // MARK: Main Challenge
-            Button {
-                onNavigate(.listChallenge)
-            } label: {
-                ChallengeCardView(resumoVM: resumeVM)
-            }
+            // MARK: Challenge Card (Aluno)
+            BigChallengeCardView(
+                resumoVM: resumeVM,
+                navigationHandler: self
+            )
+            .padding(.all)
 
-            // MARK: Grid Tarefas + Treino
-            HStack(spacing: 12) {
-                Button {
-                    onNavigate(.listTask)
-                } label: {
-                    TaskCardView(resumoVM: resumeVM)
-                }
+            // MARK: Grid: Tarefas + Treino
+            HStack(spacing: 16) {
+                BigTaskCardView(
+                    resumoVM: resumeVM,
+                    navigationHandler: self
+                )
+
                 TrainingCardView()
             }
+            .padding(.horizontal)
+
             Spacer()
         }
         .padding(.top, 12)
-        .padding(.horizontal, 16)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.secondarySystemBackground).ignoresSafeArea())
         .navigationTitle("Resumo")
         .toolbarTitleDisplayMode(.inlineLarge)
-        .toolbar {
-           
+        .task {
+            async let desafios: () = resumeVM.carregarDesafios()
+            async let tarefas: () = resumeVM.carregarTarefas()
+            _ = await (desafios, tarefas)
         }
-
+        .refreshable {
+            async let desafios: () = resumeVM.carregarDesafios()
+            async let tarefas: () = resumeVM.carregarTarefas()
+            _ = await (desafios, tarefas)
+        }
     }
-    
 }
 
 #Preview {

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct PerfilView: View {
+struct PerfilStudentView: View {
     @StateObject private var vm: PerfilViewModel
     @EnvironmentObject var authVM: AuthViewModel
     @State private var showingEditSheet = false
@@ -57,7 +57,7 @@ struct PerfilView: View {
                     VStack(spacing: -10) {
                         ZStack{
                             RoundedRectangle(cornerRadius: 45)
-                                .frame(width: .infinity, height: 75)
+                                .frame( height: 75)
                                 .foregroundStyle(.white)
                             
                             HStack {
@@ -165,10 +165,17 @@ struct PerfilView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Editar") {
-                        vm.editName = vm.user?.name ?? ""
+                        // Só inicializa a edição com um valor não-vazio
+                        let name = vm.user?.name ?? ""
+                        if name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                            vm.editName = ""
+                        } else {
+                            vm.editName = name
+                        }
                         vm.editIsTeacher = vm.user?.isTeacher ?? false
                         showingEditSheet = true
                     }
+                    .disabled(vm.user == nil) // Evita abrir antes de carregar
                 }
             }
         }
@@ -242,5 +249,5 @@ struct Row: View {
 }
 
 #Preview {
-    PerfilView(persistenceServices: PersistenceServices.shared)
+    PerfilStudentView(persistenceServices: PersistenceServices.shared)
 }

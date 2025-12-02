@@ -13,7 +13,7 @@ struct TaskCardView: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 20)
-                .fill(resumoVM.tasks.isEmpty ? .gray : Color("GreenCard"))
+                .fill(resumoVM.currentOpenTasks().isEmpty ? .gray : Color("GreenCard"))
                 .frame(height: 160)
             if resumoVM.tasks.isEmpty {
                 ProgressView()

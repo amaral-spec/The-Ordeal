@@ -34,7 +34,9 @@ struct PerfilCoordinatorView: View {
             PerfilProfessorView(persistenceServices: persistenceServices)
 
         } else {
+
             PerfilView(persistenceServices: persistenceServices)
+
 
         }
         

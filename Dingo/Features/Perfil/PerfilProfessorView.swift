@@ -72,12 +72,21 @@ struct PerfilProfessorView: View {
                 .toolbarTitleDisplayMode(.inlineLarge)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("Editar") {
-                            vm.editName = vm.user?.name ?? ""
-                            vm.editIsTeacher = vm.user?.isTeacher ?? false
-                            showingEditSheet = true
+                            Button("Editar") {
+                                // Só inicializa a edição com um valor não-vazio
+                                let name = vm.user?.name ?? ""
+                                if name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                                    vm.editName = ""
+                                } else {
+                                    vm.editName = name
+                                }
+
+                                vm.editIsTeacher = vm.user?.isTeacher ?? false
+                                
+                                showingEditSheet = true
+                            }
+                            .disabled(vm.user == nil) // Evita abrir antes de carregar usuário
                         }
-                    }
                 }
             }
             .sheet(isPresented: $showingEditSheet) {
