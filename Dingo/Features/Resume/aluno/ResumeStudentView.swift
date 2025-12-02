@@ -15,12 +15,11 @@ struct ResumeStudentView: View, CardNavigationHandler {
     }
 
     var body: some View {
-        ScrollView {
-
+        ScrollView() {
             // MARK: Streak Card
             StreakCardView()
                 .padding(.horizontal)
-
+          
             // MARK: Challenge Card (Aluno)
             BigChallengeCardView(
                 resumoVM: resumeVM,
@@ -34,8 +33,9 @@ struct ResumeStudentView: View, CardNavigationHandler {
                     resumoVM: resumeVM,
                     navigationHandler: self
                 )
-
                 TrainingCardView()
+//                    .padding(.leading)
+                    
             }
             .padding(.horizontal)
 
