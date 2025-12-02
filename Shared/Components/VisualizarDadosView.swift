@@ -130,6 +130,8 @@ struct VisualizarDadosView: View {
                     Button {
                         if let challengeModel = challengeModel {
                             onNavigate(.participantsChallenge(challengeModel))
+                        } else if let taskModel = taskModel {
+                            onNavigate(.participantsTask(taskModel))
                         }
                     } label: {
                         HStack {
@@ -220,9 +222,10 @@ struct VisualizarDadosView: View {
                                                 .fill(Color("BlueCard"))
                                                 .shadow(color: .black.opacity(0.15), radius: 5, y: 3)
                                         )
+                                        .padding(.top, 15)
+                                        .padding(.bottom, 20)
+
                                 }
-                                .padding(.top, 15)
-                                .padding(.bottom, 20)
                             }
                         }
                     }

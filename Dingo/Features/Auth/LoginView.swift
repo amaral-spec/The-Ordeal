@@ -18,7 +18,7 @@ struct LoginView: View {
 
             Text("Seja bem vindo ao Dingo\n")
                 .font(.system(size: 30))
-                .padding(.vertical, 90)
+                .padding(.vertical, 16)
 
             
             SignInWithAppleButton(

@@ -33,6 +33,9 @@ targets:
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         GENERATE_INFOPLIST_FILE: YES
         CODE_SIGN_ENTITLEMENTS: Dingo/Dingo.entitlements
+        
+        INFOPLIST_KEY_CFBundleDevelopmentRegion: "pt-BR"
+        INFOPLIST_KEY_CFBundleLocalizations: ["pt-BR"]
 
     entitlements:
       path: Dingo/Dingo.entitlements

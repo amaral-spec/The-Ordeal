@@ -1,3 +1,4 @@
+
 import SwiftUI
 
 struct ResumeTeacherView: View, CardNavigationHandler {
@@ -30,20 +31,15 @@ struct ResumeTeacherView: View, CardNavigationHandler {
                 navigationHandler: self
             )
             .padding(.horizontal)
-
             Spacer()
         }
         .background(Color(.secondarySystemBackground))
         .navigationTitle("Início")
         .toolbarTitleDisplayMode(.inlineLarge)
-        
-        // Carrega tudo ao abrir
         .task {
             await resumeVM.carregarDesafios()
             await resumeVM.carregarTarefas()
         }
-        
-        // Pull to refresh
         .refreshable {
             await resumeVM.carregarDesafios()
             await resumeVM.carregarTarefas()

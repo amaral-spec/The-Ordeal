@@ -85,6 +85,7 @@ struct ResumeCoordinatorView: View {
                     
                 case .participantsTask(let task):
                     ListaParticipantesView(isTeacher: true, taskModel: task)
+                        .environmentObject(resumeVM)
                 }
             }
         }
