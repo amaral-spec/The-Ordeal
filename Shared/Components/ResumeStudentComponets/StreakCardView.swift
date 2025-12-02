@@ -38,12 +38,14 @@ struct StreakCardView: View {
                     .foregroundColor(.gray)
             }
         }
-        .padding(.all, 20)
+
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.white)
                 .shadow(color: .black.opacity(0.1), radius: 4, y: 2)
         )
+        .padding(.vertical, 8)
+        .padding(.horizontal)
     }
 }
 

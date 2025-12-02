@@ -8,13 +8,9 @@
 import SwiftUI
 
 struct PerfilProfessorView: View {
-    @StateObject private var vm: PerfilViewModel
+    @EnvironmentObject var vm: PerfilViewModel
     @EnvironmentObject var authVM: AuthViewModel
     @State private var showingEditSheet = false
-    
-    init(persistenceServices: PersistenceServices) {
-        _vm = StateObject(wrappedValue: PerfilViewModel(persistenceServices: persistenceServices))
-    }
     
     var body: some View {
         NavigationStack {

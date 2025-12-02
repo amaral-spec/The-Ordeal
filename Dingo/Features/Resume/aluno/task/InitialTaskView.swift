@@ -7,17 +7,21 @@
 
 import SwiftUI
 
-struct InitialChainedChallengeView: View {
+struct InitialTaskView: View {
     
-    @EnvironmentObject var doChallengeVM: DoChallengeViewModel
+    @EnvironmentObject var doTaskVM: DoTaskViewModel
     @EnvironmentObject var rec: MiniRecorder
-    let onNavigation: (DoChallengeCoordinatorView.Route) -> Void
+    let onNavigation: (DoTaskCoordinatorView.Route) -> Void
     
     var body: some View {
         VStack{//Escrita
-            TopPageInstructionView(instruction: "Toque algo de sua escolha por 15 segundos")
+            TopPageInstructionView(instruction: doTaskVM.taskM?.description ?? " Sem titulo para tarefa")
             Spacer()
-            IconImageView(nomeIcone: "waveform")
+            IconImageView(
+                nomeIcone: "waveform",
+                colorBackground: Color("GreenCard").opacity(0.3),
+                colorText: Color("GreenCard")
+            )
             ImageMessageView(title: "Grave o seu audio", subtitle: "")
             MultiBarVisualizerView(values: rec.meterHistory, barCount: 24)
                 .frame(height: 54)
@@ -27,15 +31,15 @@ struct InitialChainedChallengeView: View {
             Button {
                 if rec.isRecording {
                     rec.stop()
-                    onNavigation(.recordChained)
+                    onNavigation(.recordTask)
                 } else {
                     rec.start()
                 }
             } label: {
-                RecordingButtonView(isRecording: rec.isRecording, color: Color("GreenCard"))
+                RecordingButtonView(isRecording: rec.isRecording)
             }
         }
-        .navigationTitle(Text("Encadeia"))
+        .navigationTitle(Text(doTaskVM.taskM?.title ?? "Sem titulo"))
         .navigationBarTitleDisplayMode(.inline)
     }
 }

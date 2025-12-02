@@ -10,15 +10,17 @@ import Foundation
 
 struct IconImageView: View{
     var nomeIcone: String = "waveform"
+    var colorBackground: Color = Color("BlueChallengeBackground")
+    var colorText: Color = Color("BlueChallenge")
     
     var body: some View {
         ZStack{ //Imagem no meio estranha
             Circle()
                 .frame(width: 50, height: 50)
-                .foregroundColor(Color("BlueChallengeBackground"))
+                .foregroundColor(colorBackground)
             
             Image(systemName: nomeIcone)
-                .foregroundColor(Color("BlueChallenge"))
+                .foregroundColor(colorText)
                 .font(.system(size: 25))
         }
     
@@ -45,12 +47,13 @@ struct ImageMessageView: View {
 
 struct RecordingButtonView: View{
     var isRecording: Bool
+    var color: Color = Color("BlueChallenge")
     
     var body: some View{
         
             Image(systemName: isRecording ? "stop.circle.fill" : "record.circle.fill")
                 .resizable()
-                .foregroundColor(Color("BlueChallenge"))
+                .foregroundColor(color)
                 .padding(.trailing, 1)
                 .frame(width: 64, height: 64)
 //                .padding()

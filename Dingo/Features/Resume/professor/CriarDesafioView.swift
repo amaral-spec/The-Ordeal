@@ -72,8 +72,8 @@ struct CriarDesafioView: View {
                     Button {
                         dismiss()
                     } label: {
-                        Label("Cancelar", systemImage: "xmark")
-                            .foregroundStyle(Color("BlueCard"))
+                        Image( systemName: "xmark")
+                            .foregroundStyle(.black)
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {

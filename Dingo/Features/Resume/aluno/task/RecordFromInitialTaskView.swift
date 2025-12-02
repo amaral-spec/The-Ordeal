@@ -10,17 +10,17 @@ import UIKit
 import Combine
 import AVFoundation
 
-struct RecordFromInitialChainedChallengeView: View {
+struct RecordFromInitialTaskView: View {
 
-    @EnvironmentObject var doChallengeVM: DoChallengeViewModel
+    @EnvironmentObject var doTaskVM: DoTaskViewModel
     @EnvironmentObject var player: MiniPlayer
     
     // Use a computed property so we can safely access the environment object.
     private var firstURL: URL? {
-        doChallengeVM.recordings.first
+        doTaskVM.recordings.first
     }
     
-    let onNavigation: (DoChallengeCoordinatorView.Route) -> Void
+    let onNavigation: (DoTaskCoordinatorView.Route) -> Void
 
     var body: some View {
         VStack {
@@ -54,16 +54,16 @@ struct RecordFromInitialChainedChallengeView: View {
             Spacer()
 
             Button {
-                onNavigation(.initialChained)
+                onNavigation(.initialTask)
             } label: {
                 Text("Regravar Audio")
-                    .tint(Color("BlueChallenge"))
+                    .tint(Color("GreenCard"))
             }
         }
         .onAppear {
-            doChallengeVM.recordings = doChallengeVM.recordingsList()
+            doTaskVM.recordings = doTaskVM.recordingsList()
         }
-        .navigationTitle("Encadeia")
+        .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
     }
 }

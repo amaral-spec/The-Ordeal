@@ -3,22 +3,42 @@ import CloudKit
 
 
 struct PerfilCoordinatorView: View {
-    @EnvironmentObject var authVM: AuthViewModel
-    let isProfessor: Bool
-    @State private var groupCode: String = ""
-    @EnvironmentObject var persistenceServices: PersistenceServices
+    enum Route: Hashable {
+        case meusGrupos
+    }
     
-    @State private var fetchedGroup: GroupModel? = nil
-    @State private var fetchError: String? = nil
+    @EnvironmentObject var persistenceServices: PersistenceServices
+    let isTeacher: Bool
+    @State private var path: [Route] = []
+    @StateObject private var perfilVM: PerfilViewModel
+    
+    init(isTeacher: Bool) {
+        _perfilVM = StateObject(wrappedValue: PerfilViewModel(persistenceServices: PersistenceServices()))
+        self.isTeacher = isTeacher
+    }
 
     var body: some View {
-        if isProfessor {
-            PerfilProfessorView(persistenceServices: persistenceServices)
+        NavigationStack(path: $path) {
+            VStack(){
+                if isTeacher {
+                    PerfilProfessorView()
+                        .environmentObject(perfilVM)
+                    
+                } else {
+                    PerfilStudentView() { next in
+                        path.append(next)
+                    }
+                    .environmentObject(perfilVM)
 
-        } else {
-            PerfilStudentView(persistenceServices: persistenceServices)
-//            AlunoPerfilView(viewModel: PerfilViewModel(userType: .aluno))
-
+                }
+            }
+            .navigationDestination(for: Route.self){ route in
+                switch route {
+                    case .meusGrupos:
+                        MeusGrupos()
+                        .environmentObject(perfilVM)
+                }
+            }
         }
     }
 }

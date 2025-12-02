@@ -12,6 +12,8 @@ import SwiftData
 struct OsVigaristasApp: App {
     @StateObject private var authService = AuthService.shared
     @StateObject private var persistenceServices = PersistenceServices.shared
+    @StateObject private var detector = InstrumentDetectionViewModel.shared
+
 
     var body: some Scene {
         WindowGroup {
@@ -20,6 +22,8 @@ struct OsVigaristasApp: App {
                 .environmentObject(authService) // Compartilha o estado global de login
                 .environmentObject(persistenceServices) // Compartilha funcoes do CloudKit
                 .preferredColorScheme(.light)
+                .environmentObject(detector)//Compartilha funcoes do coreMl
+
         }
     }
 }
