@@ -87,7 +87,7 @@ struct PerfilView: View {
                             RoundedRectangle(cornerRadius: 30)
                                 .frame(width: 350, height: 50)
                                 .padding(10)
-                                .foregroundStyle(Color.accentColor.opacity(0.3))
+                                .foregroundStyle(.white)
                             
                             HStack {
                                 Text("Entrar em um grupo")
@@ -132,6 +132,7 @@ struct PerfilView: View {
                             Row(texto: "Meus grupos")
                         }
                         .buttonStyle(.plain)
+                        
                         Button(action:{}){
                             Row(texto: "Histórico de tarefas")
                         }
