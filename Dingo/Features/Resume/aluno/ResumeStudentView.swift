@@ -1,33 +1,39 @@
 import SwiftUI
 
-struct ResumeStudentView: View {
-    
+struct ResumeStudentView: View, CardNavigationHandler {
+
     @EnvironmentObject var resumeVM: ResumeViewModel
     let onNavigate: (ResumeCoordinatorView.Route) -> Void
     @State var startTraining: Bool = false
-    
+
+    // MARK: - Navegação do protocolo
+    func navigateToChallengeList() {
+        onNavigate(.listChallenge)
+    }
+
+    func navigateToTaskList() {
+        onNavigate(.listTask)
+    }
+
     var body: some View {
-        VStack(spacing: 12) {
-            
+        ScrollView() {
             // MARK: Streak Card
             StreakCardView()
-            
-            // MARK: Main Challenge
-            Button {
-                onNavigate(.listChallenge)
-            } label: {
-                ChallengeCardView(resumoVM: resumeVM)
-            }
-            
-            // MARK: Grid Tarefas + Treino
-            HStack(spacing: 12) {
-                Button {
-                    onNavigate(.listTask)
-                } label: {
-                    TaskCardView(resumoVM: resumeVM)
-                }
-                
-                
+                .padding(.horizontal)
+          
+            // MARK: Challenge Card (Aluno)
+            BigChallengeCardView(
+                resumoVM: resumeVM,
+                navigationHandler: self
+            )
+            .padding(.all)
+
+            // MARK: Grid: Tarefas + Treino
+            HStack(spacing: 16) {
+                BigTaskCardView(
+                    resumoVM: resumeVM,
+                    navigationHandler: self
+                )
                 //Button of training
                 Button{
                     //StartTrainingView()
@@ -36,12 +42,14 @@ struct ResumeStudentView: View {
                     TrainingCardView()
                     
                 }
+//                    .padding(.leading)
+                    
             }
+            .padding(.horizontal)
+
             Spacer()
         }
         .padding(.top, 12)
-        .padding(.horizontal, 16)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.secondarySystemBackground).ignoresSafeArea())
         .navigationTitle("Resumo")
         .toolbarTitleDisplayMode(.inlineLarge)
@@ -52,6 +60,16 @@ struct ResumeStudentView: View {
         .sheet(isPresented: $startTraining) {
             TrainingCoordinatorView()
                 .interactiveDismissDisabled(true)//Tira o deslizar para sair
+        }
+        .task {
+            async let desafios: () = resumeVM.carregarDesafios()
+            async let tarefas: () = resumeVM.carregarTarefas()
+            _ = await (desafios, tarefas)
+        }
+        .refreshable {
+            async let desafios: () = resumeVM.carregarDesafios()
+            async let tarefas: () = resumeVM.carregarTarefas()
+            _ = await (desafios, tarefas)
         }
     }
 }

@@ -10,12 +10,13 @@ import CloudKit
 
 final class ResumeViewModel: ObservableObject {
     @Published var challenges: [ChallengeModel] = []
+    
     @Published var tasks: [TaskModel] = []
 
-    @Published var challengeGroups: [ ChallengeModel : String ] = [:]
-    
     @Published var members: [UserModel] = []
-    
+    @Published var challengeGroups: [ ChallengeModel : String ] = [:]
+    @Published var alunosTarefas: [UserModel] = []
+
     @Published var audios: [AudioRecordModel] = []
     
     @Published var isTeacher: Bool = false
@@ -25,12 +26,21 @@ final class ResumeViewModel: ObservableObject {
     @Published private var isTaskEmpty: Bool = true
     @Published private var isMemberEmpty: Bool = true
     @Published private var isAudioEmpty: Bool = true
+    @Published private var isAlunosTarefasEmpty: Bool = true
     
-    private let persistenceServices: PersistenceServices
+    let persistenceServices: PersistenceServices
     
     init(persistenceServices: PersistenceServices, isTeacher: Bool) {
         self.persistenceServices = persistenceServices
         self.isTeacher = isTeacher
+    }
+    
+    func currentOpenTasks() -> [TaskModel] {
+        tasks.filter { $0.endDate >= Date() }
+    }
+    
+    func currentOpenChallenges() -> [ChallengeModel] {
+        challenges.filter { $0.endDate >= Date() }
     }
 
     func carregarDesafios() async {
@@ -107,6 +117,21 @@ final class ResumeViewModel: ObservableObject {
                 isAudioEmpty = audiosCarregados.isEmpty
             }
             print("\(audiosCarregados.count) áudios carregados.")
+        } catch {
+            print("Erro ao carregar participantes: \(error.localizedDescription)")
+        }
+    }
+    
+    func carregarAlunosTarefa(task: TaskModel) async {
+        do {
+            let taskRef = CKRecord.Reference(recordID: task.id, action: .none)
+
+            let alunosTarefaCarregados = try await persistenceServices.fetchTaskMembers(recordReference: taskRef)
+            await MainActor.run {
+                alunosTarefas = alunosTarefaCarregados
+                isAlunosTarefasEmpty = alunosTarefaCarregados.isEmpty
+            }
+            print("\(alunosTarefaCarregados.count) alunos carregados.")
         } catch {
             print("Erro ao carregar participantes: \(error.localizedDescription)")
         }
