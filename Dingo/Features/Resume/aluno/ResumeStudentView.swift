@@ -26,7 +26,7 @@ struct ResumeStudentView: View, CardNavigationHandler {
                 resumoVM: resumeVM,
                 navigationHandler: self
             )
-            .padding(.all)
+            .padding(.horizontal)
 
             // MARK: Grid: Tarefas + Treino
             HStack(spacing: 16) {
