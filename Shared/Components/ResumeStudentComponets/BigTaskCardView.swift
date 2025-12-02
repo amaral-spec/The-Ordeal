@@ -4,35 +4,36 @@ import SwiftUI
 
 struct BigTaskCardView: View {
     @ObservedObject var resumoVM: ResumeViewModel
-
+    
     var body: some View {
         ZStack {
+            RoundedRectangle(cornerRadius: 25)
+                .fill(resumoVM.tasks.isEmpty ? .gray : Color("GreenCard"))
             if resumoVM.tasks.isEmpty {
-                RoundedRectangle(cornerRadius: 25)
-                    .fill(.gray)
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle())
+                    .scaleEffect(1.6)
+                    .tint(.white)
             } else {
-                RoundedRectangle(cornerRadius: 25)
-                    .fill(Color("GreenCard"))
-            }
-
-            VStack {
-                HStack {
-                    Text("Tarefas")
-                        .font(.title3.bold())
+                VStack {
+                    HStack {
+                        Text("Tarefas")
+                            .font(.title3.bold())
+                            .foregroundColor(.white)
+                        Spacer()
+                    }
+                    Spacer()
+                    
+                    Image("custom.checklist.checked.circle.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 140, height: 140)
                         .foregroundColor(.white)
+                    
                     Spacer()
                 }
-                Spacer()
-
-                Image("custom.checklist.checked.circle.fill")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 140, height: 140)
-                    .foregroundColor(.white)
-
-                Spacer()
+                .padding()
             }
-            .padding()
         }
         .frame(height: 220)
         .task {
@@ -40,3 +41,4 @@ struct BigTaskCardView: View {
         }
     }
 }
+

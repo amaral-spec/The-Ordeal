@@ -38,6 +38,10 @@ struct DesafiosList: View {
                         
                         if(desafio.endDate >= Date()){
                             ListCard(title: desafio.title, subtitle: "Faltam \(diasRestantes) dias!", image: ChallengeImage())
+                                .onTapGesture {
+                                    resumoVM.members = []
+                                    onNavigate(.detailChallenge(desafio))
+                                }
                         }
                     }
                 }
