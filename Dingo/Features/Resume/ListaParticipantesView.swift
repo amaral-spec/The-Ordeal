@@ -13,6 +13,7 @@ struct ListaParticipantesView: View {
     @EnvironmentObject var resumeVM: ResumeViewModel
     @State var challengeModel: ChallengeModel?
     @State var taskModel: TaskModel?
+    @State private var audioLoadingTimeoutReached: Bool = false
     
     var body: some View {
         ZStack {
@@ -62,32 +63,48 @@ struct ListaParticipantesView: View {
                                         .foregroundColor(.gray)
                                 }
                                 
-                                Text(member.name)
-                                    .padding(.horizontal)
-                                    .font(.title2)
-                                    .foregroundColor(.black.opacity(0.7))
+                                VStack(alignment: .leading, spacing: 0) {
+                                    Text(member.name)
+                                        .padding(.horizontal)
+                                        .font(.title2)
+                                        .foregroundColor(.black.opacity(0.7))
+                                        .padding(.vertical)
+                                    
+                                    if isTeacher {
+                                        if resumeVM.audios.isEmpty {
+                                            if audioLoadingTimeoutReached {
+                                                Text("Não há áudios")
+                                                    .font(.subheadline)
+                                                    .foregroundColor(.gray)
+                                                    .padding(.leading, 20)
+                                                    .padding(.vertical, 4)
+                                            } else {
+                                                HStack {
+                                                    ProgressView()
+                                                        .scaleEffect(1.2)
+                                                        .tint(Color("BlueCard"))
+                                                    Text("Carregando áudio...")
+                                                        .font(.subheadline)
+                                                        .foregroundColor(.gray)
+                                                    Spacer()
+                                                }
+                                                .padding(.leading, 20)
+                                                .padding(.vertical, 4)
+                                                .task {
+                                                    try? await Task.sleep(nanoseconds: 10_000_000_000)
+                                                    if resumeVM.audios.isEmpty {
+                                                        audioLoadingTimeoutReached = true
+                                                    }
+                                                }
+                                            }
+                                        } else if let audio = resumeVM.audioFor(member: member) {
+                                            MemberAudioRow(member: member, audio: audio)
+                                        }
+                                    }
+                                }
                                 
-                                Spacer()
                             }
                             .padding(.vertical, 8)
-                            
-                            if isTeacher {
-                                if resumeVM.audios.isEmpty {
-                                    HStack {
-                                        ProgressView()
-                                            .scaleEffect(1.2)
-                                        Text("Carregando áudio...")
-                                            .font(.subheadline)
-                                            .foregroundColor(.gray)
-                                        Spacer()
-                                    }
-                                    .padding(.leading, 20)
-                                    .padding(.vertical, 4)
-                                    
-                                } else if let audio = resumeVM.audioFor(member: member) {
-                                    MemberAudioRow(member: member, audio: audio)
-                                }
-                            }
                             
                             if index <= resumeVM.members.count - 1 {
                                 Rectangle()
@@ -117,32 +134,50 @@ struct ListaParticipantesView: View {
                                         .foregroundColor(.gray)
                                 }
                                 
-                                Text(aluno.name)
-                                    .padding(.horizontal)
-                                    .font(.title2)
-                                    .foregroundColor(.black.opacity(0.7))
+                                VStack(alignment: .leading, spacing: 0) {
+                                    
+                                    Text(aluno.name)
+                                        .padding(.horizontal)
+                                        .font(.title2)
+                                        .foregroundColor(.black.opacity(0.7))
+                                        .padding(.vertical)
+                                    
+                                    if isTeacher {
+                                        if resumeVM.audios.isEmpty {
+                                            if audioLoadingTimeoutReached {
+                                                Text("Não há áudios")
+                                                    .font(.subheadline)
+                                                    .foregroundColor(.gray)
+                                                    .padding(.leading, 20)
+                                                    .padding(.vertical, 4)
+                                            } else {
+                                                HStack {
+                                                    ProgressView()
+                                                        .scaleEffect(1.2)
+                                                        .tint(Color("GreenCard"))
+                                                    Text("Carregando áudio...")
+                                                        .font(.subheadline)
+                                                        .foregroundColor(.gray)
+                                                    Spacer()
+                                                }
+                                                .padding(.leading, 20)
+                                                .padding(.vertical, 4)
+                                                .task {
+                                                    try? await Task.sleep(nanoseconds: 10_000_000_000)
+                                                    if resumeVM.audios.isEmpty {
+                                                        audioLoadingTimeoutReached = true
+                                                    }
+                                                }
+                                            }
+                                        } else if let audio = resumeVM.audioFor(member: aluno) {
+                                            MemberAudioRow(member: aluno, audio: audio)
+                                        }
+                                    }
+                                }
                                 
-                                Spacer()
+//                                Spacer()
                             }
                             .padding(.vertical, 8)
-                            
-                            if isTeacher {
-                                if resumeVM.audios.isEmpty {
-                                    HStack {
-                                        ProgressView()
-                                            .scaleEffect(1.2)
-                                        Text("Carregando áudio...")
-                                            .font(.subheadline)
-                                            .foregroundColor(.gray)
-                                        Spacer()
-                                    }
-                                    .padding(.leading, 20)
-                                    .padding(.vertical, 4)
-                                    
-                                } else if let audio = resumeVM.audioFor(member: aluno) {
-                                    MemberAudioRow(member: aluno, audio: audio)
-                                }
-                            }
                             
                             if index <= resumeVM.alunosTarefas.count - 1 {
                                 Rectangle()
