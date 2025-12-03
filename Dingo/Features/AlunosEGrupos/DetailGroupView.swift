@@ -112,7 +112,7 @@ struct DetailGroupView: View {
                     .cornerRadius(30)
                     .padding(.top, 40)
                     .transition(.move(edge: .top).combined(with: .opacity))
-                    .animation(Animation.easeInOut(duration: 0.5), value: isCopied)
+                    .animation(Animation.easeInOut(duration: 0.5), value: !isCopied)
             }
         }
     }
