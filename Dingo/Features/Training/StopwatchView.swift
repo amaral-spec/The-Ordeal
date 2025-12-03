@@ -13,6 +13,8 @@ struct StopwatchView: View {
     @State private var isRunning = false
     @State private var timer: Timer? = nil
     @State private var startDate: Date?
+    @State private var oldTime = 0.00
+    
     let onNavigate: (TrainingCoordinatorView.Route) -> Void
     
     // MARK: - Dynamic Time Formatter (hours/minutes only if needed)
@@ -113,20 +115,19 @@ struct StopwatchView: View {
     
     func startTimer() {
         isRunning = true
-        if(time == 0){ //Impede de reiniciar o timer quando pausa e continua
-            startDate = Date()
-        }
+        startDate = Date()
         timer?.invalidate()
-        
         timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
-            self.time = Date().timeIntervalSince(self.startDate!)
+            self.time = Date().timeIntervalSince(self.startDate!) + oldTime
         }
     }
     
     func stopTimer() {
         isRunning = false
+        oldTime = time
         timer?.invalidate()
         timer = nil
+        
     }
 }
 
