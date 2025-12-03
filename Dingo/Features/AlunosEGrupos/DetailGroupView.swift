@@ -67,10 +67,25 @@ struct DetailGroupView: View {
                     }
 //                    .frame(maxWidth: .infinity)
                 }
-                
+                    
                 Button {
                     UIPasteboard.general.string = grupo.groupCode
-                    isCopied = true
+                    
+                    withAnimation {
+                        isCopied = true
+                    }
+                    
+                    // Removes feedback after 2.0 seconds
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                        withAnimation {
+                            self.isCopied = false
+                        }
+                    }
+                    
+                    // Haptics
+                    let generator = UINotificationFeedbackGenerator()
+                    generator.notificationOccurred(.success)
+                    
                 } label: {
                     HStack {
                         Image(systemName: "doc.on.doc")
