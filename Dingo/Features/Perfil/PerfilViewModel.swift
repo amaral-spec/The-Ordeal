@@ -22,6 +22,7 @@ class PerfilViewModel: ObservableObject {
     @Published var isShowingPopup: Bool = false
     @Published var groupCodeInput: String = "" // Used for TextField binding
     @Published var fetchedGroup: GroupModel? = nil
+    @Published var fetchedAllGroups: [GroupModel] = []
     @Published var fetchError: String? = nil
     @Published var isJoiningGroup: Bool = false
     @Published var joinSuccessMessage: String? = nil
@@ -34,6 +35,7 @@ class PerfilViewModel: ObservableObject {
     @Published var editName: String = ""
     @Published var editIsTeacher: Bool = false
     @Published var isSavingChanges: Bool = false
+    @Published var editValidationError: String? = nil
     
     private let persistenceServices: PersistenceServices
     private var groupCodeCancellable: AnyCancellable? // For debouncing
@@ -79,6 +81,15 @@ class PerfilViewModel: ObservableObject {
                 Task { await self.fetchGroup(code: code) }
             }
     }
+    
+    func fetchAllGroups() async {
+        do {
+            self.fetchedAllGroups = try await persistenceServices.fetchAllGroups()
+        } catch {
+            self.fetchError = "Erro ao buscar grupos: \(error.localizedDescription)"
+        }
+    }
+    
     
     func fetchGroup(code: String) async {
         // Clear old messages
@@ -170,16 +181,23 @@ class PerfilViewModel: ObservableObject {
 
     func saveUserEdits() async {
         guard !isSavingChanges else { return }
+        
+        let trimmed = editName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else {
+            editValidationError = "O nome não pode ser vazio."
+            return
+        }
+        editValidationError = nil
         isSavingChanges = true
 
         do {
             try await persistenceServices.editUser(
-                newName: editName,
+                newName: trimmed,
                 isTeacher: editIsTeacher
             )
 
             // Update UI locally
-            user?.name = editName
+            user?.name = trimmed
             user?.isTeacher = editIsTeacher
 
             isShowingEditProfile = false

@@ -10,24 +10,33 @@ import SwiftUI
 
 struct MemberAudioRow: View {
     let member: UserModel
-    let audio: AudioRecordModel
-    @StateObject var player = MiniPlayer()
+    let audio: any AudioRecordProtocol
+
+    @StateObject private var player = MiniPlayer()
 
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                Button {
-                    if player.playingURL == audio.audioURL && player.isPlaying {
-                        player.pause()
-                    } else {
-                        player.play(audio.audioURL)
-                    }
-                } label: {
-                    Image(systemName: (player.playingURL == audio.audioURL && player.isPlaying)
-                          ? "pause.fill" : "play.fill")
+        HStack {
+            Button {
+                if player.playingURL == audio.audioURL && player.isPlaying {
+                    player.pause()
+                } else {
+                    player.play(audio.audioURL)
                 }
-                PlaybackWaveformView(progress: player.progress)
+            } label: {
+                Image(systemName: (player.playingURL == audio.audioURL && player.isPlaying)
+                      ? "pause.fill" : "play.fill")
+                    .foregroundColor(.primary)
             }
+            .buttonStyle(.plain)
+
+            PlaybackWaveformView(
+                progress: (player.playingURL == audio.audioURL ? player.progress : 0)
+            )
+            .frame(height: 24)
+
+            Spacer()
         }
+        .padding(.leading, 20)
+        .padding(.vertical, 4)
     }
 }

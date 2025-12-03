@@ -12,9 +12,15 @@ import PhotosUI
 struct EditProfileModal: View {
     @ObservedObject var vm: PerfilViewModel
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var authService: AuthService
     
     @State private var selectedImage: UIImage? = nil
     @State private var photoItem: PhotosPickerItem? = nil  // NEW
+    @State private var needToCheckLoginAgain: Bool = false
+    
+    private var isNameValid: Bool {
+        !vm.editName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
     
     var body: some View {
         NavigationView {
@@ -38,15 +44,14 @@ struct EditProfileModal: View {
                                     .frame(width: 150, height: 150)
                                     .clipShape(Circle())
                                     .padding(.bottom, 40)
+                            } else {
+                                Image("partitura")
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 120, height: 120)
+                                    .clipShape(Circle())
+                                    .padding(.bottom, 40)
                             }
-//                            } else {
-//                                Image("partitura")
-//                                    .resizable()
-//                                    .scaledToFill()
-//                                    .frame(width: 120, height: 120)
-//                                    .clipShape(Circle())
-//                                    .padding(.bottom, 40)
-//                            }
                         }
                         .onChange(of: photoItem) { _, newValue in
                             Task {
@@ -76,8 +81,17 @@ struct EditProfileModal: View {
                                 .fontWeight(.bold)
                                 .padding(.leading, 40)
                             
-                            TextField("", text: $vm.editName)
+                            TextField("Digite seu nome", text: $vm.editName)
+                                .textInputAutocapitalization(.words)
+                                .disableAutocorrection(true)
                         }
+                    }
+                    
+                    if let validation = vm.editValidationError {
+                        Text(validation)
+                            .font(.caption)
+                            .foregroundColor(.red)
+                            .padding(.top, 4)
                     }
                     
                     ZStack {
@@ -86,15 +100,13 @@ struct EditProfileModal: View {
                             .foregroundStyle(.gray.opacity(0.3))
                         
                         Toggle("Sou professor", isOn: $vm.editIsTeacher)
+                            .onChange(of: vm.editIsTeacher) {
+                                needToCheckLoginAgain.toggle()
+                            }
                             .fontWeight(.bold)
                             .padding(.horizontal, 40)
                     }
                 }
-                
-                Text("O usuário terá de realizar login novamente para mudança de tipo de conta ser efetuada.")
-                    .font(.caption)
-                    .foregroundColor(.gray)
-                    .padding(.horizontal, 40)
                 
             }
             .navigationTitle("Editar perfil")
@@ -109,9 +121,16 @@ struct EditProfileModal: View {
                                     await vm.updateProfileImage(img)
                                 }
                                 await vm.saveUserEdits()
+                                if vm.editValidationError == nil {
+                                    if needToCheckLoginAgain {
+                                        authService.changeType()
+                                    }
+                                    dismiss()
+                                    
+                                }
                             }
-                            dismiss()
                         }
+                        .disabled(!isNameValid || vm.isSavingChanges)
                     }
                 }
                 

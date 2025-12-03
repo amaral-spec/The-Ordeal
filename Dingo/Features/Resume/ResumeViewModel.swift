@@ -10,13 +10,14 @@ import CloudKit
 
 final class ResumeViewModel: ObservableObject {
     @Published var challenges: [ChallengeModel] = []
+    
     @Published var tasks: [TaskModel] = []
 
-    @Published var challengeGroups: [ ChallengeModel : String ] = [:]
-    
     @Published var members: [UserModel] = []
-    
-    @Published var audios: [AudioRecordModel] = []
+    @Published var challengeGroups: [ ChallengeModel : String ] = [:]
+    @Published var alunosTarefas: [UserModel] = []
+
+    @Published var audios: [any AudioRecordProtocol] = []
     
     @Published var isTeacher: Bool = false
     
@@ -25,12 +26,21 @@ final class ResumeViewModel: ObservableObject {
     @Published private var isTaskEmpty: Bool = true
     @Published private var isMemberEmpty: Bool = true
     @Published private var isAudioEmpty: Bool = true
+    @Published private var isAlunosTarefasEmpty: Bool = true
     
-    private let persistenceServices: PersistenceServices
+    let persistenceServices: PersistenceServices
     
     init(persistenceServices: PersistenceServices, isTeacher: Bool) {
         self.persistenceServices = persistenceServices
         self.isTeacher = isTeacher
+    }
+    
+    func currentOpenTasks() -> [TaskModel] {
+        tasks.filter { $0.endDate >= Date() }
+    }
+    
+    func currentOpenChallenges() -> [ChallengeModel] {
+        challenges.filter { $0.endDate >= Date() }
     }
 
     func carregarDesafios() async {
@@ -86,6 +96,21 @@ final class ResumeViewModel: ObservableObject {
         }
     }
     
+    func carregarParticipantesPorTarefa(task: TaskModel) async {
+        let taskRef = CKRecord.Reference(recordID: task.id, action: .none)
+        
+        do {
+            let participantesCarregados = try await persistenceServices.fetchTaskMembers(recordReference: taskRef)
+            await MainActor.run {
+                members = participantesCarregados
+                isMemberEmpty = participantesCarregados.isEmpty
+            }
+            print("\(participantesCarregados.count) participantes carregados")
+        } catch {
+            print("Erro ao carregar participantes: \(error.localizedDescription)")
+        }
+    }
+    
     func formatarDiaMes(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM"
@@ -100,13 +125,43 @@ final class ResumeViewModel: ObservableObject {
     }
     
     func carregarAudios(challengeID: CKRecord.ID) async {
-        do  {
-            let audiosCarregados = try await persistenceServices.fetchChallengeAudio(challengeID: challengeID)
+        do {
+            let audiosCarregados: [AudioRecordChallengeModel] =
+                try await persistenceServices.fetchChallengeAudio(challengeID: challengeID)
+
             await MainActor.run {
-                audios = audiosCarregados
-                isAudioEmpty = audiosCarregados.isEmpty
+                self.audios = audiosCarregados as [any AudioRecordProtocol]
             }
-            print("\(audiosCarregados.count) áudios carregados.")
+        } catch {
+            print("Erro ao carregar audios: \(error)")
+        }
+    }
+
+    
+    func carregarAudios(taskID: CKRecord.ID) async {
+        do {
+            let audiosCarregados: [AudioRecordTaskModel] =
+                try await persistenceServices.fetchTaskAudio(taskID: taskID)
+
+            await MainActor.run {
+                self.audios = audiosCarregados as [any AudioRecordProtocol]
+            }
+        } catch {
+            print("Erro ao carregar audios: \(error)")
+        }
+    }
+
+    
+    func carregarAlunosTarefa(task: TaskModel) async {
+        do {
+            let taskRef = CKRecord.Reference(recordID: task.id, action: .none)
+
+            let alunosTarefaCarregados = try await persistenceServices.fetchTaskMembers(recordReference: taskRef)
+            await MainActor.run {
+                alunosTarefas = alunosTarefaCarregados
+                isAlunosTarefasEmpty = alunosTarefaCarregados.isEmpty
+            }
+            print("\(alunosTarefaCarregados.count) alunos carregados.")
         } catch {
             print("Erro ao carregar participantes: \(error.localizedDescription)")
         }
@@ -114,9 +169,10 @@ final class ResumeViewModel: ObservableObject {
 }
 
 extension ResumeViewModel {
-    func audioFor(member: UserModel) -> AudioRecordModel? {
+    func audioFor(member: UserModel) -> (any AudioRecordProtocol)? {
         audios.first { audio in
             audio.userRef.recordID == member.id
         }
     }
+
 }

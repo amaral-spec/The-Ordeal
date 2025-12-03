@@ -18,43 +18,41 @@ struct AlunosView: View {
     let onNavigate: (AlunosCoordinatorView.Route) -> Void
     
     var body: some View {
-//        Picker("", selection: $alunoVM.selectedMode) {
-//            ForEach(Mode.allCases, id: \.self) { mode in
-//                Text(mode.rawValue)
-//            }
-//        }
-//        .pickerStyle(.segmented)
-//        .padding()
+        Picker("", selection: $alunoVM.selectedMode) {
+            ForEach(Mode.allCases, id: \.self) { mode in
+                Text(mode.rawValue)
+            }
+        }
+        .pickerStyle(.segmented)
+        .padding()
         
         VStack(spacing: -15) {
-//            // MARK: - ALUNOS
-//            if alunoVM.selectedMode == .Alunos {
-//                if alunoVM.isStudentsEmpty {
-//                    emptyStateView(
-//                        image: "person.3.fill",
-//                        title: "Sem alunos",
-//                        subtitle: "Você ainda não possui alunos"
-//                    )
-//                } else {
-//                    ScrollView {
-//                        VStack {
-//                            //                        LazyVGrid(columns: rows, spacing: 10) {
-//                            // MARK: - Puxar do CloudKit
-//                            ForEach(alunoVM.students) { aluno in
-//                                AlunosViewCard(aluno: aluno)
-//                            }
-////                            .padding(8)
-//                            .background(.white)
-//                            .cornerRadius(10)
-//                            .shadow(color: .black.opacity(0.08), radius: 4, x: 0, y: 2)
-//                            //                        }
-//                        }
-//                    }
-//                    .padding(8)
-//                }
-//                
+            // MARK: - ALUNOS
+            if alunoVM.selectedMode == .Alunos {
+                if alunoVM.isStudentsEmpty {
+                    emptyStateView(
+                        image: "person.3.fill",
+                        title: "Sem alunos",
+                        subtitle: "Você ainda não possui alunos"
+                    )
+                } else {
+                    ScrollView {
+                        LazyVGrid(columns: columns, spacing: 10) {
+                            // MARK: - Puxar do CloudKit
+                            ForEach(alunoVM.students) { aluno in
+                                AlunosViewCard(aluno: aluno)
+                            }
+                            .padding(8)
+                            .background(.white)
+                            .cornerRadius(10)
+                            .shadow(radius: 1)
+                        }
+                    }
+                    .padding(8)
+                }
+                
                 // MARK: - GRUPOS
-//            } else {
+            } else {
                 if alunoVM.isGroupsEmpty {
                     emptyStateView(
                         image: "person.3.fill",
@@ -65,7 +63,7 @@ struct AlunosView: View {
                     ScrollView {
                         VStack(spacing: 10) {
                             ForEach(alunoVM.grupos) { grupo in
-                                groupCell(grupo)
+                                GroupCard(grupo: grupo)
                                     .onTapGesture {
                                         onNavigate(AlunosCoordinatorView.Route.detailGroup(grupo))
                                     }
@@ -75,13 +73,18 @@ struct AlunosView: View {
                     }
                     .padding()
                 }
-//            }
+            }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(.secondarySystemBackground))
         .navigationTitle("Alunos")
-        .navigationBarTitleDisplayMode(.automatic)
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                Button { alunoVM.criarGrupo = true } label: {
+                    Image(systemName: "person.2.badge.plus.fill")
+                        .foregroundStyle(Color(.accent))
+                }
+            }
+            
             ToolbarItem(placement: .confirmationAction) {
                 Button {
                     onNavigate(.solicitation)
@@ -90,24 +93,15 @@ struct AlunosView: View {
                         .foregroundStyle(Color(.accent))
                 }
             }
-            ToolbarItem(placement: .confirmationAction) {
-                Button { alunoVM.criarGrupo = true } label: {
-                    Image(systemName: "plus")
-                        .foregroundStyle(Color(.accent))
-                }
-            }
         }
         .task {
-//            await alunoVM.studentsLoad()
+            await alunoVM.studentsLoad()
             await alunoVM.groupLoad()
         }
         .sheet(isPresented: $alunoVM.criarGrupo) {
             CriarGrupoView(onGrupoCriado: {
                 Task { await alunoVM.groupLoad() }
             })
-        }
-        .onAppear {
-            alunoVM.selectedMode = .Grupos
         }
     }
     
@@ -143,32 +137,6 @@ struct AlunosView: View {
         }
     }
     
-    // MARK: - Grupo Cell
-    private func groupCell(_ grupo: GroupModel) -> some View {
-            HStack{
-                VStack(alignment: .leading) {
-                    Text(grupo.name)
-                        .font(.headline)
-                
-                    Text("Código: \(grupo.groupCode)")
-                        .font(.subheadline)
-                }
-                
-            Spacer()
-                
-            VStack(alignment: .trailing) {
-                Spacer()
-                    
-                Text("\(grupo.members.count) alunos")
-                    .font(.subheadline.bold().italic())
-                    .foregroundColor(.secondary)
-            }
-        }
-        .padding()
-        .background(.white)
-        .cornerRadius(12)
-        .shadow(color: .black.opacity(0.08), radius: 4, x: 0, y: 2)
-    }
 }
 
 
@@ -182,4 +150,3 @@ struct AlunosView: View {
     }
     .environmentObject(services)
 }
-

@@ -49,7 +49,7 @@ struct ChallengeImage: View {
             Image(systemName: "flag.pattern.checkered.2.crossed")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 35, height: 35)
+                .frame(width: 25, height: 25)
                 .foregroundColor(.white)
         }
     }
@@ -65,7 +65,7 @@ struct GrayChallengeImage: View {
             Image(systemName: "flag.pattern.checkered.2.crossed")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 35, height: 35)
+                .frame(width: 25, height: 25)
                 .foregroundColor(.white)
         }
     }

@@ -51,6 +51,10 @@ final class AuthService: NSObject, ObservableObject {
         isLoggedIn = false
     }
     
+    func changeType() {
+        isLoggedIn = false
+    }
+    
     // MARK: - Apple Sign In
     func handleAppleSignIn(result: Result<ASAuthorization, Error>) async throws -> LoginResult {
         switch result {

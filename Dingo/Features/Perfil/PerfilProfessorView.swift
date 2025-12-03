@@ -8,13 +8,9 @@
 import SwiftUI
 
 struct PerfilProfessorView: View {
-    @StateObject private var vm: PerfilViewModel
+    @EnvironmentObject var vm: PerfilViewModel
     @EnvironmentObject var authVM: AuthViewModel
     @State private var showingEditSheet = false
-    
-    init(persistenceServices: PersistenceServices) {
-        _vm = StateObject(wrappedValue: PerfilViewModel(persistenceServices: persistenceServices))
-    }
     
     var body: some View {
         NavigationStack {
@@ -72,12 +68,21 @@ struct PerfilProfessorView: View {
                 .toolbarTitleDisplayMode(.inlineLarge)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("Editar") {
-                            vm.editName = vm.user?.name ?? ""
-                            vm.editIsTeacher = vm.user?.isTeacher ?? false
-                            showingEditSheet = true
+                            Button("Editar") {
+                                // Só inicializa a edição com um valor não-vazio
+                                let name = vm.user?.name ?? ""
+                                if name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                                    vm.editName = ""
+                                } else {
+                                    vm.editName = name
+                                }
+
+                                vm.editIsTeacher = vm.user?.isTeacher ?? false
+                                
+                                showingEditSheet = true
+                            }
+                            .disabled(vm.user == nil) // Evita abrir antes de carregar usuário
                         }
-                    }
                 }
             }
             .sheet(isPresented: $showingEditSheet) {
@@ -87,6 +92,4 @@ struct PerfilProfessorView: View {
     }
 }
 
-#Preview {
-    PerfilProfessorView(persistenceServices: PersistenceServices.shared)
-}
+
