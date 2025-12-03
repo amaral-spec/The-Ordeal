@@ -108,7 +108,7 @@ final class DoChallengeViewModel: ObservableObject {
         guard let user = await AuthService.shared.currentUser else { return }
         
         do {
-            try await persistenceServices.saveAudioRecord(
+            try await persistenceServices.saveAudioRecordChallenge(
                 challengeID: challenge.id,
                 userID: user.id,
                 audioURL: url

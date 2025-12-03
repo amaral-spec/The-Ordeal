@@ -200,12 +200,20 @@ struct ListaParticipantesView: View {
                 await resumeVM.carregarParticipantesPorDesafio(challenge: challengeModel)
                 await resumeVM.carregarAudios(challengeID: challengeModel.id)
             }
+            if let taskModel {
+                await resumeVM.carregarParticipantesPorTarefa(task: taskModel)
+                await resumeVM.carregarAudios(taskID: taskModel.id)
+            }
         }
         .navigationTitle("Participantes")
         .task {
             if let challengeModel {
                 await resumeVM.carregarParticipantesPorDesafio(challenge: challengeModel)
                 await resumeVM.carregarAudios(challengeID: challengeModel.id)
+            }
+            if let taskModel {
+                await resumeVM.carregarParticipantesPorTarefa(task: taskModel)
+                await resumeVM.carregarAudios(taskID: taskModel.id)
             }
         }
     }

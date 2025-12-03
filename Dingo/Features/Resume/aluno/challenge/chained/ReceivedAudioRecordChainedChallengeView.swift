@@ -40,7 +40,7 @@ struct ReceivedAudioRecordChainedChallengeView: View {
                 RecordingButtonView( isRecording: rec.isRecording)
             }
         }
-        .navigationTitle(Text("Em cadeia"))
+        .navigationTitle(Text("Encadeia"))
         .navigationBarTitleDisplayMode(.inline)
     }
     

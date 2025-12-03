@@ -13,11 +13,13 @@ enum studentTabs {
 
 struct StudentMainCoordinatorView: View {
     @StateObject private var authVM: AuthViewModel
+    @StateObject private var perfilVM: PerfilViewModel
     @State private var selectedTab: studentTabs = .resume
     @State private var searchText: String = ""
     
     init() {
         _authVM = StateObject(wrappedValue: AuthViewModel(authService: AuthService.shared))
+        _perfilVM = StateObject(wrappedValue: PerfilViewModel(persistenceServices: PersistenceServices()))
     }
 
     var body: some View {
@@ -28,8 +30,8 @@ struct StudentMainCoordinatorView: View {
                     .environment(\.selectedStudentTab, $selectedTab)
             }
             Tab("Perfil", systemImage: "person.fill", value: .perfil) {
-                PerfilCoordinatorView(isProfessor: false)
-                    .environmentObject(authVM)
+                PerfilCoordinatorView(isTeacher: false)
+                    .environmentObject(perfilVM)
             }
             Tab("Buscar", systemImage: "magnifyingglass", value: .search, role: .search) {
                 NavigationStack {

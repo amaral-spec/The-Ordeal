@@ -17,7 +17,7 @@ final class ResumeViewModel: ObservableObject {
     @Published var challengeGroups: [ ChallengeModel : String ] = [:]
     @Published var alunosTarefas: [UserModel] = []
 
-    @Published var audios: [AudioRecordModel] = []
+    @Published var audios: [any AudioRecordProtocol] = []
     
     @Published var isTeacher: Bool = false
     
@@ -96,6 +96,21 @@ final class ResumeViewModel: ObservableObject {
         }
     }
     
+    func carregarParticipantesPorTarefa(task: TaskModel) async {
+        let taskRef = CKRecord.Reference(recordID: task.id, action: .none)
+        
+        do {
+            let participantesCarregados = try await persistenceServices.fetchTaskMembers(recordReference: taskRef)
+            await MainActor.run {
+                members = participantesCarregados
+                isMemberEmpty = participantesCarregados.isEmpty
+            }
+            print("\(participantesCarregados.count) participantes carregados")
+        } catch {
+            print("Erro ao carregar participantes: \(error.localizedDescription)")
+        }
+    }
+    
     func formatarDiaMes(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM"
@@ -110,17 +125,32 @@ final class ResumeViewModel: ObservableObject {
     }
     
     func carregarAudios(challengeID: CKRecord.ID) async {
-        do  {
-            let audiosCarregados = try await persistenceServices.fetchChallengeAudio(challengeID: challengeID)
+        do {
+            let audiosCarregados: [AudioRecordChallengeModel] =
+                try await persistenceServices.fetchChallengeAudio(challengeID: challengeID)
+
             await MainActor.run {
-                audios = audiosCarregados
-                isAudioEmpty = audiosCarregados.isEmpty
+                self.audios = audiosCarregados as [any AudioRecordProtocol]
             }
-            print("\(audiosCarregados.count) áudios carregados.")
         } catch {
-            print("Erro ao carregar participantes: \(error.localizedDescription)")
+            print("Erro ao carregar audios: \(error)")
         }
     }
+
+    
+    func carregarAudios(taskID: CKRecord.ID) async {
+        do {
+            let audiosCarregados: [AudioRecordTaskModel] =
+                try await persistenceServices.fetchTaskAudio(taskID: taskID)
+
+            await MainActor.run {
+                self.audios = audiosCarregados as [any AudioRecordProtocol]
+            }
+        } catch {
+            print("Erro ao carregar audios: \(error)")
+        }
+    }
+
     
     func carregarAlunosTarefa(task: TaskModel) async {
         do {
@@ -139,9 +169,10 @@ final class ResumeViewModel: ObservableObject {
 }
 
 extension ResumeViewModel {
-    func audioFor(member: UserModel) -> AudioRecordModel? {
+    func audioFor(member: UserModel) -> (any AudioRecordProtocol)? {
         audios.first { audio in
             audio.userRef.recordID == member.id
         }
     }
+
 }
