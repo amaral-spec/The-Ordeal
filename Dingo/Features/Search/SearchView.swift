@@ -8,22 +8,29 @@
 import SwiftUI
 
 struct BuscarView: View {
+    @EnvironmentObject var searchVM: SearchViewModel
     
     var body: some View {
         NavigationStack {
             List {
-                Section("Alunos") {
-                    Text("Nome Aluno")
-                    Text("Nome Aluno")
-                    Text("Nome Aluno")
-                }
-                
                 Section("Grupos") {
-                    Text("Nome Group")
-                    Text("Nome Group")
-                    Text("Nome Group")
-                    Text("Nome Group")
-                    Text("Nome Group")
+                    ForEach(searchVM.generalSearch.1) { grupo in
+                        Text(grupo.name)
+                    }
+                }
+                Section("Alunos") {
+                    ForEach(searchVM.generalSearch.0) { aluno in
+                        Text(aluno.name)                }
+                }
+                Section("Tarefas") {
+                    ForEach(searchVM.generalSearch.3) { task in
+                        Text(task.title)
+                    }
+                }
+                Section("Desafios") {
+                    ForEach(searchVM.generalSearch.2) { challenge in
+                        Text(challenge.title)
+                    }
                 }
             }
         }
