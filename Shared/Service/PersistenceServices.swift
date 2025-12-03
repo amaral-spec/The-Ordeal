@@ -676,12 +676,34 @@ class PersistenceServices: NSObject, ObservableObject {
         }
     }
     
-    func generalSearch(prompt: String, userRecordID: CKRecord.ID) async throws -> ([GroupModel], [ChallengeModel], [TaskModel]) {
+    func generalSearch(prompt: String, userRecordID: CKRecord.ID) async throws -> ([UserModel], [GroupModel], [ChallengeModel], [TaskModel]) {
+        guard let currentUser = AuthService.shared.currentUser else {
+            throw NSError(domain: "AuthError", code: 1, userInfo: [NSLocalizedDescriptionKey: "No user loggoed in"])
+        }
         // Function that creates predicates/queries for each type (group, challenge, task)
         // Returns arrays with all objects found that match both the user's prompt
         // and their user id
-        let userRef = CKRecord.Reference(recordID: userRecordID, action: .none)
+        let userRef = CKRecord.Reference(recordID: currentUser.id, action: .none)
+        
+        let userGroups = try await fetchAllGroups()
+        var studentRefs: [CKRecord.Reference] = []
 
+        // Fetching users from prompt
+        for grupo in userGroups {
+            for student in grupo.members {
+                if student.recordID != currentUser.id && !studentRefs.contains(student) {
+                    studentRefs.append(student)
+                }
+            }
+        }
+        
+        var users: [UserModel] = []
+        for ref in studentRefs {
+            let record = try await db.record(for: ref.recordID)
+            let user = UserModel(from: record)
+            users.append(user)
+        }
+        
         // Fetching groups from prompt
         let groupPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
             NSPredicate(format: "name CONTAINS %@", prompt),
@@ -693,7 +715,6 @@ class PersistenceServices: NSObject, ObservableObject {
         let groups = groupRecords.map { GroupModel(from: $0) }
         
         // Fetching challenges from prompt
-        let userGroups = try await fetchAllGroups()
         let groupRefs = userGroups.map { CKRecord.Reference(recordID: $0.id, action: .none) }
         
         let challengeNamePredicate = NSPredicate(format: "name CONTAINS %@", prompt)
@@ -718,7 +739,7 @@ class PersistenceServices: NSObject, ObservableObject {
         let taskRecords = taskResults.compactMap { try? $0.1.get() }
         let tasks = taskRecords.map { TaskModel(from: $0) }
         
-        return (groups, challenges, tasks)
+        return (users, groups, challenges, tasks)
     }
     
     // MARK: Challenge Session
