@@ -36,7 +36,7 @@ struct WaitingChainedChallengeView: View {
                 await doChallengeVM.startChallenge()
 
                 // 3. Verificar se há respostas anteriores
-                let hasNoStudentAudios = challenge.studentAudios.isEmpty
+                let hasNoStudentAudios = 
 
                 if hasNoStudentAudios {
                     // Caso NÃO tenha respostas → vai para InitialChained

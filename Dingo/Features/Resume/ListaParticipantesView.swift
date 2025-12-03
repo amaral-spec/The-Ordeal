@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ListaParticipantesView: View {
-    let isTeacher: Bool
     
     @EnvironmentObject var resumeVM: ResumeViewModel
     @State var challengeModel: ChallengeModel?
@@ -70,7 +69,7 @@ struct ListaParticipantesView: View {
                                         .foregroundColor(.black.opacity(0.7))
                                         .padding(.vertical)
                                     
-                                    if isTeacher {
+                                    if resumeVM.isTeacher {
                                         if resumeVM.audios.isEmpty {
                                             if audioLoadingTimeoutReached {
                                                 Text("Não há áudios")
@@ -142,7 +141,7 @@ struct ListaParticipantesView: View {
                                         .foregroundColor(.black.opacity(0.7))
                                         .padding(.vertical)
                                     
-                                    if isTeacher {
+                                    if resumeVM.isTeacher {
                                         if resumeVM.audios.isEmpty {
                                             if audioLoadingTimeoutReached {
                                                 Text("Não há áudios")

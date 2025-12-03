@@ -13,7 +13,7 @@ final class TaskCardVM: ObservableObject {
             backgroundColor: "GreenCard",
             loadAction: {
                 await resumoVM.carregarTarefas()
-                return resumoVM.tasks
+                return resumoVM.currentOpenTasks()
             }
         )
     }

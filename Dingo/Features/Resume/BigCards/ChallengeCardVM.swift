@@ -13,7 +13,7 @@ final class ChallengeCardVM: ObservableObject {
             backgroundColor: "BlueCard",
             loadAction: {
                 await resumoVM.carregarDesafios()
-                return resumoVM.challenges
+                return resumoVM.currentOpenChallenges()
             }
         )
     }

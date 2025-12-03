@@ -13,6 +13,9 @@ struct DoChallengeCoordinatorView: View {
         case initialChained
         case receiveChained
         case recordChained
+        case initialEcco
+        case receiveEcco
+        case recordEcco
     }
     
     @Environment(\.scenePhase) private var scenePhase
@@ -136,7 +139,7 @@ struct DoChallengeCoordinatorView: View {
             .toolbar { cancelToolbar }
             .navigationBarBackButtonHidden(true)
             .environmentObject(doChallengeVM)
-
+            
         case .recordChained:
             RecordFromInitialChainedChallengeView { next in
                 currentRoute = next
@@ -147,8 +150,27 @@ struct DoChallengeCoordinatorView: View {
                 confirmToolbar
             }
             .navigationBarBackButtonHidden(true)
+         
+        case .initialEcco:
+            InitialEccoChallengeView { next in
+                currentRoute = next
+                path.append(next)
+            }
+            
+        case .receiveEcco:
+            ReceivedAudioRecordEccoChallengeView { next in
+                currentRoute = next
+                path.append(next)
+            }
+            
+        case .recordEcco:
+            RecordFromInitialEccoChallengeView { next in
+                currentRoute = next
+                path.append(next)
+            }
         }
     }
+    
     
     private var cancelToolbar: some ToolbarContent {
         ToolbarItem(placement: .topBarLeading) {

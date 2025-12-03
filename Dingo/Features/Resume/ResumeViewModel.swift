@@ -36,11 +36,19 @@ final class ResumeViewModel: ObservableObject {
     }
     
     func currentOpenTasks() -> [TaskModel] {
-        tasks.filter { $0.endDate >= Date() }
+        if !isTeacher {
+            tasks.filter { $0.endDate >= Date() }
+        } else {
+            tasks
+        }
     }
     
     func currentOpenChallenges() -> [ChallengeModel] {
-        challenges.filter { $0.endDate >= Date() }
+        if !isTeacher {
+            challenges.filter { $0.endDate >= Date() }
+        } else {
+            challenges
+        }
     }
 
     func carregarDesafios() async {

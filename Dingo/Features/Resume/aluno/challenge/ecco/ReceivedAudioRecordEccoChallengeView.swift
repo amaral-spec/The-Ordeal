@@ -10,7 +10,7 @@ import UIKit // For haptic feedback
 import Combine
 import AVFoundation
 
-struct ReceivedAudioRecordChainedChallengeView: View {
+struct ReceivedAudioRecordEccoChallengeView: View {
     
     @StateObject private var rec = MiniRecorder()
     @EnvironmentObject var doChallengeVM: DoChallengeViewModel
@@ -24,7 +24,8 @@ struct ReceivedAudioRecordChainedChallengeView: View {
                     15 segundos para o audio abaixo
                     """)
             Spacer()
-            
+            AudioRepresentationView()
+                .padding(.trailing, 30)
             Spacer()
             IconImageView(nomeIcone: "waveform")
             ImageMessageView(

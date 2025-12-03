@@ -20,7 +20,8 @@ final class DoChallengeViewModel: ObservableObject {
     @Published var recordings: [URL] = []
     
     @Published var challengeSessionRecordID: CKRecord.ID?
-
+    
+    @Published var audioToShow: URL?
     
     private let persistenceServices: PersistenceServices
     
@@ -118,6 +119,34 @@ final class DoChallengeViewModel: ObservableObject {
             print("Erro ao enviar áudio: \(error)")
         }
     }
+    
+    func carregarAudios(challengeID: CKRecord.ID) async -> [URL] {
+        do {
+            let audiosCarregados: [AudioRecordChallengeModel] =
+                try await persistenceServices.fetchChallengeAudio(challengeID: challengeID)
+            
+            return audiosCarregados.sorted(by: { $0.createdAt < $1.createdAt }).map(\.audioURL)
+        } catch {
+            print("Erro ao carregar audios: \(error)")
+            return []
+        }
+    }
 
+
+    func getAudioToBeCopied() async -> URL? {
+        guard let challengeID = challengeM?.id else { return nil }
+        let audios = await carregarAudios(challengeID: challengeID)
+        // Choose which one you want; using first (oldest) here:
+        return audios.first
+    }
+    
+    func getLastAudioToBeCompleted() async -> URL? {
+        guard let challengeID = challengeM?.id else { return nil }
+        let audios = await carregarAudios(challengeID: challengeID)
+        // Choose which one you want; using first (oldest) here:
+        return audios.last
+    }
+    
+    
 
 }
