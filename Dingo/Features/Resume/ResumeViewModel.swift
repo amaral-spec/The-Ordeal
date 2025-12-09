@@ -174,7 +174,6 @@ final class ResumeViewModel: ObservableObject {
         }
     }
 
-    
     func carregarAudios(taskID: CKRecord.ID) async {
         do {
             let audiosCarregados: [AudioRecordTaskModel] =

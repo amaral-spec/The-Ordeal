@@ -10,7 +10,7 @@ import Foundation
 
 struct IconImageView: View{
     var nomeIcone: String = "waveform"
-    var colorBackground: Color = Color("BlueChallengeBackground")
+    var colorBackground: Color = Color("BlueCardBackground")
     var colorText: Color = Color("BlueCard")
     
     var body: some View {

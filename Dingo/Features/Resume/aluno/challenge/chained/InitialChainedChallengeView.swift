@@ -18,7 +18,7 @@ struct InitialChainedChallengeView: View {
             TopPageInstructionView(instruction: "Toque algo de sua escolha por 15 segundos")
             Spacer()
             IconImageView(nomeIcone: "waveform")
-            ImageMessageView(title: "Grave o seu audio", subtitle: "")
+            ImageMessageView(title: "Grave o seu áudio", subtitle: "")
             MultiBarVisualizerView(values: rec.meterHistory, barCount: 24)
                 .frame(height: 54)
                 .padding(.horizontal)

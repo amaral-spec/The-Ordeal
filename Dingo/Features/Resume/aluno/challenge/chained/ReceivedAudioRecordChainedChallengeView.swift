@@ -21,15 +21,15 @@ struct ReceivedAudioRecordChainedChallengeView: View {
         VStack { // Writing section
             TopPageInstructionView(instruction: """
                     Grave uma continuação de 
-                    15 segundos para o audio abaixo
+                    para o audio abaixo
                     """)
             Spacer()
             
             Spacer()
             IconImageView(nomeIcone: "waveform")
             ImageMessageView(
-                title: "Grave o seu audio",
-                subtitle: "Faça milage"
+                title: "Grave o seu áudio",
+                subtitle: "Faça milagre"
             )
             Spacer()
             Spacer()

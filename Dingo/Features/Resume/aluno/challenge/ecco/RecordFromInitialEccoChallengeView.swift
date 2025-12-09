@@ -24,7 +24,7 @@ struct RecordFromInitialEccoChallengeView: View {
 
     var body: some View {
         VStack {
-            TopPageInstructionView(instruction: "Toque algo de sua escolha por 15 segundos")
+            TopPageInstructionView(instruction: "Toque algo de sua escolha")
 
             Spacer()
             
@@ -56,14 +56,16 @@ struct RecordFromInitialEccoChallengeView: View {
             Button {
                 onNavigation(.initialChained)
             } label: {
-                Text("Regravar Audio")
-                    .tint(Color("BlueChallenge"))
+                Text("Regravar áudio")
+                    .tint(.black)
             }
+            .buttonStyle(.borderedProminent)
+            .tint(Color("BlueCardBackground"))
         }
         .onAppear {
             doChallengeVM.recordings = doChallengeVM.recordingsList()
         }
-        .navigationTitle("Encadeia")
+        .navigationTitle("Ecco")
         .navigationBarTitleDisplayMode(.inline)
     }
 }

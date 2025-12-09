@@ -15,8 +15,6 @@ final class DoChallengeViewModel: ObservableObject {
     
     @Published var challengeM: ChallengeModel?
     
-    @Published var alreadyREC: Bool = false
-    
     @Published var recordings: [URL] = []
     
     @Published var challengeSessionRecordID: CKRecord.ID?

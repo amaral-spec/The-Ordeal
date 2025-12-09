@@ -15,10 +15,10 @@ struct InitialEccoChallengeView: View {
     
     var body: some View {
         VStack{//Escrita
-            TopPageInstructionView(instruction: "Toque algo de sua escolha por 15 segundos")
+            TopPageInstructionView(instruction: "Toque algo de sua escolha")
             Spacer()
             IconImageView(nomeIcone: "waveform")
-            ImageMessageView(title: "Grave o seu audio", subtitle: "")
+            ImageMessageView(title: "Grave o seu áudio", subtitle: "")
             MultiBarVisualizerView(values: rec.meterHistory, barCount: 24)
                 .frame(height: 54)
                 .padding(.horizontal)
@@ -27,15 +27,15 @@ struct InitialEccoChallengeView: View {
             Button {
                 if rec.isRecording {
                     rec.stop()
-                    onNavigation(.recordChained)
+                    onNavigation(.recordEcco)
                 } else {
                     rec.start()
                 }
             } label: {
-                RecordingButtonView(isRecording: rec.isRecording, color: Color("GreenCard"))
+                RecordingButtonView(isRecording: rec.isRecording, color: Color("BlueCard"))
             }
         }
-        .navigationTitle(Text("Encadeia"))
+        .navigationTitle(Text("Ecco"))
         .navigationBarTitleDisplayMode(.inline)
     }
 }

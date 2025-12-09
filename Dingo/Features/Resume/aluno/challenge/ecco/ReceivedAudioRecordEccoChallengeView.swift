@@ -20,8 +20,7 @@ struct ReceivedAudioRecordEccoChallengeView: View {
     var body: some View {
         VStack { // Writing section
             TopPageInstructionView(instruction: """
-                    Grave uma continuação de 
-                    15 segundos para o audio abaixo
+                    Tente esse audio de referência
                     """)
             Spacer()
             AudioRepresentationView()
@@ -40,7 +39,7 @@ struct ReceivedAudioRecordEccoChallengeView: View {
                 RecordingButtonView( isRecording: rec.isRecording)
             }
         }
-        .navigationTitle(Text("Encadeia"))
+        .navigationTitle(Text("Ecco"))
         .navigationBarTitleDisplayMode(.inline)
     }
     
