@@ -15,8 +15,11 @@ struct EditProfileModal: View {
     @EnvironmentObject var authService: AuthService
     
     @State private var selectedImage: UIImage? = nil
-    @State private var photoItem: PhotosPickerItem? = nil  // NEW
+    @State private var photoItem: PhotosPickerItem? = nil
     @State private var needToCheckLoginAgain: Bool = false
+    
+    // 1. Estado para controlar o popup de confirmação
+    @State private var showDiscardAlert: Bool = false
     
     private var isNameValid: Bool {
         !vm.editName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
@@ -74,7 +77,7 @@ struct EditProfileModal: View {
                     ZStack {
                         RoundedRectangle(cornerRadius: 30)
                             .frame(width: 350, height: 50)
-                            .foregroundStyle(.gray.opacity(0.3))
+                            .foregroundStyle(.white)
                         
                         HStack {
                             Text("Editar nome: ")
@@ -97,7 +100,7 @@ struct EditProfileModal: View {
                     ZStack {
                         RoundedRectangle(cornerRadius: 30)
                             .frame(width: 350, height: 50)
-                            .foregroundStyle(.gray.opacity(0.3))
+                            .foregroundStyle(.white)
                         
                         Toggle("Sou professor", isOn: $vm.editIsTeacher)
                             .onChange(of: vm.editIsTeacher) {
@@ -115,7 +118,7 @@ struct EditProfileModal: View {
                     if vm.isSavingChanges {
                         ProgressView()
                     } else {
-                        Button("Salvar") {
+                        Button {
                             Task {
                                 if let img = selectedImage {
                                     await vm.updateProfileImage(img)
@@ -126,19 +129,38 @@ struct EditProfileModal: View {
                                         authService.changeType()
                                     }
                                     dismiss()
-                                    
                                 }
                             }
+                        } label: {
+                            Image(systemName: "checkmark")
+                                .font(.body.bold())
                         }
                         .disabled(!isNameValid || vm.isSavingChanges)
+                        .buttonStyle(.borderedProminent)
+                        .tint(Color("BlueCard")) 
                     }
                 }
                 
+                // 2. Botão de Cancelar alterado para ícone X e acionando o alerta
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancelar") {
-                        dismiss()
+                    Button {
+                        showDiscardAlert = true
+                    } label: {
+                        Image(systemName: "xmark")
+                            .font(.body.bold())
+                            .foregroundColor(.primary)
                     }
                 }
+            }
+            .background(Color(.secondarySystemBackground))
+            // 3. Alerta de confirmação destrutiva
+            .alert("Descartar alterações?", isPresented: $showDiscardAlert) {
+                Button("Cancelar", role: .cancel) { }
+                Button("Descartar", role: .destructive) {
+                    dismiss()
+                }
+            } message: {
+                Text("Se você sair agora, suas alterações não serão salvas.")
             }
         }
     }

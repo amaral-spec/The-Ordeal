@@ -57,7 +57,7 @@ struct RecordFromInitialChainedChallengeView: View {
                 onNavigation(.initialChained)
             } label: {
                 Text("Regravar Audio")
-                    .tint(Color("BlueChallenge"))
+                    .tint(Color("BlueCard"))
             }
         }
         .onAppear {

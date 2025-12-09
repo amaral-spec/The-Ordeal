@@ -55,19 +55,48 @@ final class ResumeViewModel: ObservableObject {
         var challengeGroupsDict: [ChallengeModel : String] = [:]
 
         do {
+            // 1. Busca todos os desafios
             let desafiosCarregados = try await persistenceServices.fetchAllChallenges()
             
-            for desafio in desafiosCarregados {
-                let groupByChallenge = try await persistenceServices.fetchGroup(recordID: desafio.group!.recordID)
-                challengeGroupsDict[desafio] = groupByChallenge.name
+            // 2. Extrai apenas os IDs de grupo ÚNICOS (Remove duplicatas para não buscar o mesmo grupo 2 vezes)
+            let uniqueGroupIDs = Set(desafiosCarregados.compactMap { $0.group?.recordID })
+            
+            // Dicionário temporário para guardar [ID do Grupo : Nome do Grupo]
+            var groupNamesByID: [CKRecord.ID : String] = [:]
+            
+            // 3. Abre um Grupo de Tarefas para buscar os grupos em PARALELO
+            try await withThrowingTaskGroup(of: (CKRecord.ID, String).self) { group in
+                
+                for groupID in uniqueGroupIDs {
+                    group.addTask {
+                        // Aqui a mágica acontece: Vários requests saem ao mesmo tempo
+                        let groupModel = try await self.persistenceServices.fetchGroup(recordID: groupID)
+                        return (groupID, groupModel.name)
+                    }
+                }
+                
+                // Coleta os resultados conforme eles chegam
+                for try await (id, name) in group {
+                    groupNamesByID[id] = name
+                }
             }
             
+            // 4. Monta o dicionário final cruzando os dados locais (memória, instantâneo)
+            for desafio in desafiosCarregados {
+                if let groupID = desafio.group?.recordID, let groupName = groupNamesByID[groupID] {
+                    challengeGroupsDict[desafio] = groupName
+                }
+            }
+            
+            // 5. Atualiza a UI
             await MainActor.run {
                 challengeGroups = challengeGroupsDict
                 challenges = desafiosCarregados
                 isChallengeEmpty = desafiosCarregados.isEmpty
             }
-            print("\(desafiosCarregados.count) desafios carregados")
+            
+            print("\(desafiosCarregados.count) desafios carregados e processados.")
+            
         } catch {
             print("Erro ao carregar desafios: \(error.localizedDescription)")
         }

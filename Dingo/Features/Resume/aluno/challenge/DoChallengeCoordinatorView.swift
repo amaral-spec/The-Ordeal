@@ -59,7 +59,7 @@ struct DoChallengeCoordinatorView: View {
         }
         .alert("Cancelar desafio?", isPresented: $showCancelAlert) {
             Button("Manter", role: .cancel) { }
-            Button("Cancelar desafio", role: .destructive) {
+            Button("Descartar desafio", role: .destructive) {
                 
                 if currentRoute != .waitingChained {
                     Task { await doChallengeVM.outChallenge() }
@@ -188,7 +188,7 @@ struct DoChallengeCoordinatorView: View {
             } label: {
                 Label("Confirmar", systemImage: "checkmark")
             }
-            .buttonStyle(.borderedProminent)      // Torna o botão primário
-            .tint(Color("BlueChallenge"))         }
+            .buttonStyle(.borderedProminent)
+            .tint(Color("BlueCard"))         }
     }
 }

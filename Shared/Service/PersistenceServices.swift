@@ -526,7 +526,7 @@ class PersistenceServices: NSObject, ObservableObject {
     func fetchTaskAudio(taskID: CKRecord.ID) async throws -> [AudioRecordTaskModel] {
         
         let ref = CKRecord.Reference(recordID: taskID, action: .none)
-        let predicate = NSPredicate(format: "task == %@", ref)
+        let predicate = NSPredicate(format: "task == %@ and user == %@", ref)
         
         let query = CKQuery(recordType: "AudioRecordTask", predicate: predicate)
         

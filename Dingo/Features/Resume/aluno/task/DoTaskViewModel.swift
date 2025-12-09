@@ -14,17 +14,15 @@ import AVFoundation
 final class DoTaskViewModel: ObservableObject {
     
     @Published var taskM: TaskModel?
-    
-    
     @Published var recordings: [URL] = []
-
+    @Published var isCompleted: Bool = false
     
     private let persistenceServices: PersistenceServices
     
-    init(persistenceServices: PersistenceServices, taskM: TaskModel) {
-        self.persistenceServices = persistenceServices
-        self.taskM = taskM
-    }
+    init(persistenceServices: PersistenceServices, taskM: TaskModel? = nil) {
+            self.persistenceServices = persistenceServices
+            self.taskM = taskM
+        }
 
     func recordingsList() -> [URL] {
         // Locate the Recordings folder.

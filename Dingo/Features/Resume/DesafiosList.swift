@@ -49,8 +49,12 @@ struct DesafiosList: View {
             .padding(.horizontal, 16)
             .padding(.top, 12)
         }
+        .background(Color(.secondarySystemBackground))
         .navigationTitle("Desafios")
         .navigationBarTitleDisplayMode(.inline)
+        .refreshable {
+            await resumoVM.carregarDesafios()
+        }
         .task {
             await resumoVM.carregarDesafios()
         }

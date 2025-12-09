@@ -4,7 +4,7 @@ import PhotosUI
 struct StopwatchView: View {
     
     @EnvironmentObject var detector: InstrumentDetectionViewModel
-
+    
     
     @State private var instrumentItem: UIImage? = nil
     @State private var showPicker = false
@@ -13,6 +13,8 @@ struct StopwatchView: View {
     @State private var isRunning = false
     @State private var timer: Timer? = nil
     @State private var startDate: Date?
+    @State private var oldTime = 0.00
+    
     let onNavigate: (TrainingCoordinatorView.Route) -> Void
     
     // MARK: - Dynamic Time Formatter (hours/minutes only if needed)
@@ -42,11 +44,11 @@ struct StopwatchView: View {
             
             //Timer
             
-                Text(formattedTime)
-                    .font(.system(size: 64, weight: .bold))
-                    .padding()
-                    .frame(maxWidth: .infinity, alignment: .center)
-
+            Text(formattedTime)
+                .font(.system(size: 64, weight: .bold))
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .center)
+            
             
             Spacer()
             
@@ -66,44 +68,25 @@ struct StopwatchView: View {
                         .foregroundStyle(.white)
                 }
             }
-        
-            
-            
-            
-            
-            Spacer()
-            
-            //Botao de tirar foto
-            Button(action: {
-                if(isRunning == false && time != 0){
-                    onNavigate(.takePhoto)
-                }
-            }) {
-                if(!isRunning && time != 0){
-                    ZStack {
-                        Rectangle()
-                            .frame(width: 200, height: 50)
-                            .cornerRadius(10)
-                            .foregroundColor(Color("RedCard"))
-                        
-                        Text("Finalizar")
-                            .fontWeight(.bold)
-                            .frame(width: 200, height: 50)
-                            .foregroundColor(.white)
-                    }
-                }else{
-                    Rectangle()
-                        .frame(width: 200, height: 50)
-                        .opacity(0)
-                }
-            }
-            .padding(.bottom, 20)
         }
-
+        
         .toolbar{
             ToolbarItem(placement: .principal) {
                 Text("Treino")
                     .font(.headline)
+            }
+            
+            ToolbarItem(placement: .automatic) {
+                Button {
+                    onNavigate(.takePhoto)
+                } label: {
+                    Image(systemName: "checkmark")
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundColor(.white)
+                }
+                .disabled(isRunning || time == 0)
+                .buttonStyle(.borderedProminent)
+                .tint(Color("RedCard"))
             }
         }
         
@@ -113,28 +96,27 @@ struct StopwatchView: View {
     
     func startTimer() {
         isRunning = true
-        if(time == 0){ //Impede de reiniciar o timer quando pausa e continua
-            startDate = Date()
-        }
+        startDate = Date()
         timer?.invalidate()
-        
         timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
-            self.time = Date().timeIntervalSince(self.startDate!)
+            self.time = Date().timeIntervalSince(self.startDate!) + oldTime
         }
     }
     
     func stopTimer() {
         isRunning = false
+        oldTime = time
         timer?.invalidate()
         timer = nil
+        
     }
 }
 
-   
+
 
 #Preview {
     StopwatchView(onNavigate: { _ in })
         .environmentObject(InstrumentDetectionViewModel())
-
+    
 }
 
