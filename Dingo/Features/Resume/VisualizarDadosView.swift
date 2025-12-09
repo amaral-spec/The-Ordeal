@@ -21,6 +21,10 @@ struct VisualizarDadosView: View {
     @State var startChallenge: Bool = false
     let onNavigate: (ResumeCoordinatorView.Route) -> Void
     
+    @StateObject var doChallengeVM = DoChallengeViewModel(
+        persistenceServices: PersistenceServices()
+    )
+    
     init(isChallenge: Bool, challengeModel: ChallengeModel? = nil, taskModel: TaskModel? = nil, onNavigate: @escaping (ResumeCoordinatorView.Route) -> Void) {
         if let challengeModel = challengeModel {
             self.challengeModel = challengeModel
@@ -202,28 +206,27 @@ struct VisualizarDadosView: View {
                                     }
                                 }
                             }
-                        }
-                        
-                        if isChallenge && !resumeVM.isTeacher {
-                            Button {
-                                startChallenge = true
-                            } label: {
-                                Text("Começar desafio")
-                                    .foregroundColor(.white)
-                                    .font(.title3.bold())
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.vertical, 18)
-                                    .background(
-                                        Capsule()
-                                            .fill(Color("BlueCard"))
-                                            .shadow(color: .black.opacity(0.15), radius: 5, y: 3)
-                                    )
-                                    .padding(.top, 15)
-                                    .padding(.bottom, 20)
 
+                            
+                            if isChallenge && !resumeVM.isTeacher {
+                                Button {
+                                    startChallenge = !doChallengeVM.isCompleted
+                                } label: {
+                                    Text("Começar desafio")
+                                        .foregroundColor(.white)
+                                        .font(.title3.bold())
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.vertical, 18)
+                                        .background(
+                                            Capsule()
+                                                .fill(Color("BlueCard"))
+                                                .shadow(color: .black.opacity(0.15), radius: 5, y: 3)
+                                        )
+                                }
+                                .padding(.top, 15)
+                                .padding(.bottom, 20)
                             }
                         }
-
                     }
                     .frame(maxWidth: .infinity)
                 }
@@ -253,3 +256,4 @@ struct VisualizarDadosView: View {
         }
     }
 }
+

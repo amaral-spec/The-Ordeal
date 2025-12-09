@@ -34,13 +34,13 @@ struct ResumeStudentView: View, CardNavigationHandler {
                     resumoVM: resumeVM,
                     navigationHandler: self
                 )
+                
                 //Button of training
                 Button{
                     //StartTrainingView()
                     startTraining = true
                 } label: {
                     TrainingCardView()
-                    
                 }
 //                    .padding(.leading)
                     

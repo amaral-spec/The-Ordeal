@@ -17,11 +17,15 @@ struct TarefasList: View {
     @State var startTask: Bool = false
     @State var chooseTask: TaskModel? = nil
     
+    @StateObject var doTaskVM = DoTaskViewModel(
+        persistenceServices: PersistenceServices()
+    )
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 10) {
                 ForEach(resumoVM.tasks) { tarefa in
-                    if(resumoVM.isTeacher){
+                    if(resumoVM.isTeacher){ //professor
                         if(tarefa.endDate < Date()){
                             ListCard(title: tarefa.title, subtitle: "Resultado", image: GrayTaskImage())
                                 .onTapGesture {
@@ -36,13 +40,13 @@ struct TarefasList: View {
                                     onNavigate(.detailTask(tarefa))
                                 }
                         }
-                    } else {
+                    } else { //aluno
                         if(tarefa.endDate >= Date()){
                             ListCard(title: tarefa.title, subtitle: "Faça até \(resumoVM.formatarDiaMes(tarefa.endDate))!", image: TaskImage())
                                 .onTapGesture {
                                     resumoVM.alunosTarefas = []
                                     chooseTask = tarefa
-                                    startTask = true
+                                    startTask = !doTaskVM.isCompleted 
                                 }
                         }
                     }
@@ -76,7 +80,7 @@ struct TarefasList: View {
             CriarTarefaView(numTask: .constant(0))
         }
         .sheet(isPresented: $startTask) {
-            DoTaskCoordinatorView(taskM: chooseTask!)
+            DoTaskCoordinatorView(doTaskVM: doTaskVM)
         }
     }
 }
