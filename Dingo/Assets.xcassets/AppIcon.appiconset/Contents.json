@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "AppIconDingo 1.png",
+      "filename" : "AppIconDingo.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -13,7 +13,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "AppIconDingo.png",
+      "filename" : "AppIconDingo 1.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"

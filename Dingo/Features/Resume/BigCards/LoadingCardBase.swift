@@ -2,7 +2,10 @@ import SwiftUI
 
 struct LoadingCardBase<T>: View {
     @ObservedObject var vm: CardLoaderViewModel<T>
-
+    
+    var sizeIcon: Int {
+        vm.currentIcon.contains("badge.plus") ? 150 : 100
+    }
     let title: String
 
     var body: some View {
@@ -28,7 +31,7 @@ struct LoadingCardBase<T>: View {
                     Image(vm.currentIcon)
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 100, height: 100)
+                        .frame(width: CGFloat(sizeIcon), height: CGFloat(sizeIcon))
                         .foregroundColor(.white)
 
                     Spacer()
