@@ -14,12 +14,12 @@ class StreakViewModel: ObservableObject {
     //@Published var trainingDates: [Int] = []
     static let shared = StreakViewModel()
 
-    @Published var Streak: Int = 0
+    @Published private var Streak: Int = 0
     @Published var lastDate: Date?
     //@Published var lastDate = Calendar.current.date(byAdding: .day, value: -4, to: Date())!
-    let today = Calendar.current.date(byAdding: .day, value: -2, to: Date())!
+    //let today = Calendar.current.date(byAdding: .day, value: -2, to: Date())!
     let calendar = Calendar.current
-    //var today = Calendar.current.startOfDay(for: Date())
+    var today = Date()
     var wToday: Int { calendar.component(.weekday, from: today) }
     var wLastDate: Int {calendar.component(.weekday, from: lastDate ?? today) }
 
@@ -44,6 +44,9 @@ class StreakViewModel: ObservableObject {
         if(wLastDate >= wToday || distance >= 7){
             trainingDates.removeAll()
         }
+    }
+    func getStreak() -> Int{
+        return Streak
     }
     
 //    func daysOfWeekTrained() -> Set<Int> {

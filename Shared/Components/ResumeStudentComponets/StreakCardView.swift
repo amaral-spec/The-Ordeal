@@ -11,16 +11,18 @@ struct StreakCardView: View {
     @EnvironmentObject var streakVM: StreakViewModel
     var body: some View {
         HStack(spacing: 16) {
+            //Fogo grande
             VStack(spacing: 4) {
                 Image(systemName: "flame.fill")
                     .foregroundColor(Color("RedCard"))
                     .font(.system(size: 32))
 
-                Text("20")
+                Text("\(streakVM.getStreak()))
                     .font(.title3.bold())
             }
-            .frame(width: 50, alignment: .center)
+            .frame(width: 45, alignment: .center)
 
+            //Foguinhos e dias
             VStack(alignment: .leading, spacing: 8) {
                 HStack(spacing: 20) {
                     ForEach(["Dom","Seg","Ter","Qua","Qui","Sex","Sab"], id: \.self) { day in
@@ -46,22 +48,27 @@ struct StreakCardView: View {
                     }
                 }
 
+                //Aviso
                 Text("Atenção! Uma semana sem treinar zera sua streak!")
                     .font(.caption2.italic())
                     .foregroundColor(.gray)
             }
         }
+        //.padding()
         .onAppear(){
-            streakVM.updateTrainingDates()
+            //streakVM.updateTrainingDates()
         }
-
+        .padding(.top, 8)
+        .padding(.bottom, 8)
+        .padding(.horizontal)
+        
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.white)
                 .shadow(color: .black.opacity(0.1), radius: 4, y: 2)
+                .frame(maxWidth: .infinity)
         )
-        .padding(.vertical, 8)
-        //.padding(.horizontal)
+        
         
         
     }
