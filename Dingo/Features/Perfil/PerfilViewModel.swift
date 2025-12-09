@@ -23,6 +23,7 @@ class PerfilViewModel: ObservableObject {
     @Published var groupCodeInput: String = "" // Used for TextField binding
     @Published var fetchedGroup: GroupModel? = nil
     @Published var fetchedAllGroups: [GroupModel] = []
+    @Published var isLoadingGroups: Bool = false
     @Published var fetchError: String? = nil
     @Published var isJoiningGroup: Bool = false
     @Published var joinSuccessMessage: String? = nil
@@ -83,11 +84,13 @@ class PerfilViewModel: ObservableObject {
     }
     
     func fetchAllGroups() async {
+        self.isLoadingGroups = true
         do {
             self.fetchedAllGroups = try await persistenceServices.fetchAllGroups()
         } catch {
             self.fetchError = "Erro ao buscar grupos: \(error.localizedDescription)"
         }
+        self.isLoadingGroups = false
     }
     
     

@@ -44,8 +44,6 @@ struct VisualizarDadosView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
-                
-                
                 // MARK: - CARD 1: Tempo Restante
                 VStack {
                     HStack(spacing: 12) {
@@ -83,14 +81,11 @@ struct VisualizarDadosView: View {
                     }
                 }
                 .padding(16)
-                .frame(maxWidth: .infinity)
                 .background(
                     RoundedRectangle(cornerRadius: 20)
                         .fill(Color.white)
                         .shadow(color: .black.opacity(0.1), radius: 6, y: 3)
                 )
-                
-                
                 
                 
                 // MARK: - CARD 2: Descrição
@@ -207,27 +202,28 @@ struct VisualizarDadosView: View {
                                     }
                                 }
                             }
-                            
-                            if isChallenge && !resumeVM.isTeacher {
-                                Button {
-                                    startChallenge = true
-                                } label: {
-                                    Text("Começar desafio")
-                                        .foregroundColor(.white)
-                                        .font(.title3.bold())
-                                        .frame(maxWidth: .infinity)
-                                        .padding(.vertical, 18)
-                                        .background(
-                                            Capsule()
-                                                .fill(Color("BlueCard"))
-                                                .shadow(color: .black.opacity(0.15), radius: 5, y: 3)
-                                        )
-                                        .padding(.top, 15)
-                                        .padding(.bottom, 20)
+                        }
+                        
+                        if isChallenge && !resumeVM.isTeacher {
+                            Button {
+                                startChallenge = true
+                            } label: {
+                                Text("Começar desafio")
+                                    .foregroundColor(.white)
+                                    .font(.title3.bold())
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 18)
+                                    .background(
+                                        Capsule()
+                                            .fill(Color("BlueCard"))
+                                            .shadow(color: .black.opacity(0.15), radius: 5, y: 3)
+                                    )
+                                    .padding(.top, 15)
+                                    .padding(.bottom, 20)
 
-                                }
                             }
                         }
+
                     }
                     .frame(maxWidth: .infinity)
                 }
@@ -237,6 +233,7 @@ struct VisualizarDadosView: View {
             }
             .padding(20)
         }
+        .background(Color(.secondarySystemBackground))
         .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $startChallenge) {

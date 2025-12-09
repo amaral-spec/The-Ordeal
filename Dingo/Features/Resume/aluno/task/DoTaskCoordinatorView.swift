@@ -52,9 +52,9 @@ struct DoTaskCoordinatorView: View {
                 micDenied = (ok == false)
             }
         }
-        .alert("Cancelar Tarefa?", isPresented: $showCancelAlert) {
+        .alert("Descartar tarefa?", isPresented: $showCancelAlert) {
             Button("Manter", role: .cancel) { }
-            Button("Cancelar tarefa", role: .destructive) {
+            Button("Descartar tarefa", role: .destructive) {
                 dismiss()
             }
         } message: {
@@ -141,7 +141,7 @@ struct DoTaskCoordinatorView: View {
                 Label("Confirmar", systemImage: "checkmark")
             }
             .buttonStyle(.borderedProminent)      // Torna o botão primário
-            .tint(Color("GreeCard"))
+            .tint(Color("GreenCard"))
         }
     }
 }

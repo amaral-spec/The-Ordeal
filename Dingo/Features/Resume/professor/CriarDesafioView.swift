@@ -143,6 +143,8 @@ struct CriarDesafioView: View {
                             .background(Color("BlueCard"))
                     }
                     .disabled(desafioNome.isEmpty || selectedGroupID == nil || isSaving)
+//                    .buttonStyle(.borderedProminent)
+//                    .tint(Color("BlueChallenge"))
                 }
             }
         }

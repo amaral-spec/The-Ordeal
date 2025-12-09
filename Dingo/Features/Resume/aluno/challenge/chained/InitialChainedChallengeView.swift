@@ -32,7 +32,7 @@ struct InitialChainedChallengeView: View {
                     rec.start()
                 }
             } label: {
-                RecordingButtonView(isRecording: rec.isRecording, color: Color("GreenCard"))
+                RecordingButtonView(isRecording: rec.isRecording)
             }
         }
         .navigationTitle(Text("Encadeia"))

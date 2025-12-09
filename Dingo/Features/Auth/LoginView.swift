@@ -16,28 +16,31 @@ struct LoginView: View {
                     .padding()
             }
 
-            Text("Seja bem vindo ao Dingo\n")
-                .font(.system(size: 30))
-                .padding(.vertical, 16)
-
-            
-            SignInWithAppleButton(
-                .signIn,
-                onRequest: { request in
-                    request.requestedScopes = [.fullName, .email]
-                },
-                onCompletion: { result in
-                    authVM.handle(result)
-                }
-            )
-            .cornerRadius(50)
-            .frame(height: 50)
-            .padding()
-            .signInWithAppleButtonStyle(.black)
-            
+            if authVM.authService.alreadyCheck && !authVM.authService.isLoggedIn {
+                Text("Seja bem vindo ao Dingo\n")
+                    .font(.system(size: 30))
+                    .padding(.vertical, 16)
+                
+                
+                SignInWithAppleButton(
+                    .continue,
+                    onRequest: { request in
+                        request.requestedScopes = [.fullName, .email]
+                    },
+                    onCompletion: { result in
+                        authVM.handle(result)
+                    }
+                )
+                .cornerRadius(50)
+                .frame(height: 50)
+                .padding()
+                .signInWithAppleButtonStyle(.black)
+            }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .ignoresSafeArea()
+        .onAppear() {
+            authVM.checkStatus()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity) // <--- O SEGREDO
     }
 }
 

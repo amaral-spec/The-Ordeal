@@ -3,17 +3,16 @@ import AuthenticationServices
 
 @MainActor
 final class AuthViewModel: ObservableObject {
-    @Published var isLoading = false
     @Published var errorMessage: String? = nil
     @Published var isNewUser: Bool?  = false
-    private let authService: AuthService
+
+    let authService: AuthService
 
     init(authService: AuthService) {
         self.authService = authService
     }
     
     func handle(_ result: Result<ASAuthorization, Error>) {
-        isLoading = true
         errorMessage = nil
 
         Task {
@@ -24,7 +23,6 @@ final class AuthViewModel: ObservableObject {
                 errorMessage = "Falha no login: \(error.localizedDescription)"
             }
 
-            isLoading = false
         }
     }
 

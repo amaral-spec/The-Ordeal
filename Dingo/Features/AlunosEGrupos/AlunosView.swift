@@ -7,12 +7,6 @@
 
 import SwiftUI
 
-let columns: [GridItem] = [
-    GridItem(.flexible()),
-    GridItem(.flexible()),
-    GridItem(.flexible())
-]
-
 struct AlunosView: View {
     @ObservedObject var alunoVM: AlunosViewModel
     let onNavigate: (AlunosCoordinatorView.Route) -> Void
@@ -42,10 +36,10 @@ struct AlunosView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.secondarySystemBackground))
-        .navigationTitle("Alunos")
+        .navigationTitle("Grupos")
         .navigationBarTitleDisplayMode(.automatic)
         .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
+            ToolbarItem(placement: .automatic) {
                 Button {
                     onNavigate(.solicitation)
                 } label: {
@@ -53,7 +47,7 @@ struct AlunosView: View {
                         .foregroundStyle(Color(.accent))
                 }
             }
-            ToolbarItem(placement: .confirmationAction) {
+            ToolbarItem(placement: .automatic) {
                 Button { alunoVM.criarGrupo = true } label: {
                     Image(systemName: "plus")
                         .foregroundStyle(Color(.accent))
@@ -67,6 +61,8 @@ struct AlunosView: View {
             CriarGrupoView(onGrupoCriado: {
                 Task { await alunoVM.groupLoad() }
             })
+            .presentationDetents([.fraction(0.25)]) // <--- Define 25% da altura da tela
+            .interactiveDismissDisabled(true)
         }
         .onAppear {
             alunoVM.selectedMode = .Grupos

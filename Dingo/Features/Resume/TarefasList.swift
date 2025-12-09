@@ -51,8 +51,12 @@ struct TarefasList: View {
             .padding(.horizontal, 16)
             .padding(.top, 12)
         }
+        .background(Color(.secondarySystemBackground))
         .navigationTitle("Tarefas")
         .navigationBarTitleDisplayMode(.inline)
+        .refreshable {
+            await resumoVM.carregarTarefas()
+        }
         .task {
             await resumoVM.carregarTarefas()
         }
