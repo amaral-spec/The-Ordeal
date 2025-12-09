@@ -94,5 +94,5 @@ struct PerfilProfessorView: View {
 
 
 #Preview {
-    PerfilProfessorView(persistenceServices: PersistenceServices.shared)
+    //PerfilProfessorView(persistenceServices: PersistenceServices.shared)
 }
