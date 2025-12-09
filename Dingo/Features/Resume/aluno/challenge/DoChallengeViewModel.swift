@@ -21,10 +21,11 @@ final class DoChallengeViewModel: ObservableObject {
     
     @Published var challengeSessionRecordID: CKRecord.ID?
 
+    @Published var isCompleted: Bool = false
     
     private let persistenceServices: PersistenceServices
     
-    init(persistenceServices: PersistenceServices, challengeM: ChallengeModel) {
+    init(persistenceServices: PersistenceServices, challengeM: ChallengeModel? = nil) {
         self.persistenceServices = persistenceServices
         self.challengeM = challengeM
     }

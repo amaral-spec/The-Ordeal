@@ -21,6 +21,10 @@ struct VisualizarDadosView: View {
     @State var startChallenge: Bool = false
     let onNavigate: (ResumeCoordinatorView.Route) -> Void
     
+    @StateObject var doChallengeVM = DoChallengeViewModel(
+        persistenceServices: PersistenceServices()
+    )
+    
     init(isChallenge: Bool, challengeModel: ChallengeModel? = nil, taskModel: TaskModel? = nil, onNavigate: @escaping (ResumeCoordinatorView.Route) -> Void) {
         if let challengeModel = challengeModel {
             self.challengeModel = challengeModel
@@ -210,7 +214,7 @@ struct VisualizarDadosView: View {
                             
                             if isChallenge && !resumeVM.isTeacher {
                                 Button {
-                                    startChallenge = true
+                                    startChallenge = !doChallengeVM.isCompleted
                                 } label: {
                                     Text("Começar desafio")
                                         .foregroundColor(.white)

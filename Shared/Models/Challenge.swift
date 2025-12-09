@@ -17,10 +17,9 @@ final class ChallengeModel: Identifiable, Equatable, Hashable {
     var someoneIsDoingIt: Bool = false
     
     // Linkar audio com os alunos
-    var studentAudios: [CKRecord.Reference: URL]
     
     var generalAudio: URL?
-    
+    var studentAudios: [CKRecord.Reference: URL] //conferir se ta certo
     var group: CKRecord.Reference?
     var title: String
     var description: String
