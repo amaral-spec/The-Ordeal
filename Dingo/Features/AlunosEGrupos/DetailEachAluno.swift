@@ -26,7 +26,7 @@ struct DetailEachAluno: View {
                 VStack(spacing: -10) {
                     ZStack {
                         RoundedRectangle(cornerRadius: 45)
-                            .frame(width: .infinity, height: 60)
+                            .frame(height: 60)
                             .foregroundStyle(.white)
 
                         HStack {

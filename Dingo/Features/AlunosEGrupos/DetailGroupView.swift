@@ -12,8 +12,10 @@ struct DetailGroupView: View {
     let grupo: GroupModel
     @State private var members: [UserModel] = []
     @State private var isLoadingMembers = false
+    
+    // MUDANÇA 1: Removemos o Bool 'eachAluno'. O próprio selectedMember controla a tela.
     @State private var selectedMember: UserModel?
-    @State private var eachAluno: Bool = false
+    
     @State private var isCopied: Bool = false
     
     var body: some View {
@@ -36,8 +38,8 @@ struct DetailGroupView: View {
                         HStack(spacing: 10){
                             ForEach(members, id: \.id) { member in
                                 Button {
+                                    // MUDANÇA 2: Apenas definimos o membro. O sheet abre sozinho.
                                     selectedMember = member
-                                    eachAluno = true
                                 } label: {
                                     VStack {
                                         if let image = member.profileImage {
@@ -65,9 +67,8 @@ struct DetailGroupView: View {
                         }
                         .padding(.horizontal)
                     }
-//                    .frame(maxWidth: .infinity)
                 }
-                    
+                
                 Button {
                     UIPasteboard.general.string = grupo.groupCode
                     
@@ -75,14 +76,12 @@ struct DetailGroupView: View {
                         isCopied = true
                     }
                     
-                    // Removes feedback after 2.0 seconds
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                         withAnimation {
                             self.isCopied = false
                         }
                     }
                     
-                    // Haptics
                     let generator = UINotificationFeedbackGenerator()
                     generator.notificationOccurred(.success)
                     
@@ -94,11 +93,10 @@ struct DetailGroupView: View {
                     .font(.headline)
                     .foregroundColor(.white)
                     .padding()
-                    .frame(maxWidth: .infinity/*350, maxHeight: 52*/)
+                    .frame(maxWidth: .infinity)
                     .background(Color.accentColor)
                     .cornerRadius(50)
                 }
-//                .frame(maxWidth: .infinity, minHeight: 70)
                 .padding(.horizontal)
             }
             .padding(.vertical)
@@ -109,12 +107,12 @@ struct DetailGroupView: View {
         .task {
             await loadMembers()
         }
-        .sheet(isPresented: $eachAluno) {
-            if let member = selectedMember {
-                DetailEachAluno(member: member)
-                    .presentationDetents([.medium, .large])
-                    .presentationDragIndicator(.visible)
-            }
+        // MUDANÇA 3: Usamos .sheet(item:). Isso garante que 'member' existe antes de abrir.
+        // O UserModel precisa ser Identifiable (ter um ID), o que ele parece ter pelo seu ForEach.
+        .sheet(item: $selectedMember) { member in
+            DetailEachAluno(member: member)
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
         }
         .overlay(alignment: .top) {
             if isCopied {
@@ -141,6 +139,7 @@ struct DetailGroupView: View {
         do {
             let db = CKContainer.default().publicCloudDatabase
             var loadedMembers: [UserModel] = []
+            // Nota: Isso faz muitas requisições (N+1). Considere usar CKQuery com "recordID IN [...]" no futuro.
             for ref in grupo.members {
                 let record = try await db.record(for: ref.recordID)
                 let user = UserModel(from: record)
