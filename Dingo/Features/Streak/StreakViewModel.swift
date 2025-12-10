@@ -23,7 +23,7 @@ class StreakViewModel: ObservableObject {
 
 
     //@Published var lastDate = Calendar.current.date(byAdding: .day, value: -4, to: Date())!
-    //let today = Calendar.current.date(byAdding: .day, value: -2, to: Date())!
+    //let today = Calendar.current.date(byAdding: .day, value: +4, to: Date())!
     let calendar = Calendar.current
     var today = Date()
     var wToday: Int { calendar.component(.weekday, from: today) }

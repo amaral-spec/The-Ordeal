@@ -12,7 +12,8 @@ struct StreakCardView: View {
     @EnvironmentObject var streakVM: StreakViewModel
     let calendar = Calendar.current
     var today: Int { calendar.component(.weekday, from: Date()) }
-    
+    //var today: Int { calendar.component(.weekday, from: Calendar.current.date(byAdding: .day, value: +4, to: Date())!) }
+
     var body: some View {
         HStack(spacing: 16) {
             //Fogo grande
@@ -110,22 +111,16 @@ func stringToIntDay(day: String) -> Int {
     switch day{
     case "Dom":
         return 1
-        break
     case "Seg":
         return 2
-        break
     case "Ter":
         return 3
-        break
     case "Qua":
         return 4
-        break
     case "Qui":
         return 5
-        break
     case "Sex":
         return 6
-        break
     case "Sab":
         return 7
     default:
