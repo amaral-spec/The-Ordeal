@@ -99,7 +99,7 @@ struct VisualizarDadosView: View {
                 descriptionCard
                 
                 // Exibe o player apenas se o áudio foi gerado com sucesso
-                if mergedAudioURL != nil {
+                if (resumeVM.isTeacher || endDate < Date()) && mergedAudioURL != nil{
                     audioCard
                 }
                 
@@ -133,14 +133,26 @@ struct VisualizarDadosView: View {
                     .interactiveDismissDisabled(true)
             }
         }
-        
+        .refreshable {
+            Task {
+                // 1. Carrega dados básicos
+                await loadData()
+                
+                if (resumeVM.isTeacher || endDate < Date()) && mergedAudioURL != nil {
+                    await loadAndMergeAudios()
+                }
+            }
+        }
         // MARK: Async Tasks
-        .task {
-            // 1. Carrega dados básicos
-            await loadData()
-            
-            // 2. Carrega e unifica áudios
-            await loadAndMergeAudios()
+        .onAppear {
+            Task {
+                // 1. Carrega dados básicos
+                await loadData()
+                
+                if resumeVM.isTeacher || endDate < Date() {
+                    await loadAndMergeAudios()
+                }
+            }
         }
     }
     
@@ -182,7 +194,7 @@ struct VisualizarDadosView: View {
         
         // Depois chamamos a função de união criada anteriormente
         do {
-            self.mergedAudioURL = try await resumeVM.mergeAudioFiles() 
+            self.mergedAudioURL = try await resumeVM.mergeAudioFiles()
         } catch {
             print("Erro ao unificar áudios: \(error)")
         }
