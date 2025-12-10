@@ -31,12 +31,13 @@ struct ProfessorMainCoordinatorView: View {
             Tab("Início", systemImage: "music.note.house.fill", value: .inicio) {
                 ResumeCoordinatorView(isTeacher: true)
             }
-            Tab("Alunos", systemImage: "person.3", value: .alunos) {
+            Tab("Grupos", systemImage: "person.3", value: .alunos) {
                 AlunosCoordinatorView()
             }
             Tab("Perfil", systemImage: "person.fill", value: .perfil) {
                 PerfilCoordinatorView(isTeacher: true)
                     .environmentObject(perfilVM)
+                    .environmentObject(authVM)
             }
             Tab("Buscar", systemImage: "magnifyingglass", value: .buscar, role: .search) {
                 NavigationStack {

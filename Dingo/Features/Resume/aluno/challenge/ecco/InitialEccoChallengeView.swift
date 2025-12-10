@@ -7,22 +7,18 @@
 
 import SwiftUI
 
-struct InitialTaskView: View {
+struct InitialEccoChallengeView: View {
     
-    @EnvironmentObject var doTaskVM: DoTaskViewModel
+    @EnvironmentObject var doChallengeVM: DoChallengeViewModel
     @EnvironmentObject var rec: MiniRecorder
-    let onNavigation: (DoTaskCoordinatorView.Route) -> Void
+    let onNavigation: (DoChallengeCoordinatorView.Route) -> Void
     
     var body: some View {
         VStack{//Escrita
-            TopPageInstructionView(instruction: doTaskVM.taskM?.description ?? " Sem titulo para tarefa")
+            TopPageInstructionView(instruction: "Toque algo de sua escolha")
             Spacer()
-            IconImageView(
-                nomeIcone: "waveform",
-                colorBackground: Color("GreenCard").opacity(0.3),
-                colorText: Color("GreenCard")
-            )
-            ImageMessageView(title: "Grave o seu audio", subtitle: "")
+            IconImageView(nomeIcone: "waveform")
+            ImageMessageView(title: "Grave o seu áudio", subtitle: "")
             MultiBarVisualizerView(values: rec.meterHistory, barCount: 24)
                 .frame(height: 54)
                 .padding(.horizontal)
@@ -31,15 +27,15 @@ struct InitialTaskView: View {
             Button {
                 if rec.isRecording {
                     rec.stop()
-                    onNavigation(.recordTask)
+                    onNavigation(.recordEcco)
                 } else {
                     rec.start()
                 }
             } label: {
-                RecordingButtonView(isRecording: rec.isRecording, color: Color("GreenCard"))
+                RecordingButtonView(isRecording: rec.isRecording, color: Color("BlueCard"))
             }
         }
-        .navigationTitle(Text(doTaskVM.taskM?.title ?? "Sem titulo"))
+        .navigationTitle(Text("Ecco"))
         .navigationBarTitleDisplayMode(.inline)
     }
 }

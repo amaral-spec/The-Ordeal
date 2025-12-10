@@ -13,13 +13,17 @@ struct DoChallengeCoordinatorView: View {
         case initialChained
         case receiveChained
         case recordChained
+        case waitingEcco
+        case initialEcco
+        case receiveEcco
+        case recordEcco
     }
     
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var persistenceServices: PersistenceServices
     
-    @State private var path: [Route] = [.waitingChained]
+    @State private var path: [Route] = []
     
     @State private var showCancelAlert: Bool = false
     @State private var showConfirmAlert: Bool = false
@@ -28,18 +32,24 @@ struct DoChallengeCoordinatorView: View {
     @StateObject private var rec = MiniRecorder()
     @StateObject private var player = MiniPlayer()
     
-    @State private var currentRoute: Route = .waitingChained
+    @State private var currentRoute: Route
     @State private var micDenied = false
 
 
     init(challengeM: ChallengeModel) {
         _doChallengeVM = StateObject(wrappedValue: DoChallengeViewModel(persistenceServices: PersistenceServices.shared, challengeM: challengeM))
+        if challengeM.whichChallenge == 1 {
+            currentRoute = .waitingEcco
+        } else {
+            currentRoute = .waitingChained
+        }
+        
     }
 
     var body: some View {
 
         NavigationStack(path: $path) {
-            screen(for: .waitingChained)
+            screen(for: self.currentRoute)
                 .navigationDestination(for: Route.self) { route in
                     screen(for: route)
                 }
@@ -56,7 +66,7 @@ struct DoChallengeCoordinatorView: View {
         }
         .alert("Cancelar desafio?", isPresented: $showCancelAlert) {
             Button("Manter", role: .cancel) { }
-            Button("Cancelar desafio", role: .destructive) {
+            Button("Descartar desafio", role: .destructive) {
                 
                 if currentRoute != .waitingChained {
                     Task { await doChallengeVM.outChallenge() }
@@ -136,7 +146,7 @@ struct DoChallengeCoordinatorView: View {
             .toolbar { cancelToolbar }
             .navigationBarBackButtonHidden(true)
             .environmentObject(doChallengeVM)
-
+            
         case .recordChained:
             RecordFromInitialChainedChallengeView { next in
                 currentRoute = next
@@ -147,8 +157,47 @@ struct DoChallengeCoordinatorView: View {
                 confirmToolbar
             }
             .navigationBarBackButtonHidden(true)
+        
+        case .waitingEcco:
+            WaitingEccoChallengeView { next in
+                currentRoute = next
+                path.append(next)
+            }
+            .toolbar { cancelToolbar }
+            .navigationBarBackButtonHidden(true)
+            .environmentObject(doChallengeVM)
+            
+        case .initialEcco:
+            InitialEccoChallengeView { next in
+                currentRoute = next
+                path.append(next)
+            }
+            .toolbar { cancelToolbar }
+            .navigationBarBackButtonHidden(true)
+            .environmentObject(doChallengeVM)
+            
+        case .receiveEcco:
+            ReceivedAudioRecordEccoChallengeView { next in
+                currentRoute = next
+                path.append(next)
+            }
+            .toolbar { cancelToolbar }
+            .navigationBarBackButtonHidden(true)
+            .environmentObject(doChallengeVM)
+            
+        case .recordEcco:
+            RecordFromInitialEccoChallengeView { next in
+                currentRoute = next
+                path.append(next)
+            }
+            .toolbar {
+                cancelToolbar
+                confirmToolbar
+            }
+            .navigationBarBackButtonHidden(true)
         }
     }
+    
     
     private var cancelToolbar: some ToolbarContent {
         ToolbarItem(placement: .topBarLeading) {
@@ -166,7 +215,7 @@ struct DoChallengeCoordinatorView: View {
             } label: {
                 Label("Confirmar", systemImage: "checkmark")
             }
-            .buttonStyle(.borderedProminent)      // Torna o botão primário
-            .tint(Color("BlueChallenge"))         }
+            .buttonStyle(.borderedProminent)
+            .tint(Color("BlueCard"))         }
     }
 }

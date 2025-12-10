@@ -33,6 +33,7 @@ struct StudentMainCoordinatorView: View {
             Tab("Perfil", systemImage: "person.fill", value: .perfil) {
                 PerfilCoordinatorView(isTeacher: false)
                     .environmentObject(perfilVM)
+                    .environmentObject(authVM)
             }
             Tab("Buscar", systemImage: "magnifyingglass", value: .search, role: .search) {
                 NavigationStack {

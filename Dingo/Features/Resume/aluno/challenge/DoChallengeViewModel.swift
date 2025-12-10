@@ -15,16 +15,18 @@ final class DoChallengeViewModel: ObservableObject {
     
     @Published var challengeM: ChallengeModel?
     
-    @Published var alreadyREC: Bool = false
-    
     @Published var recordings: [URL] = []
     
     @Published var challengeSessionRecordID: CKRecord.ID?
 
+    @Published var audioToShow: URL?
+
+    @Published var isCompleted: Bool = false
+
     
     private let persistenceServices: PersistenceServices
     
-    init(persistenceServices: PersistenceServices, challengeM: ChallengeModel) {
+    init(persistenceServices: PersistenceServices, challengeM: ChallengeModel? = nil) {
         self.persistenceServices = persistenceServices
         self.challengeM = challengeM
     }
@@ -118,6 +120,41 @@ final class DoChallengeViewModel: ObservableObject {
             print("Erro ao enviar áudio: \(error)")
         }
     }
+    
+    func carregarAudios(challengeID: CKRecord.ID) async -> [URL] {
+        do {
+            let audiosCarregados: [AudioRecordChallengeModel] =
+                try await persistenceServices.fetchChallengeAudio(challengeID: challengeID)
+            
+            return audiosCarregados.sorted(by: { $0.createdAt < $1.createdAt }).map(\.audioURL)
+        } catch {
+            print("Erro ao carregar audios: \(error)")
+            return []
+        }
+    }
 
 
+    func getAudioToBeCopied() async -> URL? {
+        guard let challengeID = challengeM?.id else { return nil }
+        let audios = await carregarAudios(challengeID: challengeID)
+        // Choose which one you want; using first (oldest) here:
+        return audios.first
+    }
+    
+    func getLastAudioToBeCompleted() async -> URL? {
+        guard let challengeID = challengeM?.id else { return nil }
+        let audios = await carregarAudios(challengeID: challengeID)
+        // Choose which one you want; using first (oldest) here:
+        return audios.last
+    }
+    
+    func isHeAlreadyDoneThisChallenge(challengeID: CKRecord.ID) async -> Bool {
+        do {
+            let value = try await persistenceServices.alreadyMakeTheChallenge(challengeID: challengeID)
+            return value == nil ? false : true
+        } catch {
+            return false
+        }
+    }
+    
 }

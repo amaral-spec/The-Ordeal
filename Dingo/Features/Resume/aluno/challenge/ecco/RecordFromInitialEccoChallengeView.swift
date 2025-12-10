@@ -10,21 +10,21 @@ import UIKit
 import Combine
 import AVFoundation
 
-struct RecordFromInitialTaskView: View {
+struct RecordFromInitialEccoChallengeView: View {
 
-    @EnvironmentObject var doTaskVM: DoTaskViewModel
+    @EnvironmentObject var doChallengeVM: DoChallengeViewModel
     @EnvironmentObject var player: MiniPlayer
     
     // Use a computed property so we can safely access the environment object.
     private var firstURL: URL? {
-        doTaskVM.recordings.first
+        doChallengeVM.recordings.first
     }
     
-    let onNavigation: (DoTaskCoordinatorView.Route) -> Void
+    let onNavigation: (DoChallengeCoordinatorView.Route) -> Void
 
     var body: some View {
         VStack {
-            TopPageInstructionView(instruction: "Toque algo de sua escolha por 15 segundos")
+            TopPageInstructionView(instruction: "Toque algo de sua escolha")
 
             Spacer()
             
@@ -54,18 +54,18 @@ struct RecordFromInitialTaskView: View {
             Spacer()
 
             Button {
-                onNavigation(.initialTask)
+                onNavigation(.initialChained)
             } label: {
-                Text("Regravar Audio")
+                Text("Regravar áudio")
                     .tint(.black)
             }
             .buttonStyle(.borderedProminent)
-            .tint(Color("GreenCardBackground"))
+            .tint(Color("BlueCardBackground"))
         }
         .onAppear {
-            doTaskVM.recordings = doTaskVM.recordingsList()
+            doChallengeVM.recordings = doChallengeVM.recordingsList()
         }
-        .navigationTitle("")
+        .navigationTitle("Ecco")
         .navigationBarTitleDisplayMode(.inline)
     }
 }

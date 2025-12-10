@@ -57,8 +57,10 @@ struct RecordFromInitialChainedChallengeView: View {
                 onNavigation(.initialChained)
             } label: {
                 Text("Regravar Audio")
-                    .tint(Color("BlueChallenge"))
+                    .tint(.black)
             }
+            .buttonStyle(.borderedProminent)
+            .tint(Color("BlueCardBackground"))
         }
         .onAppear {
             doChallengeVM.recordings = doChallengeVM.recordingsList()

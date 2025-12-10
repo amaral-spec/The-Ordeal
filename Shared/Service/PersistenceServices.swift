@@ -502,6 +502,59 @@ class PersistenceServices: NSObject, ObservableObject {
         print("AudioRecord salvo no CloudKit!")
     }
 
+    func alreadyMakeTheChallenge(challengeID: CKRecord.ID) async throws -> AudioRecordChallengeModel? {
+        guard let currentUser = AuthService.shared.currentUser else {
+            throw NSError(domain: "AuthError", code: 1, userInfo: [NSLocalizedDescriptionKey: "No user loggoed in"])
+        }
+        
+        let userRef = CKRecord.Reference(recordID: currentUser.id, action: .none)
+        
+        let ref = CKRecord.Reference(recordID: challengeID, action: .none)
+        let predicate = NSPredicate(format: "challenge == %@ AND user == %@", ref, userRef)
+        
+        let query = CKQuery(recordType: "AudioRecordChallenge", predicate: predicate)
+        
+        var models: [AudioRecordChallengeModel] = []
+        
+        let (results, _) = try await db.records(matching: query)
+        
+        for (_, result) in results {
+            if case .success(let record) = result,
+               let audioModel = AudioRecordChallengeModel(from: record) {
+                models.append(audioModel)
+            }
+        }
+        
+        return models.first
+    }
+    
+    func alreadyMakeTheTask(taskID: CKRecord.ID) async throws -> AudioRecordTaskModel? {
+        guard let currentUser = AuthService.shared.currentUser else {
+            throw NSError(domain: "AuthError", code: 1, userInfo: [NSLocalizedDescriptionKey: "No user loggoed in"])
+        }
+
+        let userRef = CKRecord.Reference(recordID: currentUser.id, action: .none)
+        
+        let ref = CKRecord.Reference(recordID: taskID, action: .none)
+        
+        let predicate = NSPredicate(format: "task == %@ AND user == %@", ref, userRef)
+        
+        let query = CKQuery(recordType: "AudioRecordTask", predicate: predicate)
+        
+        var models: [AudioRecordTaskModel] = []
+        
+        let (results, _) = try await db.records(matching: query)
+        
+        for (_, result) in results {
+            if case .success(let record) = result,
+               let audioModel = AudioRecordTaskModel(from: record) {
+                models.append(audioModel)
+            }
+        }
+        
+        return models.first
+    }
+    
     func fetchChallengeAudio(challengeID: CKRecord.ID) async throws -> [AudioRecordChallengeModel] {
         
         let ref = CKRecord.Reference(recordID: challengeID, action: .none)

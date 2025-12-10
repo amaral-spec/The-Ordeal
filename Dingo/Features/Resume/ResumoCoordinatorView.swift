@@ -80,11 +80,11 @@ struct ResumeCoordinatorView: View {
                         .environmentObject(resumeVM)
                     
                 case .participantsChallenge(let challenge):
-                    ListaParticipantesView(isTeacher: true, challengeModel: challenge)
+                    ListaParticipantesView(isTeacher: isTeacher, challengeModel: challenge)
                         .environmentObject(resumeVM)
                     
                 case .participantsTask(let task):
-                    ListaParticipantesView(isTeacher: true, taskModel: task)
+                    ListaParticipantesView(isTeacher: isTeacher, taskModel: task)
                         .environmentObject(resumeVM)
                 }
             }

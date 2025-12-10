@@ -121,6 +121,7 @@ struct SolicitacoesView: View {
                 .listRowBackground(Color.clear)
             }
         }
+        .background(Color(.secondarySystemBackground))
         .listStyle(.plain)
         .navigationTitle("Solicitações")
         .navigationBarTitleDisplayMode(.inline)
