@@ -18,7 +18,6 @@ final class AuthService: NSObject, ObservableObject {
     @Published private(set) var isLoggedIn: Bool = false
     @Published private(set) var appleUserID: String = ""
     @Published private(set) var currentUser: UserModel?
-    @Published private(set) var alreadyCheck: Bool = false
     
     // MARK: - Private properties
     private let userDefaults = UserDefaults.standard
@@ -90,7 +89,7 @@ final class AuthService: NSObject, ObservableObject {
     
     // MARK: - Estado de login
     func checkAppleSignInStatus() {
-        alreadyCheck = false
+        
         guard !appleUserID.isEmpty else {
             isLoggedIn = false
             return
@@ -113,7 +112,8 @@ final class AuthService: NSObject, ObservableObject {
                 }
             }
         }
-        alreadyCheck = true
+        
+     
     }
     
     // MARK: - CloudKit

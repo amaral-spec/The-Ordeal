@@ -15,7 +15,6 @@ final class DoTaskViewModel: ObservableObject {
     
     @Published var taskM: TaskModel?
     @Published var recordings: [URL] = []
-    @Published var isCompleted: Bool = false
     
     private let persistenceServices: PersistenceServices
     
@@ -50,9 +49,9 @@ final class DoTaskViewModel: ObservableObject {
     }
 
     func submitStudentAudio(url: URL) async {
-        guard let task = taskM else { return }
-        guard let user = await AuthService.shared.currentUser else { return }
-        
+        guard let task = taskM else { print("Para enviar audio task não pode ser nulo!");  return }
+        guard let user = await AuthService.shared.currentUser else { print("Para enviar audio user não pode ser nulo!"); return }
+
         do {
             try await persistenceServices.saveAudioRecordTask(
                 taskID: task.id,
@@ -65,5 +64,13 @@ final class DoTaskViewModel: ObservableObject {
         }
     }
 
+    func isHeAlreadyDoneThisTask(taskID: CKRecord.ID) async -> Bool {
+        do {            
+            let value = try await persistenceServices.alreadyMakeTheTask(taskID: taskID)
+            return value == nil ? false : true
+        } catch {
+            return false
+        }
+    }
 
 }

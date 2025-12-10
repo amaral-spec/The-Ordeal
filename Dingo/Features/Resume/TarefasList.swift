@@ -15,7 +15,7 @@ struct TarefasList: View {
     let onNavigate: (ResumeCoordinatorView.Route) -> Void
     
     @State var startTask: Bool = false
-    @State var chooseTask: TaskModel? = nil
+    @State private var alreadyDone: Bool = false
     
     @StateObject var doTaskVM = DoTaskViewModel(
         persistenceServices: PersistenceServices()
@@ -44,9 +44,29 @@ struct TarefasList: View {
                         if(tarefa.endDate >= Date()){
                             ListCard(title: tarefa.title, subtitle: "Faça até \(resumoVM.formatarDiaMes(tarefa.endDate))!", image: TaskImage())
                                 .onTapGesture {
-                                    resumoVM.alunosTarefas = []
-                                    chooseTask = tarefa
-                                    startTask = !doTaskVM.isCompleted 
+                                    Task { @MainActor in
+                                        alreadyDone = await doTaskVM.isHeAlreadyDoneThisTask(taskID: tarefa.id)
+                                        if !alreadyDone {
+                                            doTaskVM.taskM = tarefa
+                                            resumoVM.alunosTarefas = []
+                                            startTask = true
+                                        } else {
+                                            withAnimation {
+                                                alreadyDone = true
+                                            }
+                                            
+                                            // Removes feedback after 2.0 seconds
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                                                withAnimation {
+                                                    self.alreadyDone = false
+                                                }
+                                            }
+                                            
+                                            // Haptics
+                                            let generator = UINotificationFeedbackGenerator()
+                                            generator.notificationOccurred(.success)
+                                        }
+                                    }
                                 }
                         }
                     }
@@ -54,6 +74,20 @@ struct TarefasList: View {
             }
             .padding(.horizontal, 16)
             .padding(.top, 12)
+        }
+        .overlay(alignment: .top) {
+            if alreadyDone {
+                Text("Você já fez essa tarefa")
+                    .font(.headline)
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 20)
+                    .background(Color("BlueCard"))
+                    .foregroundStyle(.white)
+                    .cornerRadius(30)
+                    .padding(.top, 40)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                    .animation(.spring(duration: 0.4), value: alreadyDone)
+            }
         }
         .background(Color(.secondarySystemBackground))
         .navigationTitle("Tarefas")

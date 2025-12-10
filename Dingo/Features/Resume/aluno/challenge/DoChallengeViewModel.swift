@@ -148,6 +148,13 @@ final class DoChallengeViewModel: ObservableObject {
         return audios.last
     }
     
+    func isHeAlreadyDoneThisChallenge(challengeID: CKRecord.ID) async -> Bool {
+        do {
+            let value = try await persistenceServices.alreadyMakeTheChallenge(challengeID: challengeID)
+            return value == nil ? false : true
+        } catch {
+            return false
+        }
+    }
     
-
 }

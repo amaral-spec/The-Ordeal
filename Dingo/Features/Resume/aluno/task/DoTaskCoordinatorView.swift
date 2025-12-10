@@ -67,7 +67,6 @@ struct DoTaskCoordinatorView: View {
                     Task {
                         if let firstURL = doTaskVM.recordings.first {
                             await doTaskVM.submitStudentAudio(url: firstURL)
-                            doTaskVM.isCompleted = true
                         }
                         dismiss()
                     }

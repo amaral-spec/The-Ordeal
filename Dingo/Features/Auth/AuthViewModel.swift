@@ -42,3 +42,4 @@ final class AuthViewModel: ObservableObject {
         authService.logout()
     }
 }
+

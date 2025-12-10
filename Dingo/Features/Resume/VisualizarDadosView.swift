@@ -7,23 +7,43 @@ import SwiftUI
 import CloudKit
 
 struct VisualizarDadosView: View {
+    
     // MARK: - Properties
+    
+    // Configurações de Entrada
     let isChallenge: Bool
     let challengeModel: ChallengeModel?
     let taskModel: TaskModel?
     let onNavigate: (ResumeCoordinatorView.Route) -> Void
     
+    // Environment
     @EnvironmentObject var resumeVM: ResumeViewModel
     
-    // States locais apenas para interação
-    @State private var selectedMember: UserModel?
-    @State private var startChallenge: Bool = false
-    
+    // State Objects
     @StateObject var doChallengeVM = DoChallengeViewModel(
         persistenceServices: PersistenceServices()
     )
     
-    // MARK: - Computed Properties (Lógica de exibição)
+    // Local States
+    @State private var alreadyDone: Bool = false
+    @State private var selectedMember: UserModel?
+    @State private var startChallenge: Bool = false
+    @State private var isLoading: Bool = true
+    @State private var isCheckingStatus: Bool = true
+    
+    // MARK: - Init
+    
+    init(isChallenge: Bool,
+         challengeModel: ChallengeModel? = nil,
+         taskModel: TaskModel? = nil,
+         onNavigate: @escaping (ResumeCoordinatorView.Route) -> Void) {
+        self.isChallenge = isChallenge
+        self.challengeModel = challengeModel
+        self.taskModel = taskModel
+        self.onNavigate = onNavigate
+    }
+    
+    // MARK: - Computed Properties (Helpers)
     
     private var themeColor: Color {
         isChallenge ? Color("BlueCard") : Color("GreenCard")
@@ -46,7 +66,6 @@ struct VisualizarDadosView: View {
         else { return resumeVM.alunosTarefas.isEmpty }
     }
     
-    // NOVO: Helper para o nome do tipo de desafio
     private var challengeTypeName: String {
         guard let type = challengeModel?.whichChallenge else { return "" }
         switch type {
@@ -56,41 +75,40 @@ struct VisualizarDadosView: View {
         }
     }
     
-    // NOVO: Helper para o ícone do tipo de desafio
     private var challengeTypeIcon: String {
         guard let type = challengeModel?.whichChallenge else { return "questionmark" }
         switch type {
-        case 1: return "waveform" // Ícone para Echo
-        case 2: return "link"     // Ícone para Encadeia
+        case 1: return "waveform"
+        case 2: return "link"
         default: return "circle"
         }
     }
     
-    // MARK: - Init
-    init(isChallenge: Bool,
-         challengeModel: ChallengeModel? = nil,
-         taskModel: TaskModel? = nil,
-         onNavigate: @escaping (ResumeCoordinatorView.Route) -> Void) {
-        self.isChallenge = isChallenge
-        self.challengeModel = challengeModel
-        self.taskModel = taskModel
-        self.onNavigate = onNavigate
-    }
-    
     // MARK: - Body
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 timeCard
                 descriptionCard
                 participantsCard
+                if isChallenge && !resumeVM.isTeacher {
+                    if isCheckingStatus {
+                        loadingButton // <--- Mostra o loading enquanto checa
+                    } else if !alreadyDone {
+                        startButton
+                    } else {
+                        alreadyDoneChallenge
+                    }
+                }
             }
             .padding(20)
         }
         .background(Color(.secondarySystemBackground))
         .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)
-        // Sheets & Overlays
+        
+        // MARK: Sheets
         .sheet(item: $selectedMember) { member in
             DetailEachAluno(member: member)
                 .presentationDetents([.medium, .large])
@@ -102,18 +120,45 @@ struct VisualizarDadosView: View {
                     .interactiveDismissDisabled(true)
             }
         }
-        // Data Loading
+        
+        // MARK: Async Tasks
         .task {
-            if isChallenge, let challenge = challengeModel {
-                await resumeVM.carregarParticipantesPorDesafio(challenge: challenge)
-            } else if let task = taskModel {
-                await resumeVM.carregarAlunosTarefa(task: task)
-            }
+            await loadData()
         }
     }
+    
+    // MARK: - Logic Methods
+    
+    private func loadData() async {
+            self.isLoading = true
+            // defer { self.isLoading = false } // <--- REMOVA O DEFER DAQUI
+            
+            // 1. Carrega participantes e libera a tela principal
+            if isChallenge, let challenge = challengeModel {
+                await resumeVM.carregarParticipantesPorDesafio(challenge: challenge)
+                self.isLoading = false // <--- LIBERA A UI PRINCIPAL AQUI
+                
+                // 2. Verifica se aluno já fez (Botão entra em loading específico)
+                if !resumeVM.isTeacher {
+                    withAnimation { self.isCheckingStatus = true } // Ativa loading do botão
+                    
+                    let done = await doChallengeVM.isHeAlreadyDoneThisChallenge(challengeID: challenge.id)
+                    
+                    withAnimation {
+                        self.alreadyDone = done
+                        self.isCheckingStatus = false // Desativa loading do botão
+                    }
+                }
+                
+            } else if let task = taskModel {
+                await resumeVM.carregarAlunosTarefa(task: task)
+                self.isLoading = false
+            }
+        }
 }
 
-// MARK: - Subviews & Cards
+// MARK: - Subviews & Cards Extension
+
 extension VisualizarDadosView {
     
     // 1. Card de Tempo
@@ -123,14 +168,16 @@ extension VisualizarDadosView {
                 .foregroundColor(themeColor)
                 .font(.system(size: 35))
             
-            if endDate < Date() {
-                Text("Terminou!")
-                    .font(.title2.bold())
-                    .foregroundColor(.black)
-            } else {
-                Text("Termina em \(resumeVM.diasRestantes(ate: endDate)) dias!")
-                    .font(.title2.bold())
-                    .foregroundColor(.black)
+            VStack(alignment: .leading) {
+                if endDate < Date() {
+                    Text("Terminou!")
+                        .font(.title2.bold())
+                        .foregroundColor(.black)
+                } else {
+                    Text("Termina em \(resumeVM.diasRestantes(ate: endDate)) dias!")
+                        .font(.title2.bold())
+                        .foregroundColor(.black)
+                }
             }
             Spacer()
         }
@@ -138,15 +185,17 @@ extension VisualizarDadosView {
         .cardStyle()
     }
     
-    // 2. Card de Descrição (MODIFICADO)
+    // 2. Card de Descrição
     private var descriptionCard: some View {
         VStack(alignment: .leading, spacing: 12) {
             
-            // Título Geral do Card
-            HStack( spacing: 5) {
+            // Header
+            HStack(spacing: 5) {
                 Text(isChallenge ? "Dados do desafio" : "Dados da tarefa")
                     .font(.title2.bold())
+                
                 Spacer()
+                
                 if isChallenge {
                     HStack(spacing: 6) {
                         Image(systemName: challengeTypeIcon)
@@ -161,16 +210,17 @@ extension VisualizarDadosView {
             }
             
             Divider()
-                        
-            // Descrição
+            
+            // Texto Descrição
             VStack(alignment: .leading, spacing: 5) {
                 Text("Descrição")
-                    .font(.headline) // Ajustei para headline para ficar hierarquicamente correto
+                    .font(.headline)
                     .foregroundStyle(.secondary)
                 
                 if description.isEmpty {
                     Text("Nenhuma descrição.")
                         .font(.caption.italic())
+                        .foregroundStyle(.secondary)
                 } else {
                     Text(description)
                         .font(.body)
@@ -187,7 +237,8 @@ extension VisualizarDadosView {
     // 3. Card de Participantes
     private var participantsCard: some View {
         VStack(alignment: .leading, spacing: 12) {
-            // Header clicável
+            
+            // Header com Ação
             Button {
                 if let challenge = challengeModel {
                     onNavigate(.participantsChallenge(challenge))
@@ -206,33 +257,43 @@ extension VisualizarDadosView {
                 }
             }
             
-            // Lista ou Loading
+            // Conteúdo
             VStack(alignment: .leading) {
-                if isListEmpty {
-                    HStack {
-                        Spacer()
-                        ProgressView()
-                            .scaleEffect(1.4)
-                            .tint(themeColor)
-                        Spacer()
-                    }
-                    .padding(.vertical, 20)
+                if isLoading {
+                    loadingView
                 } else {
-                    membersList
-                }
-                
-                // Botão de Começar (Apenas Desafio e Aluno)
-                if isChallenge && !resumeVM.isTeacher {
-                    startButton
+                    if isListEmpty {
+                        emptyStateView
+                    } else {
+                        membersList
+                    }
                 }
             }
             .frame(maxWidth: .infinity)
         }
     }
     
-    // Lista horizontal unificada visualmente
+    // Sub-componentes do Card de Participantes
+    
+    private var loadingView: some View {
+        HStack {
+            Spacer()
+            ProgressView()
+                .scaleEffect(1.4)
+                .tint(themeColor)
+            Spacer()
+        }
+        .padding(.vertical, 20)
+    }
+    
+    private var emptyStateView: some View {
+        Text("Nenhum participante encontrado.")
+            .font(.callout)
+            .foregroundStyle(.secondary)
+            .padding(.vertical, 10)
+    }
+    
     private var membersList: some View {
-        
         let members = isChallenge ? resumeVM.members : resumeVM.alunosTarefas
         
         return ScrollView(.horizontal, showsIndicators: false) {
@@ -249,9 +310,36 @@ extension VisualizarDadosView {
         }
     }
     
+    // Botão de Loading (Visual idêntico ao Start, mas com spinner)
+        private var loadingButton: some View {
+            Button {
+                // Ação vazia, pois está carregando
+            } label: {
+                ProgressView()
+                    .tint(.white) // Spinner branco
+                    .scaleEffect(1.2)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 18) // Mesma altura do original
+                    .background(
+                        Capsule()
+                            .fill(themeColor.opacity(0.6)) // Cor um pouco mais clara para indicar disabled
+                            .shadow(color: .black.opacity(0.15), radius: 5, y: 3)
+                    )
+            }
+            .disabled(true) // Desabilita interação
+            .padding(.top, 15)
+            .padding(.bottom, 20)
+        }
+    
     private var startButton: some View {
         Button {
-            startChallenge = !doChallengeVM.isCompleted
+            // Haptics
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.success)
+            
+            // Ação
+            startChallenge = true
+            
         } label: {
             Text("Começar desafio")
                 .foregroundColor(.white)
@@ -267,9 +355,29 @@ extension VisualizarDadosView {
         .padding(.top, 15)
         .padding(.bottom, 20)
     }
+    
+    private var alreadyDoneChallenge: some View {
+        Button {
+            
+            
+        } label: {
+            Text("Desafio já foi feito")
+                .foregroundColor(.white)
+                .font(.title3.bold())
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 18)
+                .background(
+                    Capsule()
+                        .fill(Color("BlueCardBackground2"))
+                        .shadow(color: .black.opacity(0.15), radius: 5, y: 3)
+                )
+        }
+        .padding(.top, 15)
+        .padding(.bottom, 20)
+    }
 }
 
-// MARK: - Reusable Components
+// MARK: - Helper Components & Modifiers
 
 struct MemberAvatarView: View {
     let image: UIImage?
