@@ -22,15 +22,16 @@ struct DoTaskCoordinatorView: View {
     @State private var showCancelAlert: Bool = false
     @State private var showConfirmAlert: Bool = false
     
-    @StateObject private var doTaskVM: DoTaskViewModel
+    @ObservedObject var doTaskVM: DoTaskViewModel
     @StateObject private var rec = MiniRecorder()
     @StateObject private var player = MiniPlayer()
     
     @State private var currentRoute: Route = .initialTask
     @State private var micDenied = false
 
-    init(taskM: TaskModel) {
-        _doTaskVM = StateObject(wrappedValue: DoTaskViewModel(persistenceServices: PersistenceServices.shared, taskM: taskM))
+
+    init(doTaskVM: DoTaskViewModel) {
+        self.doTaskVM = doTaskVM
     }
 
     var body: some View {
@@ -52,9 +53,9 @@ struct DoTaskCoordinatorView: View {
                 micDenied = (ok == false)
             }
         }
-        .alert("Cancelar Tarefa?", isPresented: $showCancelAlert) {
+        .alert("Descartar tarefa?", isPresented: $showCancelAlert) {
             Button("Manter", role: .cancel) { }
-            Button("Cancelar tarefa", role: .destructive) {
+            Button("Descartar tarefa", role: .destructive) {
                 dismiss()
             }
         } message: {
@@ -137,11 +138,12 @@ struct DoTaskCoordinatorView: View {
         ToolbarItem(placement: .topBarTrailing) {
             Button() {
                 showConfirmAlert = true
+                
             } label: {
                 Label("Confirmar", systemImage: "checkmark")
             }
             .buttonStyle(.borderedProminent)      // Torna o botão primário
-            .tint(Color("GreeCard"))
+            .tint(Color("GreenCard"))
         }
     }
 }

@@ -10,8 +10,8 @@ import Foundation
 
 struct IconImageView: View{
     var nomeIcone: String = "waveform"
-    var colorBackground: Color = Color("BlueChallengeBackground")
-    var colorText: Color = Color("BlueChallenge")
+    var colorBackground: Color = Color("BlueCardBackground")
+    var colorText: Color = Color("BlueCard")
     
     var body: some View {
         ZStack{ //Imagem no meio estranha
@@ -47,7 +47,7 @@ struct ImageMessageView: View {
 
 struct RecordingButtonView: View{
     var isRecording: Bool
-    var color: Color = Color("BlueChallenge")
+    var color: Color = Color("BlueCard")
     
     var body: some View{
         

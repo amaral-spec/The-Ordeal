@@ -16,6 +16,7 @@ struct StudentMainCoordinatorView: View {
     @StateObject private var perfilVM: PerfilViewModel
     @State private var selectedTab: studentTabs = .resume
     @State private var searchText: String = ""
+    @State private var query: String = ""
     
     init() {
         _authVM = StateObject(wrappedValue: AuthViewModel(authService: AuthService.shared))
@@ -32,12 +33,14 @@ struct StudentMainCoordinatorView: View {
             Tab("Perfil", systemImage: "person.fill", value: .perfil) {
                 PerfilCoordinatorView(isTeacher: false)
                     .environmentObject(perfilVM)
+                    .environmentObject(authVM)
             }
             Tab("Buscar", systemImage: "magnifyingglass", value: .search, role: .search) {
                 NavigationStack {
-                    BuscarView()
+                    BuscarView(searchText: $searchText)
                         .navigationTitle("Buscar")
                         .toolbarTitleDisplayMode(.inlineLarge)
+
                 }
                 .searchable(text: $searchText)
             }

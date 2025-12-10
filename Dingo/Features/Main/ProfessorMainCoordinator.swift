@@ -16,6 +16,9 @@ struct ProfessorMainCoordinatorView: View {
     @StateObject private var perfilVM: PerfilViewModel
     @State private var selectedTab: professorTabs = .inicio
     @State private var searchText: String = ""
+    @State private var query: String = ""
+    @StateObject private var searchVM = SearchViewModel(persistence: PersistenceServices())
+    
     
     init() {
         print("professor")
@@ -28,20 +31,28 @@ struct ProfessorMainCoordinatorView: View {
             Tab("Início", systemImage: "music.note.house.fill", value: .inicio) {
                 ResumeCoordinatorView(isTeacher: true)
             }
-            Tab("Alunos", systemImage: "person.3", value: .alunos) {
+            Tab("Grupos", systemImage: "person.3", value: .alunos) {
                 AlunosCoordinatorView()
             }
             Tab("Perfil", systemImage: "person.fill", value: .perfil) {
                 PerfilCoordinatorView(isTeacher: true)
                     .environmentObject(perfilVM)
+                    .environmentObject(authVM)
             }
             Tab("Buscar", systemImage: "magnifyingglass", value: .buscar, role: .search) {
                 NavigationStack {
-                    BuscarView()
+                    BuscarView(searchText: $searchText)
+                        .environmentObject(searchVM)
                         .navigationTitle("Buscar")
                         .toolbarTitleDisplayMode(.inlineLarge)
+                        .searchable(text: $searchText)
+                        .onSubmit(of: .search) {
+                            query = searchText
+                            Task {
+                                await searchVM.carregarSearch(prompt: query)
+                            }
+                        }
                 }
-                .searchable(text: $searchText)
             }
         }
         .tint(Color.accentColor)

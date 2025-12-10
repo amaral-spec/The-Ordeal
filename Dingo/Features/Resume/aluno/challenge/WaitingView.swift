@@ -7,13 +7,14 @@
 
 import SwiftUI
 
-struct WaitingChainedChallengeView: View {
+struct WaitingView: View {
 
     @EnvironmentObject var doChallengeVM: DoChallengeViewModel
     @EnvironmentObject var persistenceServices: PersistenceServices
     let onNavigation: (DoChallengeCoordinatorView.Route) -> Void
     
-
+    private var title: String { doChallengeVM.challengeM?.whichChallenge == 1 ? "Ecco" : "Encadeia" }
+    
     var body: some View {
         VStack {
             Spacer()
@@ -21,7 +22,7 @@ struct WaitingChainedChallengeView: View {
 
             ImageMessageView(
                 title: "Em espera",
-                subtitle: "Outra pessoas está gravando,\nespere o desafio estar livre\npara começar"
+                subtitle: "Outra pessoa está gravando,\nespere o desafio estar livre\npara começar"
             )
             Spacer()
         }
@@ -36,14 +37,14 @@ struct WaitingChainedChallengeView: View {
                 await doChallengeVM.startChallenge()
 
                 // 3. Verificar se há respostas anteriores
-                let hasNoStudentAudios = challenge.studentAudios.isEmpty
+                let hasNoStudentAudios = await doChallengeVM.carregarAudios(challengeID: challenge.id).isEmpty
 
                 if hasNoStudentAudios {
                     // Caso NÃO tenha respostas → vai para InitialChained
-                    onNavigation(.initialChained)
+                    onNavigation(.initial)
                 } else {
                     // Caso JÁ tenha respostas → vai para ReceivedAudio
-                    onNavigation(.receiveChained)
+                    onNavigation(.receive)
                 }
 
             } else {
@@ -51,7 +52,7 @@ struct WaitingChainedChallengeView: View {
             }
         }
 
-        .navigationTitle("Encadeia")
+        .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)
     }
     

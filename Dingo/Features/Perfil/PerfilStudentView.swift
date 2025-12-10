@@ -33,10 +33,10 @@ struct PerfilStudentView: View {
                             .padding(.top, 30)
                     }
                     
-//                    VStack(spacing: -20) {
-                        Text(vm.user?.name ?? "Loading...")
+                    //                    VStack(spacing: -20) {
+                    Text(vm.user?.name ?? "Loading...")
                         .font(.title.bold())
-                            .padding()
+                        .padding()
                     
                     VStack(spacing: -10) {
                         ZStack{
@@ -57,94 +57,67 @@ struct PerfilStudentView: View {
                         .padding(25)
                         
                         HStack(spacing: 15) {
-                            CardPerfil(texto: "Última tarefa: \n\(vm.user?.lastTask?.endDate.formatted(date: .numeric, time: .omitted) ?? "No data")")
-                            CardPerfil(texto: "Último desafio: \n\(vm.user?.lastChallenge?.endDate.formatted(date: .numeric, time: .omitted) ?? "No data")")
+                            CardPerfil(texto: "Última tarefa: \n\(vm.user?.lastTask?.endDate.formatted(date: .numeric, time: .omitted) ?? "Sem tarefa")")
+                            CardPerfil(texto: "Último desafio: \n\(vm.user?.lastChallenge?.endDate.formatted(date: .numeric, time: .omitted) ?? "Sem desafio")")
                         }
                         .padding([.horizontal], 25)
                     }
                     
-                    Button {
-                        vm.isShowingPopup = true
-                        vm.resetGroupJoinState()
-                    } label: {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 30)
-                                .frame(width: 350, height: 50)
-                                .padding(10)
-                                .foregroundStyle(.white)
-                            
-                            HStack {
-                                Text("Entrar em um grupo")
-                                    .foregroundColor(.black)
+                    VStack(spacing: 16) {
+                        
+                        Row(texto: "Entrar em um grupo", hasArrow: false)
+                            .onTapGesture {
+                                vm.isShowingPopup = true
+                                vm.resetGroupJoinState()
                             }
-                            .padding(.horizontal, 40)
-                        }
-                    }
-                    .alert("Solicitar entrada em um grupo", isPresented: $vm.isShowingPopup) {
-                        TextField("Código do grupo", text: $vm.groupCodeInput)
-                            .textInputAutocapitalization(.never)
-                            .disableAutocorrection(true)
-                        
-                        Button(action: {
-                            Task { await vm.askToJoinGroup() }
-                        }) {
-                            Text(vm.isJoiningGroup ? "Aguarde..." : "Entrar")
-                        }
-                        .disabled(vm.fetchedGroup == nil || vm.isJoiningGroup)
-                        
-                        Button("Cancelar", role: .cancel) {
-                            vm.resetGroupJoinState()
-                        }
-                    }
-                    message: {
-                        // Display the dynamic message based on ViewModel state
-                        if vm.isJoiningGroup {
-                            Text("Aguarde, enviando solicitação...")
-                        } else if let group = vm.fetchedGroup {
-                            Text("Grupo encontrado: **\(group.name)**. Clique em Entrar para enviar a solicitação.")
-                        } else if let error = vm.fetchError {
-                            Text("**Erro:** \(error)")
-                        } else if vm.groupCodeInput.isEmpty {
-                            Text("Digite o código único do grupo.")
-                        } else {
-                            Text("Procurando grupo...")
-                        }
-                    }
-                    
-                    VStack(spacing: 20) {
                         
                         Row(texto: "Meus grupos")
                             .onTapGesture {
                                 onNavigate(.meusGrupos)
                             }
                         
-//                        Button(action:{}){
-//                            Row(texto: "Histórico de tarefas")
-//                        }
-//                        .buttonStyle(.plain)
-                    }
-                    
-                    Button {
-                        authVM.logout()
-                    } label: {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 30)
-                                .frame(width: 350, height: 50)
-                                .padding(10)
-                                .foregroundStyle(Color.white)
-                            
-                            HStack {
-                                Text("Sair")
-                                    .foregroundColor(.red)
+                        Row(texto: "Sair", hasArrow: false, foregroundColor: .red, isCentered: true)
+                            .onTapGesture {
+                                authVM.logout()
                             }
-                            .padding(.horizontal, 40)
-                        }
+                        
                     }
-                    Spacer()
+                    .padding(.top)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color(.secondarySystemBackground).ignoresSafeArea())
             }
+            .alert("Solicitar entrada em um grupo", isPresented: $vm.isShowingPopup) {
+                TextField("Código do grupo", text: $vm.groupCodeInput)
+                    .textInputAutocapitalization(.never)
+                    .disableAutocorrection(true)
+                
+                Button(action: {
+                    Task { await vm.askToJoinGroup() }
+                }) {
+                    Text(vm.isJoiningGroup ? "Aguarde..." : "Entrar")
+                }
+                .disabled(vm.fetchedGroup == nil || vm.isJoiningGroup)
+                
+                Button("Cancelar", role: .cancel) {
+                    vm.resetGroupJoinState()
+                }
+            }
+            message: {
+                // Display the dynamic message based on ViewModel state
+                if vm.isJoiningGroup {
+                    Text("Aguarde, enviando solicitação...")
+                } else if let group = vm.fetchedGroup {
+                    Text("Grupo encontrado: **\(group.name)**. Clique em Entrar para enviar a solicitação.")
+                } else if let error = vm.fetchError {
+                    Text("**Erro:** \(error)")
+                } else if vm.groupCodeInput.isEmpty {
+                    Text("Digite o código único do grupo.")
+                } else {
+                    Text("Procurando grupo...")
+                }
+            }
+            
             .navigationTitle("Perfil")
             .toolbarTitleDisplayMode(.inlineLarge)
             .toolbar {
@@ -201,36 +174,69 @@ struct CardPerfil: View {
     var body: some View {
         ZStack{
             RoundedRectangle(cornerRadius: 25)
-                .frame(width: .infinity, height: 100)
-//                .padding(5)
+                .frame( height: 100)
+            //                .padding(5)
                 .foregroundStyle(.white)
             
             Text(texto)
-                .multilineTextAlignment(.center)
+                .multilineTextAlignment(.leading)
         }
     }
 }
+import SwiftUI
 
 struct Row: View {
-    @State var texto: String
+    // 1. Mude de @State para let/var para permitir receber dados de fora
+    let texto: String
+    var hasArrow: Bool = true
+    var foregroundColor: Color = .black
+    var isCentered: Bool = false
+    
     var body: some View {
-        ZStack{
+        ZStack {
             RoundedRectangle(cornerRadius: 30)
-                .frame(width: .infinity, height: 50)
-                .padding([.horizontal], 25)
+                .frame(height: 50)
+                .padding(.horizontal, 25)
                 .foregroundStyle(.white)
             
+            // 2. Removido o parametro 'alignment' que estava com erro de sintaxe
             HStack {
-                Text(texto)
+                // Lógica de centralização usando Spacers
+                if isCentered {
+                    Spacer()
+                }
                 
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+                Text(texto)
+                    .foregroundStyle(foregroundColor)
+                
+                // Se NÃO for centralizado, o Spacer fica entre o texto e a seta
+                if !isCentered {
+                    Spacer()
+                }
+                
+                if hasArrow {
+                    Image(systemName: "chevron.right")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        // Se estiver centralizado com seta, dá um pequeno padding na seta
+                        .padding(.leading, isCentered ? 8 : 0)
+                }
+                
+                // Se for centralizado e NÃO tiver seta, precisamos de um Spacer no final para equilibrar
+                if isCentered && !hasArrow {
+                    Spacer()
+                }
             }
             .padding(.horizontal, 40)
         }
     }
 }
 
-
+#Preview {
+    VStack {
+        Row(texto: "Opção Normal")
+        Row(texto: "Opção Centralizada", hasArrow: false, foregroundColor: .red, isCentered: true)
+        Row(texto: "Centralizada com Seta", hasArrow: true, isCentered: true)
+    }
+    .background(Color.gray.opacity(0.2))
+}

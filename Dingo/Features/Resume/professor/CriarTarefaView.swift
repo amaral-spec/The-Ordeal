@@ -37,7 +37,11 @@ struct CriarTarefaView: View {
                     Section {
                         TextField("Nome da Tarefa (Obrigatório)", text: $tarefaNome)
                         TextField("Descrição (Opcional)", text: $tarefaDescricao)
+                    } header: {
+                        Text("Título & Descrição")
                     }
+                    
+                    
                     Section("Participantes") {
                         Picker("Escolha um aluno", selection: $selectedUserID) {
                             Text("Selecione...").tag(nil as CKRecord.ID?)
