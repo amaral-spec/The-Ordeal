@@ -798,7 +798,7 @@ class PersistenceServices: NSObject, ObservableObject {
         let challengeRef = CKRecord.Reference(recordID: challengeID, action: .none)
 
         // timeout de 90s
-        let limit = Date().addingTimeInterval(-90)
+        let limit = Date().addingTimeInterval(-120)
 
         let predicate = NSPredicate(
             format: "challenge == %@ AND isDoing == true AND timestamp > %@",

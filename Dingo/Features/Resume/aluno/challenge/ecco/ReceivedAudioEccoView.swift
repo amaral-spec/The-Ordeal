@@ -10,7 +10,7 @@ import UIKit // For haptic feedback
 import Combine
 import AVFoundation
 
-struct ReceivedAudioRecordChainedChallengeView: View {
+struct ReceivedAudioRecordEccoView: View {
     
     @StateObject private var rec = MiniRecorder()
     @EnvironmentObject var doChallengeVM: DoChallengeViewModel
@@ -20,16 +20,16 @@ struct ReceivedAudioRecordChainedChallengeView: View {
     var body: some View {
         VStack { // Writing section
             TopPageInstructionView(instruction: """
-                    Grave uma continuação de 
-                    para o audio abaixo
+                    Tente esse audio de referência
                     """)
             Spacer()
-            
+            AudioRepresentationView()
+                .padding(.trailing, 30)
             Spacer()
             IconImageView(nomeIcone: "waveform")
             ImageMessageView(
-                title: "Grave o seu áudio",
-                subtitle: "Faça milagre"
+                title: "Grave o seu audio",
+                subtitle: "Faça milage"
             )
             Spacer()
             Spacer()
@@ -39,14 +39,14 @@ struct ReceivedAudioRecordChainedChallengeView: View {
                 RecordingButtonView( isRecording: rec.isRecording)
             }
         }
-        .navigationTitle(Text("Encadeia"))
+        .navigationTitle(Text("Ecco"))
         .navigationBarTitleDisplayMode(.inline)
     }
     
 }
 
 #Preview {
-    ReceivedAudioRecordChainedChallengeView() {_ in 
+    ReceivedAudioChainedView() {_ in 
         print("Navegue")
     }
 }

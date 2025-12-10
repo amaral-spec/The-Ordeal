@@ -10,7 +10,7 @@ import UIKit
 import Combine
 import AVFoundation
 
-struct RecordFromInitialEccoChallengeView: View {
+struct RecordFromInitialChainedView: View {
 
     @EnvironmentObject var doChallengeVM: DoChallengeViewModel
     @EnvironmentObject var player: MiniPlayer
@@ -24,7 +24,7 @@ struct RecordFromInitialEccoChallengeView: View {
 
     var body: some View {
         VStack {
-            TopPageInstructionView(instruction: "Toque algo de sua escolha")
+            TopPageInstructionView(instruction: "Toque algo de sua escolha por 15 segundos")
 
             Spacer()
             
@@ -49,14 +49,11 @@ struct RecordFromInitialEccoChallengeView: View {
                     .fill(Color(.secondarySystemBackground))
                     .padding(16)
             )
-
-
             Spacer()
-
             Button {
                 onNavigation(.initialChained)
             } label: {
-                Text("Regravar áudio")
+                Text("Regravar Audio")
                     .tint(.black)
             }
             .buttonStyle(.borderedProminent)
@@ -65,7 +62,7 @@ struct RecordFromInitialEccoChallengeView: View {
         .onAppear {
             doChallengeVM.recordings = doChallengeVM.recordingsList()
         }
-        .navigationTitle("Ecco")
+        .navigationTitle("Encadeia")
         .navigationBarTitleDisplayMode(.inline)
     }
 }

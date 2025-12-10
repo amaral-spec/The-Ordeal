@@ -121,7 +121,7 @@ struct DoChallengeCoordinatorView: View {
     private func screen(for route: Route) -> some View {
         switch route {
         case .waitingChained:
-            WaitingChainedChallengeView { next in
+            WaitingChainedView { next in
                 currentRoute = next
                 path.append(next)
             }
@@ -130,7 +130,7 @@ struct DoChallengeCoordinatorView: View {
             .environmentObject(doChallengeVM)
             
         case .initialChained:
-            InitialChainedChallengeView { next in
+            InitialChainedView { next in
                 currentRoute = next
                 path.append(next)
             }
@@ -139,7 +139,7 @@ struct DoChallengeCoordinatorView: View {
             .environmentObject(doChallengeVM)
             
         case .receiveChained:
-            ReceivedAudioRecordChainedChallengeView { next in
+            ReceivedAudioChainedView { next in
                 currentRoute = next
                 path.append(next)
             }
@@ -148,7 +148,7 @@ struct DoChallengeCoordinatorView: View {
             .environmentObject(doChallengeVM)
             
         case .recordChained:
-            RecordFromInitialChainedChallengeView { next in
+            RecordFromInitialChainedView { next in
                 currentRoute = next
                 path.append(next)
             }
@@ -159,7 +159,7 @@ struct DoChallengeCoordinatorView: View {
             .navigationBarBackButtonHidden(true)
         
         case .waitingEcco:
-            WaitingEccoChallengeView { next in
+            WaitingEccoView { next in
                 currentRoute = next
                 path.append(next)
             }
@@ -168,7 +168,7 @@ struct DoChallengeCoordinatorView: View {
             .environmentObject(doChallengeVM)
             
         case .initialEcco:
-            InitialEccoChallengeView { next in
+            InitialEccoView { next in
                 currentRoute = next
                 path.append(next)
             }
@@ -177,7 +177,7 @@ struct DoChallengeCoordinatorView: View {
             .environmentObject(doChallengeVM)
             
         case .receiveEcco:
-            ReceivedAudioRecordEccoChallengeView { next in
+            ReceivedAudioRecordEccoView { next in
                 currentRoute = next
                 path.append(next)
             }
@@ -186,7 +186,7 @@ struct DoChallengeCoordinatorView: View {
             .environmentObject(doChallengeVM)
             
         case .recordEcco:
-            RecordFromInitialEccoChallengeView { next in
+            RecordFromInitialEccoView { next in
                 currentRoute = next
                 path.append(next)
             }

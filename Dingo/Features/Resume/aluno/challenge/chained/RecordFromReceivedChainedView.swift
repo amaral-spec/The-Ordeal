@@ -10,7 +10,7 @@ import UIKit
 import Combine
 import AVFoundation
 
-struct RecordFromInitialChainedChallengeView: View {
+struct RecordFromReceivedChainedView: View {
 
     @EnvironmentObject var doChallengeVM: DoChallengeViewModel
     @EnvironmentObject var player: MiniPlayer
@@ -49,10 +49,7 @@ struct RecordFromInitialChainedChallengeView: View {
                     .fill(Color(.secondarySystemBackground))
                     .padding(16)
             )
-
-
             Spacer()
-
             Button {
                 onNavigation(.initialChained)
             } label: {

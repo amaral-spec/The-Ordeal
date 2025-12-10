@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct InitialChainedChallengeView: View {
+struct InitialEccoView: View {
     
     @EnvironmentObject var doChallengeVM: DoChallengeViewModel
     @EnvironmentObject var rec: MiniRecorder
@@ -15,7 +15,7 @@ struct InitialChainedChallengeView: View {
     
     var body: some View {
         VStack{//Escrita
-            TopPageInstructionView(instruction: "Toque algo de sua escolha por 15 segundos")
+            TopPageInstructionView(instruction: "Toque algo de sua escolha")
             Spacer()
             IconImageView(nomeIcone: "waveform")
             ImageMessageView(title: "Grave o seu áudio", subtitle: "")
@@ -27,15 +27,15 @@ struct InitialChainedChallengeView: View {
             Button {
                 if rec.isRecording {
                     rec.stop()
-                    onNavigation(.recordChained)
+                    onNavigation(.recordEcco)
                 } else {
                     rec.start()
                 }
             } label: {
-                RecordingButtonView(isRecording: rec.isRecording)
+                RecordingButtonView(isRecording: rec.isRecording, color: Color("BlueCard"))
             }
         }
-        .navigationTitle(Text("Encadeia"))
+        .navigationTitle(Text("Ecco"))
         .navigationBarTitleDisplayMode(.inline)
     }
 }

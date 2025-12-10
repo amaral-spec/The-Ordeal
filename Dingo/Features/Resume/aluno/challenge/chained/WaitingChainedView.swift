@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct WaitingEccoChallengeView: View {
+struct WaitingChainedView: View {
 
     @EnvironmentObject var doChallengeVM: DoChallengeViewModel
     @EnvironmentObject var persistenceServices: PersistenceServices
@@ -40,10 +40,10 @@ struct WaitingEccoChallengeView: View {
 
                 if hasNoStudentAudios {
                     // Caso NÃO tenha respostas → vai para InitialChained
-                    onNavigation(.initialEcco)
+                    onNavigation(.initialChained)
                 } else {
                     // Caso JÁ tenha respostas → vai para ReceivedAudio
-                    onNavigation(.receiveEcco)
+                    onNavigation(.receiveChained)
                 }
 
             } else {
@@ -51,7 +51,7 @@ struct WaitingEccoChallengeView: View {
             }
         }
 
-        .navigationTitle("Ecco")
+        .navigationTitle("Encadeia")
         .navigationBarTitleDisplayMode(.inline)
     }
     
