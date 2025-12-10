@@ -11,40 +11,44 @@ import CloudKit
 final class SearchViewModel: ObservableObject {
     @Published var generalSearch: ([UserModel], [GroupModel], [ChallengeModel], [TaskModel]) = ([], [], [], [])
     @Published var isSearchEmpty: Bool = true
+    @Published var isLoading: Bool = false
+    @Published var resultsLoaded: Bool = false
+
     let persistence: PersistenceServices
     
     init(persistence: PersistenceServices) {
         self.persistence = persistence
     }
     
+    @MainActor
     func carregarSearch(prompt: String) async {
-        guard !prompt.isEmpty else {
-            await MainActor.run {
-                generalSearch = ([], [], [], [])
-                isSearchEmpty = true
-            }
-            return
-        }
+        isLoading = true
+        resultsLoaded = false
+        
+        let minimumDelay: UInt64 = 800_000_000 // 0.8 segundo
+        
+        async let delay = Task.sleep(minimumDelay)
+        async let buscarCarregadosTask = persistence.generalSearch(prompt: prompt)
         
         do {
-            let results = try await persistence.generalSearch(
-                prompt: prompt,
-            )
+            let buscarCarregados = try await buscarCarregadosTask
             
-            await MainActor.run {
-                generalSearch = results
-                isSearchEmpty = results.0.isEmpty &&
-                results.1.isEmpty &&
-                results.2.isEmpty &&
-                results.3.isEmpty
-            }
-            print("Users:", results.0.count)
-            print("Groups:", results.1.count)
-            print("Challenges:", results.2.count)
-            print("Tasks:", results.3.count)
+            let _ = await delay
+            
+            generalSearch = buscarCarregados
+            isSearchEmpty =
+                buscarCarregados.0.isEmpty &&
+                buscarCarregados.1.isEmpty &&
+                buscarCarregados.2.isEmpty &&
+                buscarCarregados.3.isEmpty
+            
+            print("\(buscarCarregados.0.count) usuários, \(buscarCarregados.1.count) grupos, \(buscarCarregados.2.count) desafios e \(buscarCarregados.3.count) tarefas carregados")
             
         } catch {
-            print("Erro ao carregar search: \(error.localizedDescription)")
+            print("Erro ao carregar resultados: \(error.localizedDescription)")
         }
+        
+        resultsLoaded = true
+        isLoading = false
     }
 }
