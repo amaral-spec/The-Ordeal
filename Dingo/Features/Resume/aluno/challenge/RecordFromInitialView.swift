@@ -10,7 +10,7 @@ import UIKit
 import Combine
 import AVFoundation
 
-struct RecordFromInitialChainedChallengeView: View {
+struct RecordFromInitialView: View {
 
     @EnvironmentObject var doChallengeVM: DoChallengeViewModel
     @EnvironmentObject var player: MiniPlayer
@@ -20,11 +20,13 @@ struct RecordFromInitialChainedChallengeView: View {
         doChallengeVM.recordings.first
     }
     
+    private var title: String { doChallengeVM.challengeM?.whichChallenge == 1 ? "Ecco" : "Encadeia" }
+    
     let onNavigation: (DoChallengeCoordinatorView.Route) -> Void
 
     var body: some View {
         VStack {
-            TopPageInstructionView(instruction: "Toque algo de sua escolha por 15 segundos")
+            TopPageInstructionView(instruction: "Toque algo de sua escolha")
 
             Spacer()
             
@@ -49,23 +51,20 @@ struct RecordFromInitialChainedChallengeView: View {
                     .fill(Color(.secondarySystemBackground))
                     .padding(16)
             )
-
-
             Spacer()
-
             Button {
-                onNavigation(.initialChained)
+                onNavigation(.initial)
             } label: {
                 Text("Regravar Audio")
-                    .tint(.black)
+                    .foregroundStyle(.white)
             }
             .buttonStyle(.borderedProminent)
-            .tint(Color("BlueCardBackground"))
+            .tint(Color("BlueCard"))
         }
         .onAppear {
             doChallengeVM.recordings = doChallengeVM.recordingsList()
         }
-        .navigationTitle("Encadeia")
+        .navigationTitle("title")
         .navigationBarTitleDisplayMode(.inline)
     }
 }

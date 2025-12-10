@@ -97,9 +97,10 @@ struct ListaParticipantesView: View {
             }
         }
         .navigationTitle("Participantes")
-        .task {
+        .onAppear() {
             resumeVM.audios = []
-            
+        }
+        .task {
             // Inicia o contador de 10 segundos
             iniciarTimeoutAudios()
             

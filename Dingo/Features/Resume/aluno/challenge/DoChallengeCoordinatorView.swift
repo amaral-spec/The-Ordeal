@@ -9,14 +9,11 @@ import SwiftUI
 
 struct DoChallengeCoordinatorView: View {
     enum Route: Hashable {
-        case waitingChained
-        case initialChained
-        case receiveChained
-        case recordChained
-        case waitingEcco
-        case initialEcco
-        case receiveEcco
-        case recordEcco
+        case waiting
+        case initial
+        case receive
+        case recordInitial
+        case recordReceived
     }
     
     @Environment(\.scenePhase) private var scenePhase
@@ -38,12 +35,7 @@ struct DoChallengeCoordinatorView: View {
 
     init(challengeM: ChallengeModel) {
         _doChallengeVM = StateObject(wrappedValue: DoChallengeViewModel(persistenceServices: PersistenceServices.shared, challengeM: challengeM))
-        if challengeM.whichChallenge == 1 {
-            currentRoute = .waitingEcco
-        } else {
-            currentRoute = .waitingChained
-        }
-        
+            currentRoute = .waiting
     }
 
     var body: some View {
@@ -68,7 +60,7 @@ struct DoChallengeCoordinatorView: View {
             Button("Manter", role: .cancel) { }
             Button("Descartar desafio", role: .destructive) {
                 
-                if currentRoute != .waitingChained {
+                if currentRoute != .waiting {
                     Task { await doChallengeVM.outChallenge() }
                 }
                 
@@ -120,8 +112,17 @@ struct DoChallengeCoordinatorView: View {
     @ViewBuilder
     private func screen(for route: Route) -> some View {
         switch route {
-        case .waitingChained:
-            WaitingChainedChallengeView { next in
+        case .waiting:
+            WaitingView { next in
+                currentRoute = next
+                path.append(next)
+            }
+            .toolbar { cancelWaitingToolbar }
+            .navigationBarBackButtonHidden(true)
+            .environmentObject(doChallengeVM)
+            
+        case .initial:
+            InitialView { next in
                 currentRoute = next
                 path.append(next)
             }
@@ -129,8 +130,8 @@ struct DoChallengeCoordinatorView: View {
             .navigationBarBackButtonHidden(true)
             .environmentObject(doChallengeVM)
             
-        case .initialChained:
-            InitialChainedChallengeView { next in
+        case .receive:
+            ReceivedAudioView { next in
                 currentRoute = next
                 path.append(next)
             }
@@ -138,17 +139,8 @@ struct DoChallengeCoordinatorView: View {
             .navigationBarBackButtonHidden(true)
             .environmentObject(doChallengeVM)
             
-        case .receiveChained:
-            ReceivedAudioRecordChainedChallengeView { next in
-                currentRoute = next
-                path.append(next)
-            }
-            .toolbar { cancelToolbar }
-            .navigationBarBackButtonHidden(true)
-            .environmentObject(doChallengeVM)
-            
-        case .recordChained:
-            RecordFromInitialChainedChallengeView { next in
+        case .recordInitial:
+            RecordFromInitialView { next in
                 currentRoute = next
                 path.append(next)
             }
@@ -157,36 +149,9 @@ struct DoChallengeCoordinatorView: View {
                 confirmToolbar
             }
             .navigationBarBackButtonHidden(true)
-        
-        case .waitingEcco:
-            WaitingEccoChallengeView { next in
-                currentRoute = next
-                path.append(next)
-            }
-            .toolbar { cancelToolbar }
-            .navigationBarBackButtonHidden(true)
-            .environmentObject(doChallengeVM)
             
-        case .initialEcco:
-            InitialEccoChallengeView { next in
-                currentRoute = next
-                path.append(next)
-            }
-            .toolbar { cancelToolbar }
-            .navigationBarBackButtonHidden(true)
-            .environmentObject(doChallengeVM)
-            
-        case .receiveEcco:
-            ReceivedAudioRecordEccoChallengeView { next in
-                currentRoute = next
-                path.append(next)
-            }
-            .toolbar { cancelToolbar }
-            .navigationBarBackButtonHidden(true)
-            .environmentObject(doChallengeVM)
-            
-        case .recordEcco:
-            RecordFromInitialEccoChallengeView { next in
+        case .recordReceived:
+            RecordFromReceivedView { next in
                 currentRoute = next
                 path.append(next)
             }
@@ -195,6 +160,15 @@ struct DoChallengeCoordinatorView: View {
                 confirmToolbar
             }
             .navigationBarBackButtonHidden(true)
+        }
+    }
+    
+    private var cancelWaitingToolbar: some ToolbarContent {
+        ToolbarItem(placement: .topBarLeading) {
+            Button("Cancelar", systemImage: "xmark") {
+                dismiss()
+            }
+            .tint(.black)
         }
     }
     

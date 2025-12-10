@@ -5,6 +5,7 @@
 
 import SwiftUI
 import CloudKit
+import AVFoundation
 
 struct VisualizarDadosView: View {
     
@@ -16,6 +17,7 @@ struct VisualizarDadosView: View {
     let taskModel: TaskModel?
     let onNavigate: (ResumeCoordinatorView.Route) -> Void
     
+    
     // Environment
     @EnvironmentObject var resumeVM: ResumeViewModel
     
@@ -24,7 +26,11 @@ struct VisualizarDadosView: View {
         persistenceServices: PersistenceServices()
     )
     
+    // Assumindo que seu MiniPlayer gerencia o estado de reprodução
+    @StateObject private var player = MiniPlayer()
+    
     // Local States
+    @State private var mergedAudioURL: URL? = nil // <--- Alterado para URL
     @State private var alreadyDone: Bool = false
     @State private var selectedMember: UserModel?
     @State private var startChallenge: Bool = false
@@ -91,10 +97,17 @@ struct VisualizarDadosView: View {
             VStack(alignment: .leading, spacing: 24) {
                 timeCard
                 descriptionCard
+                
+                // Exibe o player apenas se o áudio foi gerado com sucesso
+                if (resumeVM.isTeacher || endDate < Date()) && mergedAudioURL != nil{
+                    audioCard
+                }
+                
                 participantsCard
+                
                 if isChallenge && !resumeVM.isTeacher {
                     if isCheckingStatus {
-                        loadingButton // <--- Mostra o loading enquanto checa
+                        loadingButton
                     } else if !alreadyDone {
                         startButton
                     } else {
@@ -120,46 +133,121 @@ struct VisualizarDadosView: View {
                     .interactiveDismissDisabled(true)
             }
         }
-        
+        .refreshable {
+            Task {
+                // 1. Carrega dados básicos
+                await loadData()
+                
+                if (resumeVM.isTeacher || endDate < Date()) && mergedAudioURL != nil {
+                    await loadAndMergeAudios()
+                }
+            }
+        }
         // MARK: Async Tasks
-        .task {
-            await loadData()
+        .onAppear {
+            Task {
+                // 1. Carrega dados básicos
+                await loadData()
+                
+                if resumeVM.isTeacher || endDate < Date() {
+                    await loadAndMergeAudios()
+                }
+            }
         }
     }
     
     // MARK: - Logic Methods
     
     private func loadData() async {
-            self.isLoading = true
-            // defer { self.isLoading = false } // <--- REMOVA O DEFER DAQUI
+        self.isLoading = true
+        
+        // 1. Carrega participantes e libera a tela principal
+        if isChallenge, let challenge = challengeModel {
+            await resumeVM.carregarParticipantesPorDesafio(challenge: challenge)
+            self.isLoading = false
             
-            // 1. Carrega participantes e libera a tela principal
-            if isChallenge, let challenge = challengeModel {
-                await resumeVM.carregarParticipantesPorDesafio(challenge: challenge)
-                self.isLoading = false // <--- LIBERA A UI PRINCIPAL AQUI
+            // 2. Verifica se aluno já fez (Botão entra em loading específico)
+            if !resumeVM.isTeacher {
+                withAnimation { self.isCheckingStatus = true }
                 
-                // 2. Verifica se aluno já fez (Botão entra em loading específico)
-                if !resumeVM.isTeacher {
-                    withAnimation { self.isCheckingStatus = true } // Ativa loading do botão
-                    
-                    let done = await doChallengeVM.isHeAlreadyDoneThisChallenge(challengeID: challenge.id)
-                    
-                    withAnimation {
-                        self.alreadyDone = done
-                        self.isCheckingStatus = false // Desativa loading do botão
-                    }
+                let done = await doChallengeVM.isHeAlreadyDoneThisChallenge(challengeID: challenge.id)
+                
+                withAnimation {
+                    self.alreadyDone = done
+                    self.isCheckingStatus = false
                 }
-                
-            } else if let task = taskModel {
-                await resumeVM.carregarAlunosTarefa(task: task)
-                self.isLoading = false
             }
+            
+        } else if let task = taskModel {
+            await resumeVM.carregarAlunosTarefa(task: task)
+            self.isLoading = false
         }
+    }
+    
+    private func loadAndMergeAudios() async {
+        // Primeiro precisamos carregar os áudios do CK para o array do ViewModel
+        if isChallenge, let challenge = challengeModel {
+            await resumeVM.carregarAudios(challengeID: challenge.id)
+        } else if let task = taskModel {
+            await resumeVM.carregarAudios(taskID: task.id)
+        }
+        
+        // Depois chamamos a função de união criada anteriormente
+        do {
+            self.mergedAudioURL = try await resumeVM.mergeAudioFiles()
+        } catch {
+            print("Erro ao unificar áudios: \(error)")
+        }
+    }
 }
 
 // MARK: - Subviews & Cards Extension
 
 extension VisualizarDadosView {
+    
+    private var audioCard: some View {
+        VStack(spacing: 12) {
+            
+            HStack {
+                Image(systemName: "speaker.wave.2.bubble.fill")
+                    .foregroundColor(themeColor)
+                Text("Resumo da Turma") // Adicionei um título
+                    .font(.headline)
+                Spacer()
+            }
+            
+            HStack {
+                Button {
+                    guard let url = mergedAudioURL else { return }
+                    
+                    // Lógica para tocar/pausar baseada na URL
+                    if player.playingURL == url && player.isPlaying {
+                        player.pause()
+                    } else {
+                        player.play(url)
+                    }
+                } label: {
+                    Image(systemName: (player.playingURL == mergedAudioURL && player.isPlaying) ? "pause.fill" : "play.fill")
+                        .font(.title2)
+                        .padding(10)
+                        .background(themeColor.opacity(0.1))
+                        .clipShape(Circle())
+                }
+                .buttonStyle(.plain)
+                .disabled(mergedAudioURL == nil)
+                
+                // Assumindo que seu PlaybackWaveformView observa o player
+                PlaybackWaveformView(progress: player.progress)
+            }
+            .padding(16) // Ajustei padding interno
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color(.secondarySystemBackground))
+            )
+        }
+        .padding(16) // Padding do card
+        .cardStyle()
+    }
     
     // 1. Card de Tempo
     private var timeCard: some View {
@@ -310,36 +398,32 @@ extension VisualizarDadosView {
         }
     }
     
-    // Botão de Loading (Visual idêntico ao Start, mas com spinner)
-        private var loadingButton: some View {
-            Button {
-                // Ação vazia, pois está carregando
-            } label: {
-                ProgressView()
-                    .tint(.white) // Spinner branco
-                    .scaleEffect(1.2)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 18) // Mesma altura do original
-                    .background(
-                        Capsule()
-                            .fill(themeColor.opacity(0.6)) // Cor um pouco mais clara para indicar disabled
-                            .shadow(color: .black.opacity(0.15), radius: 5, y: 3)
-                    )
-            }
-            .disabled(true) // Desabilita interação
-            .padding(.top, 15)
-            .padding(.bottom, 20)
+    // Botão de Loading
+    private var loadingButton: some View {
+        Button {
+            // Ação vazia
+        } label: {
+            ProgressView()
+                .tint(.white)
+                .scaleEffect(1.2)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 18)
+                .background(
+                    Capsule()
+                        .fill(themeColor.opacity(0.6))
+                        .shadow(color: .black.opacity(0.15), radius: 5, y: 3)
+                )
         }
+        .disabled(true)
+        .padding(.top, 15)
+        .padding(.bottom, 20)
+    }
     
     private var startButton: some View {
         Button {
-            // Haptics
             let generator = UINotificationFeedbackGenerator()
             generator.notificationOccurred(.success)
-            
-            // Ação
             startChallenge = true
-            
         } label: {
             Text("Começar desafio")
                 .foregroundColor(.white)
@@ -358,7 +442,6 @@ extension VisualizarDadosView {
     
     private var alreadyDoneChallenge: some View {
         Button {
-            
             
         } label: {
             Text("Desafio já foi feito")

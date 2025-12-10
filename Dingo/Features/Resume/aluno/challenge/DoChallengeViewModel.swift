@@ -21,9 +21,6 @@ final class DoChallengeViewModel: ObservableObject {
 
     @Published var audioToShow: URL?
 
-    @Published var isCompleted: Bool = false
-
-    
     private let persistenceServices: PersistenceServices
     
     init(persistenceServices: PersistenceServices, challengeM: ChallengeModel? = nil) {
