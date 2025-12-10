@@ -9,13 +9,19 @@ import Foundation
 import UIKit
 import SwiftUI
 
+@MainActor
 class StreakViewModel: ObservableObject {
     @Published var trainingDates: [Int] = [1, 2, 7]
-    //@Published var trainingDates: [Int] = []
-    static let shared = StreakViewModel()
-
     @Published private var Streak: Int = 0
     @Published var lastDate: Date?
+    
+    //@Published var trainingDates: [Int] = []
+    
+    private let persistenceServices: PersistenceServices
+    //static let shared = StreakViewModel()
+    static let shared = StreakViewModel(persistenceServices: PersistenceServices.shared)
+
+
     //@Published var lastDate = Calendar.current.date(byAdding: .day, value: -4, to: Date())!
     //let today = Calendar.current.date(byAdding: .day, value: -2, to: Date())!
     let calendar = Calendar.current
@@ -23,8 +29,16 @@ class StreakViewModel: ObservableObject {
     var wToday: Int { calendar.component(.weekday, from: today) }
     var wLastDate: Int {calendar.component(.weekday, from: lastDate ?? today) }
 
-    func registerTrainingToday() {
-        updateTrainingDates()
+    @Published var user: UserModel?
+
+
+    init(persistenceServices: PersistenceServices) {
+        self.persistenceServices = persistenceServices
+    }
+    
+    
+    func registerTrainingToday() async {
+        await updateTrainingDates()
         let distance = calendar.dateComponents([.day], from: lastDate ?? today, to: today).day ?? 0
         if(distance < 7){
             Streak += 1
@@ -34,20 +48,63 @@ class StreakViewModel: ObservableObject {
         //lastDate = today
         trainingDates.append(wToday)
         
-        print("Streak:\(Streak) \n lista\(trainingDates)\n hj: \(today) \(wToday)\n ultimo: \(lastDate) \(wLastDate)")
+        //print("Streak:\(Streak) \n lista\(trainingDates)\n hj: \(today) \(wToday)\n ultimo: \(lastDate) \(wLastDate)")
+        
+        do {
+            try await persistenceServices.updateStreak(streak: Streak.self, lastDate: lastDate.self ?? Date(), trainingDates: trainingDates.self)
+       
+            
+            
+            
+        } catch {
+            print("Failed updating trainingDates: \(error)")
+        }
+        
+        
         
     }
     
     //This makes the list of dates clear if the week change
-    func updateTrainingDates(){
+    func updateTrainingDates() async{
         let distance = calendar.dateComponents([.day], from: lastDate ?? today, to: today).day ?? 0
-        if(wLastDate >= wToday || distance >= 7){
+        if(wLastDate > wToday || distance >= 7){
             trainingDates.removeAll()
+            do {
+                try await persistenceServices.updateStreak(streak: Streak.self, lastDate: lastDate.self ?? Date(), trainingDates: trainingDates.self)
+                user?.trainingDates = trainingDates
+                
+            } catch {
+                print("Failed updating trainingDates: \(error)")
+            }
+            
         }
+        
+        
     }
+    
+    
     func getStreak() -> Int{
         return Streak
     }
+    
+    
+    func loadStreak() async {
+        do {
+            let fetchedStreak = try await persistenceServices.fetchUserStreak()
+            
+            print("Streak coletada com sucesso: \(fetchedStreak)")
+         
+            
+            Streak = fetchedStreak.streak
+            trainingDates = fetchedStreak.trainingDates ?? []
+            lastDate = fetchedStreak.lastDate
+            //print("\n ***********************streakViewModel: \(fetchedStreak.streak) \n trainingDates: \(fetchedStreak.trainingDates) \n lastDate: \(fetchedStreak.lastDate ?? Date())")
+
+        } catch {
+            print("Failed to load user: \(error)")
+        }
+    }
+
     
 //    func daysOfWeekTrained() -> Set<Int> {
 //        let calendar = Calendar.current

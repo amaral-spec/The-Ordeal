@@ -92,8 +92,9 @@ struct TakeThePhotoView: View {
                 Button("confirmar", systemImage: "checkmark"){
                     if(isAInstrument)
                     {
-                        streakVM.registerTrainingToday()
-                       
+                        Task{
+                            await streakVM.registerTrainingToday()
+                        }
                         finalizarSheet()
                     }
                 }

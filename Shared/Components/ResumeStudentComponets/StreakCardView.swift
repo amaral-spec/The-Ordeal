@@ -70,7 +70,13 @@ struct StreakCardView: View {
         }
         //.padding()
         .onAppear(){
-            streakVM.updateTrainingDates()
+            //streakVM.loadStreak(userID: auth().currentUser!.uid)
+            Task{
+                await streakVM.loadStreak()
+                print("Streak:\(streakVM.getStreak()) \n lista\(streakVM.trainingDates)\n hj: \(streakVM.today) \(streakVM.wToday)\n ultimo: \(streakVM.lastDate) \(streakVM.wLastDate)")
+                await streakVM.updateTrainingDates()
+                
+            }
         }
         .padding(.top, 8)
         .padding(.bottom, 8)
