@@ -16,7 +16,8 @@ struct TakeThePhotoView: View {
     @State private var showPicker = false
     //@State private var pickedImage: UIImage? // Armazena a imagem capturada pela câmera.
     @State private var isAInstrument: Bool = false
-    
+    @EnvironmentObject var streakVM: StreakViewModel
+
     let finalizarSheet: () -> Void
     
     var body: some View {
@@ -91,6 +92,9 @@ struct TakeThePhotoView: View {
                 Button("confirmar", systemImage: "checkmark"){
                     if(isAInstrument)
                     {
+                        Task{
+                            await streakVM.registerTrainingToday()
+                        }
                         finalizarSheet()
                     }
                 }

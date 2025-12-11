@@ -53,6 +53,27 @@ class PersistenceServices: NSObject, ObservableObject {
         return usuario
     }
     
+    func fetchUserStreak() async throws -> UserModel {
+        guard let currentUser = AuthService.shared.currentUser else {
+            throw NSError(domain: "AuthError", code: 1, userInfo: [NSLocalizedDescriptionKey: "No user loggoed in"])
+        }
+        
+        let record = try await db.record(for: currentUser.id)
+        
+        let streak = record["streak"] as? Int ?? 0
+        let lastDate = record["lastDate"] as? Date ?? Date()
+        let trainingDates = record["trainingDates"] as? [Int] ?? []
+ 
+     
+        let usuario = UserModel(from: record)
+        usuario.id = record.recordID
+        
+        usuario.streak = streak
+        usuario.lastDate = lastDate
+        usuario.trainingDates = trainingDates
+        return usuario
+    }
+    
     func fetchUserForTask() async throws -> [UserModel] {
         guard let currentUser = AuthService.shared.currentUser else {
             throw NSError(domain: "AuthError", code: 1, userInfo: [NSLocalizedDescriptionKey: "No user loggoed in"])
@@ -131,6 +152,25 @@ class PersistenceServices: NSObject, ObservableObject {
         record["isTeacher"] = isTeacher as CKRecordValue
 
         try await db.save(record)
+    }
+    
+    func updateStreak(streak: Int, lastDate: Date, trainingDates: [Int]) async throws{
+        guard let currentUser = AuthService.shared.currentUser else {
+            throw NSError(domain: "AuthError", code: 1, userInfo: [NSLocalizedDescriptionKey: "No user loggoed in"])
+        }
+        
+        do {
+            let record = try await db.record(for: currentUser.id)
+            record["streak"] = streak
+            record["lastDate"] = lastDate
+            record["trainingDates"] = trainingDates
+            
+            let savedRecord = try await db.save(record)
+            print("streak\(streak)\n lastDate: \(lastDate)\n trainingDates: \(trainingDates)")
+        } catch {
+            print("Failed to update streak: \(error)")
+            throw error
+        }
     }
     
     func updateProfileImage(_ image: UIImage) async throws {
@@ -891,7 +931,7 @@ class PersistenceServices: NSObject, ObservableObject {
         let challengeRef = CKRecord.Reference(recordID: challengeID, action: .none)
 
         // timeout de 90s
-        let limit = Date().addingTimeInterval(-120)
+        let limit = Date().addingTimeInterval(-90)
 
         let predicate = NSPredicate(
             format: "challenge == %@ AND isDoing == true AND timestamp > %@",

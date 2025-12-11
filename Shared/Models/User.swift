@@ -17,6 +17,8 @@ final class UserModel: Identifiable {
     var email: String
     var isTeacher: Bool
     var streak: Int
+    var lastDate: Date?
+    var trainingDates: [Int]?
     var points: Int
     var lastTask: TaskModel?
     var lastChallenge: ChallengeModel?
@@ -46,7 +48,8 @@ final class UserModel: Identifiable {
         self.streak = record["streak"] as? Int ?? 0
         self.points = record["points"] as? Int ?? 0
         self.profileImageName = record["profileImageName"]
-
+        self.trainingDates = record["trainingDates"] as? [Int] ?? []
+        self.lastDate = record["lastDate"] as? Date
         // Converte CKAsset em UIImage
         if let asset = record["profileImage"] as? CKAsset,
            let url = asset.fileURL,
@@ -66,6 +69,9 @@ final class UserModel: Identifiable {
         record["isTeacher"] = isTeacher as CKRecordValue
         record["streak"] = streak as CKRecordValue
         record["points"] = points as CKRecordValue
+        record["trainingDates"] = (trainingDates ?? []) as CKRecordValue
+        record["lastDate"] = (lastDate ?? Date()) as CKRecordValue
+
         return record
     }
 }

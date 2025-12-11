@@ -51,7 +51,7 @@ struct StopwatchView: View {
             
             
             Spacer()
-            
+            Spacer()
             
             Button {
                 if isRunning {
@@ -68,6 +68,7 @@ struct StopwatchView: View {
                         .foregroundStyle(.white)
                 }
             }
+
         }
         
         .toolbar{
@@ -75,6 +76,7 @@ struct StopwatchView: View {
                 Text("Treino")
                     .font(.headline)
             }
+
             
             ToolbarItem(placement: .automatic) {
                 Button {

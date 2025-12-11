@@ -31,11 +31,20 @@ struct DoChallengeCoordinatorView: View {
     
     @State private var currentRoute: Route
     @State private var micDenied = false
+    
+    // 1. Correção na declaração (removido o valor default)
+    @Binding private var alreadyDone: Bool
 
-
-    init(challengeM: ChallengeModel) {
+    // 2. Correção no Init
+    init(challengeM: ChallengeModel, alreadyDone: Binding<Bool>) {
+        // Inicializa o StateObject
         _doChallengeVM = StateObject(wrappedValue: DoChallengeViewModel(persistenceServices: PersistenceServices.shared, challengeM: challengeM))
-            currentRoute = .waiting
+        
+        // Inicializa o Binding usando o underscore (_)
+        _alreadyDone = alreadyDone
+        
+        // Inicializa o State simples
+        _currentRoute = State(initialValue: .waiting)
     }
 
     var body: some View {
@@ -50,45 +59,30 @@ struct DoChallengeCoordinatorView: View {
         .environmentObject(rec)
         .environmentObject(player)
         .task {
-            // Request permission to record when view appears.
             rec.requestPermission { ok in
-                // Show an alert if permission is denied.
                 micDenied = (ok == false)
             }
         }
         .alert("Cancelar desafio?", isPresented: $showCancelAlert) {
             Button("Manter", role: .cancel) { }
             Button("Descartar desafio", role: .destructive) {
-                
                 if currentRoute != .waiting {
                     Task { await doChallengeVM.outChallenge() }
                 }
-                
                 dismiss()
             }
         } message: {
             Text("Tem certeza que deseja cancelar? Seu progresso atual será descartado.")
         }
         .alert("Enviar Desafio?", isPresented: $showConfirmAlert) {
+            // Nota: iOS 26.0 ainda não existe, assumindo que seja uma verificação futura ou placeholder
             if #available(iOS 26.0, *) {
                 Button("Finalizar", role: .confirm) {
-                    Task {
-                        if let firstURL = doChallengeVM.recordings.first {
-                            await doChallengeVM.submitStudentAudio(url: firstURL)
-                        }
-                        await doChallengeVM.outChallenge()
-                        dismiss()
-                    }
+                    finalizeChallenge()
                 }
             } else {
                 Button("Finalizar") {
-                    Task {
-                        if let firstURL = doChallengeVM.recordings.first {
-                            await doChallengeVM.submitStudentAudio(url: firstURL)
-                        }
-                        await doChallengeVM.outChallenge()
-                        dismiss()
-                    }
+                    finalizeChallenge()
                 }
             }
             Button("Cancelar", role: .cancel) { }
@@ -106,6 +100,22 @@ struct DoChallengeCoordinatorView: View {
             #endif
         } message: {
             Text("Please allow microphone access in Settings to record audio.")
+        }
+    }
+    
+    // MARK: - Helper Methods
+    
+    private func finalizeChallenge() {
+        Task {
+            if let firstURL = doChallengeVM.recordings.first {
+                await doChallengeVM.submitStudentAudio(url: firstURL)
+            }
+            await doChallengeVM.outChallenge()
+            
+            // 3. Atualiza a variável binding para avisar a tela anterior
+            alreadyDone = true
+            
+            dismiss()
         }
     }
     
@@ -190,6 +200,7 @@ struct DoChallengeCoordinatorView: View {
                 Label("Confirmar", systemImage: "checkmark")
             }
             .buttonStyle(.borderedProminent)
-            .tint(Color("BlueCard"))         }
+            .tint(Color("BlueCard"))
+        }
     }
 }

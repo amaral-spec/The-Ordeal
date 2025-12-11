@@ -13,6 +13,8 @@ struct OsVigaristasApp: App {
     @StateObject private var authService = AuthService.shared
     @StateObject private var persistenceServices = PersistenceServices.shared
     @StateObject private var detector = InstrumentDetectionViewModel.shared
+    @StateObject private var streakVM = StreakViewModel.shared
+
 
 
     var body: some Scene {
@@ -23,6 +25,7 @@ struct OsVigaristasApp: App {
                 .environmentObject(persistenceServices) // Compartilha funcoes do CloudKit
                 .preferredColorScheme(.light)
                 .environmentObject(detector)//Compartilha funcoes do coreMl
+                .environmentObject(streakVM)
 
         }
     }

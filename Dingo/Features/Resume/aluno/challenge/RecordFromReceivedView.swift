@@ -42,37 +42,43 @@ struct RecordFromReceivedView: View {
         VStack(spacing: 24) {
             
             TopPageInstructionView(instruction: instruction)
-
+            Spacer()
+            // 1. Player do Áudio Original (se existir)
+            HStack{
+                if let promptURL = originalPromptURL {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Áudio Original")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .padding(.horizontal)
+                        
+                        audioPlayerRow(for: promptURL)
+                            .frame(width: 350)
+                    }
+                }
+                Spacer()
+            }
             Spacer()
             
-            // 1. Player do Áudio Original (se existir)
-            if let promptURL = originalPromptURL {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Áudio Original")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .padding(.horizontal)
-                    
-                    audioPlayerRow(for: promptURL)
-                }
-            }
-            
             // 2. Player da Gravação do Usuário
-            if let recordingURL = userRecordingURL {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Sua Gravação")
-                        .font(.caption)
+            HStack{
+                Spacer()
+                if let recordingURL = userRecordingURL {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Sua Gravação")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .padding(.horizontal)
+                        
+                        audioPlayerRow(for: recordingURL)
+                            .frame(width: 350)
+                    }
+                } else {
+                    // Caso algo tenha dado errado e não tenha gravação
+                    Text("Nenhuma gravação encontrada")
                         .foregroundStyle(.secondary)
-                        .padding(.horizontal)
-                    
-                    audioPlayerRow(for: recordingURL)
                 }
-            } else {
-                // Caso algo tenha dado errado e não tenha gravação
-                Text("Nenhuma gravação encontrada")
-                    .foregroundStyle(.secondary)
             }
-            
             Spacer()
             
             // 3. Botão de Regravar
