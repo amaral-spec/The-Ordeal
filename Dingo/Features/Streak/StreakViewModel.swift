@@ -39,28 +39,28 @@ class StreakViewModel: ObservableObject {
     
     func registerTrainingToday() async {
         await updateTrainingDates()
-        let distance = calendar.dateComponents([.day], from: lastDate ?? today, to: today).day ?? 0
-        if(distance < 7){
-            Streak += 1
-        }else{
-            Streak = 0
+        if(calendar.isDate(today, inSameDayAs: lastDate ?? Calendar.current.date(byAdding: .day, value: -1, to: Date())!)){
+            let distance = calendar.dateComponents([.day], from: lastDate ?? today, to: today).day ?? 0
+            if(distance < 7){
+                Streak += 1
+            }else{
+                Streak = 0
+            }
+            //lastDate = today
+            trainingDates.append(wToday)
+            
+            //print("Streak:\(Streak) \n lista\(trainingDates)\n hj: \(today) \(wToday)\n ultimo: \(lastDate) \(wLastDate)")
+            
+            do {
+                try await persistenceServices.updateStreak(streak: Streak.self, lastDate: lastDate.self ?? Date(), trainingDates: trainingDates.self)
+                
+                
+                
+                
+            } catch {
+                print("Failed updating trainingDates: \(error)")
+            }
         }
-        //lastDate = today
-        trainingDates.append(wToday)
-        
-        //print("Streak:\(Streak) \n lista\(trainingDates)\n hj: \(today) \(wToday)\n ultimo: \(lastDate) \(wLastDate)")
-        
-        do {
-            try await persistenceServices.updateStreak(streak: Streak.self, lastDate: lastDate.self ?? Date(), trainingDates: trainingDates.self)
-       
-            
-            
-            
-        } catch {
-            print("Failed updating trainingDates: \(error)")
-        }
-        
-        
         
     }
     
@@ -87,7 +87,7 @@ class StreakViewModel: ObservableObject {
         return Streak
     }
     
-    
+   
     func loadStreak() async {
         do {
             let fetchedStreak = try await persistenceServices.fetchUserStreak()
