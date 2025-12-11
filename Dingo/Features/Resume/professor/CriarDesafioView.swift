@@ -6,8 +6,10 @@
 //
 import SwiftUI
 import CloudKit
+
 struct CriarDesafioView: View {
-    @State private var selectedChallengeType: Int = 0
+    // ALTERAÇÃO 1: Inicializado com 1 para "Echo" já vir selecionado
+    @State private var selectedChallengeType: Int = 1
     @State private var selectedDate = Date()
     @State private var desafioNome: String = ""
     @State private var desafioDescricao: String = ""
@@ -22,6 +24,17 @@ struct CriarDesafioView: View {
     @State private var didCreateChallenge: Bool = false
     @State private var failedCreateChallenge: Bool = false
     
+    // ALTERAÇÃO 2: Propriedade computada para retornar a explicação
+    var descricaoTipoDesafio: String {
+        switch selectedChallengeType {
+        case 1:
+            return "O primeiro aluno irá gravar um sample para ser imitado pelos próximos alunos."
+        case 2:
+            return "O primeiro aluno irá gravar um sample, e os próximos alunos irão escutar os últimos 5 segundos e isso se seguirá em cadeia."
+        default:
+            return ""
+        }
+    }
     
     init(numChallenge: Binding<Int>) {
         self._numChallenge = numChallenge
@@ -30,21 +43,31 @@ struct CriarDesafioView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Tipo de Desafio") {
+                Section {
                     Picker("Tipo", selection: $selectedChallengeType) {
                         Text("Echo").tag(1)
                         Text("Encadeia").tag(2)
                     }
                     .pickerStyle(.segmented)
+                    
+                    // ALTERAÇÃO 2: Exibição da explicação dinâmica
+                    Text(descricaoTipoDesafio)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .padding(.vertical, 4)
+                } header: {
+                    Text("Tipo de Desafio")
                 }
                 
                 Section {
                     TextField("Nome do Desafio (Obrigatório)", text: $desafioNome)
                     
-                    // TODO: Pegar descrição baseado no tipo de desafio
                     TextField("Descrição (Opcional)", text: $desafioDescricao)
+                } header: {
+                    Text("Título & Descrição")
                 }
-                Section("Grupo") {
+                
+                Section {
                     Picker("Escolha um grupo", selection: $selectedGroupID) {
                         Text("Selecione...").tag(nil as CKRecord.ID?)
                         ForEach(groups, id: \.id) { group in
@@ -52,10 +75,15 @@ struct CriarDesafioView: View {
                         }
                     }
                     .pickerStyle(.navigationLink)
+                } header: {
+                    Text("Grupo")
                 }
+                
                 Section {
                     DatePicker("Data de início", selection: $selectedDate)
                         .datePickerStyle(.compact)
+                } footer: {
+                    Text("A data de término será definida automaticamente para 1 semana após o início.")
                 }
             }
             .navigationTitle("Adicionar Desafio")
@@ -72,7 +100,7 @@ struct CriarDesafioView: View {
                     Button {
                         dismiss()
                     } label: {
-                        Image( systemName: "xmark")
+                        Image(systemName: "xmark")
                             .foregroundStyle(.black)
                     }
                 }
@@ -85,6 +113,8 @@ struct CriarDesafioView: View {
                             }
                             isSaving = true
                             let groupRef = CKRecord.Reference(recordID: group.id, action: .none)
+                            
+                            // Lógica de data mantida conforme o original (+ 7 dias)
                             let challenge = ChallengeModel(
                                 whichChallenge: selectedChallengeType,
                                 title: desafioNome,
@@ -125,7 +155,7 @@ struct CriarDesafioView: View {
                                 
                                 // Haptics
                                 let generator = UINotificationFeedbackGenerator()
-                                generator.notificationOccurred(.success)
+                                generator.notificationOccurred(.error) // Mudei para .error aqui pois faz mais sentido no catch
                                 
                                 // Removes feedback after 2.0 seconds
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
@@ -133,14 +163,15 @@ struct CriarDesafioView: View {
                                         self.failedCreateChallenge = false
                                     }
                                     
-                                    dismiss()
+                                    // Comentado para permitir que o usuário tente novamente sem fechar a tela
+                                    // dismiss()
                                 }
                             }
                             isSaving = false
                         }
                     } label: {
                         Label("Adicionar", systemImage: "checkmark")
-                            .background(Color("BlueCard"))
+                            .background(Color("BlueCard")) // Certifique-se que essa cor existe nos Assets
                     }
                     .disabled(desafioNome.isEmpty || selectedGroupID == nil || isSaving)
                 }
@@ -162,7 +193,7 @@ struct CriarDesafioView: View {
                     .font(.headline)
                     .padding(.vertical, 10)
                     .padding(.horizontal, 20)
-                    .background(Color("RedCard"))
+                    .background(Color("RedCard")) // Certifique-se que essa cor existe nos Assets
                     .cornerRadius(30)
                     .padding(.top, 40)
                     .transition(.move(edge: .top).combined(with: .opacity))

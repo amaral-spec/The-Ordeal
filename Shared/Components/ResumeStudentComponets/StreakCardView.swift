@@ -69,6 +69,7 @@ struct StreakCardView: View {
                     .foregroundColor(.gray)
             }
         }
+
         //.padding()
         .onAppear(){
             //streakVM.loadStreak(userID: auth().currentUser!.uid)
@@ -83,6 +84,7 @@ struct StreakCardView: View {
         .padding(.bottom, 8)
         .padding(.horizontal)
         
+
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.white)
@@ -90,8 +92,7 @@ struct StreakCardView: View {
                 .frame(maxWidth: .infinity)
         )
         
-        
-        
+
     }
         
     

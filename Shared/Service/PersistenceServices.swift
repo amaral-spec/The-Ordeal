@@ -542,6 +542,59 @@ class PersistenceServices: NSObject, ObservableObject {
         print("AudioRecord salvo no CloudKit!")
     }
 
+    func alreadyMakeTheChallenge(challengeID: CKRecord.ID) async throws -> AudioRecordChallengeModel? {
+        guard let currentUser = AuthService.shared.currentUser else {
+            throw NSError(domain: "AuthError", code: 1, userInfo: [NSLocalizedDescriptionKey: "No user loggoed in"])
+        }
+        
+        let userRef = CKRecord.Reference(recordID: currentUser.id, action: .none)
+        
+        let ref = CKRecord.Reference(recordID: challengeID, action: .none)
+        let predicate = NSPredicate(format: "challenge == %@ AND user == %@", ref, userRef)
+        
+        let query = CKQuery(recordType: "AudioRecordChallenge", predicate: predicate)
+        
+        var models: [AudioRecordChallengeModel] = []
+        
+        let (results, _) = try await db.records(matching: query)
+        
+        for (_, result) in results {
+            if case .success(let record) = result,
+               let audioModel = AudioRecordChallengeModel(from: record) {
+                models.append(audioModel)
+            }
+        }
+        
+        return models.first
+    }
+    
+    func alreadyMakeTheTask(taskID: CKRecord.ID) async throws -> AudioRecordTaskModel? {
+        guard let currentUser = AuthService.shared.currentUser else {
+            throw NSError(domain: "AuthError", code: 1, userInfo: [NSLocalizedDescriptionKey: "No user loggoed in"])
+        }
+
+        let userRef = CKRecord.Reference(recordID: currentUser.id, action: .none)
+        
+        let ref = CKRecord.Reference(recordID: taskID, action: .none)
+        
+        let predicate = NSPredicate(format: "task == %@ AND user == %@", ref, userRef)
+        
+        let query = CKQuery(recordType: "AudioRecordTask", predicate: predicate)
+        
+        var models: [AudioRecordTaskModel] = []
+        
+        let (results, _) = try await db.records(matching: query)
+        
+        for (_, result) in results {
+            if case .success(let record) = result,
+               let audioModel = AudioRecordTaskModel(from: record) {
+                models.append(audioModel)
+            }
+        }
+        
+        return models.first
+    }
+    
     func fetchChallengeAudio(challengeID: CKRecord.ID) async throws -> [AudioRecordChallengeModel] {
         
         let ref = CKRecord.Reference(recordID: challengeID, action: .none)
@@ -716,50 +769,143 @@ class PersistenceServices: NSObject, ObservableObject {
         }
     }
     
-    func generalSearch(prompt: String, userRecordID: CKRecord.ID) async throws -> ([GroupModel], [ChallengeModel], [TaskModel]) {
-        // Function that creates predicates/queries for each type (group, challenge, task)
-        // Returns arrays with all objects found that match both the user's prompt
-        // and their user id
-        let userRef = CKRecord.Reference(recordID: userRecordID, action: .none)
-
-        // Fetching groups from prompt
-        let groupPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
-            NSPredicate(format: "name CONTAINS %@", prompt),
-            NSPredicate(format: "members CONTAINS %@", userRef)
-        ])
-        let groupQuery = CKQuery(recordType: "MusicGroup", predicate: groupPredicate)
-        let (groupResults, _) = try await db.records(matching: groupQuery)
-        let groupRecords = groupResults.compactMap { try? $0.1.get() }
-        let groups = groupRecords.map { GroupModel(from: $0) }
+    func generalSearch(prompt: String) async throws -> ([UserModel], [GroupModel], [ChallengeModel], [TaskModel]) {
+        guard let currentUser = AuthService.shared.currentUser else {
+            throw NSError(domain: "AuthError", code: 1, userInfo: [NSLocalizedDescriptionKey: "No user logged in"])
+        }
         
-        // Fetching challenges from prompt
+        let userRef = CKRecord.Reference(recordID: currentUser.id, action: .none)
+        
+        // 1. Carregar Grupos do Usuário
+        // Busca grupos onde o usuário está na lista de membros
         let userGroups = try await fetchAllGroups()
+        
+        // --- FILTRO DE ALUNOS ---
+        var studentRefs: [CKRecord.Reference] = []
+        for grupo in userGroups {
+            for student in grupo.members {
+                if student.recordID != currentUser.id && !studentRefs.contains(student) {
+                    studentRefs.append(student)
+                }
+            }
+        }
+        
+        var users: [UserModel] = []
+        for ref in studentRefs {
+            if let record = try? await db.record(for: ref.recordID) {
+                let user = UserModel(from: record)
+                users.append(user)
+            }
+        }
+        // Filtro de texto na memória (case insensitive)
+        let filteredUsers = users.filter { $0.name.localizedCaseInsensitiveContains(prompt) }
+        
+        
+        // --- FILTRO DE GRUPOS ---
+        // Filtra na memória os grupos já baixados
+        let filteredGroups = userGroups.filter { $0.name.localizedCaseInsensitiveContains(prompt) }
+        
+        
+        // --- FILTRO DE CHALLENGES ---
         let groupRefs = userGroups.map { CKRecord.Reference(recordID: $0.id, action: .none) }
+        var filteredChallenges: [ChallengeModel] = []
         
-        let challengeNamePredicate = NSPredicate(format: "name CONTAINS %@", prompt)
-        let groupListPredicate = NSPredicate(format: "group IN %@", groupRefs)
-        let challengePredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
-            challengeNamePredicate,
-            groupListPredicate
-        ])
+        if !groupRefs.isEmpty {
+            // Busca challenges que pertencem a esses grupos
+            let groupListPredicate = NSPredicate(format: "group IN %@", groupRefs)
+            let challengeQuery = CKQuery(recordType: "Challenge", predicate: groupListPredicate)
+            
+            let (challengeResults, _) = try await db.records(matching: challengeQuery)
+            let challengeRecords = challengeResults.compactMap { try? $0.1.get() }
+            let allChallenges = challengeRecords.map { ChallengeModel(from: $0) }
+            
+            // Filtro de texto na memória
+            filteredChallenges = allChallenges.filter { $0.title.localizedCaseInsensitiveContains(prompt) }
+        }
         
-        let challengeQuery = CKQuery(recordType: "Challenge", predicate: challengePredicate)
-        let (challengeResults, _) = try await db.records(matching: challengeQuery)
-        let challengeRecords = challengeResults.compactMap { try? $0.1.get() }
-        let challenges = challengeRecords.map { ChallengeModel(from: $0) }
         
-        // Fetching tasks from prompt
-        let taskPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
-            NSPredicate(format: "title CONTAINS %@", prompt),
-            NSPredicate(format: "student == %@", userRef)
-        ])
+        // --- FILTRO DE TASKS (CORREÇÃO AQUI) ---
+        // Erro anterior: student == userRef
+        // Correção: student CONTAINS userRef (pois é uma Reference List)
+        let taskPredicate = NSPredicate(format: "student CONTAINS %@", userRef)
         let taskQuery = CKQuery(recordType: "Task", predicate: taskPredicate)
+        
         let (taskResults, _) = try await db.records(matching: taskQuery)
         let taskRecords = taskResults.compactMap { try? $0.1.get() }
-        let tasks = taskRecords.map { TaskModel(from: $0) }
+        let allTasks = taskRecords.map { TaskModel(from: $0) }
         
-        return (groups, challenges, tasks)
+        // Filtro de texto na memória
+        let filteredTasks = allTasks.filter { $0.title.localizedCaseInsensitiveContains(prompt) }
+        
+        
+        return (filteredUsers, filteredGroups, filteredChallenges, filteredTasks)
     }
+    
+//    func generalSearch(prompt: String) async throws -> ([UserModel], [GroupModel], [ChallengeModel], [TaskModel]) {
+//        guard let currentUser = AuthService.shared.currentUser else {
+//            throw NSError(domain: "AuthError", code: 1, userInfo: [NSLocalizedDescriptionKey: "No user loggoed in"])
+//        }
+//        // Function that creates predicates/queries for each type (group, challenge, task)
+//        // Returns arrays with all objects found that match both the user's prompt
+//        // and their user id
+//        let userRef = CKRecord.Reference(recordID: currentUser.id, action: .none)
+//        
+//        let userGroups = try await fetchAllGroups()
+//        var studentRefs: [CKRecord.Reference] = []
+//
+//        // Fetching users from prompt
+//        for grupo in userGroups {
+//            for student in grupo.members {
+//                if student.recordID != currentUser.id && !studentRefs.contains(student) {
+//                    studentRefs.append(student)
+//                }
+//            }
+//        }
+//        
+//        var users: [UserModel] = []
+//        for ref in studentRefs {
+//            let record = try await db.record(for: ref.recordID)
+//            let user = UserModel(from: record)
+//            users.append(user)
+//        }
+//        
+//        // Fetching groups from prompt
+//        let groupPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+//            NSPredicate(format: "name CONTAINS[c %@", prompt),
+//            NSPredicate(format: "ANY members == %@", userRef)
+//        ])
+//        let groupQuery = CKQuery(recordType: "MusicGroup", predicate: groupPredicate)
+//        let (groupResults, _) = try await db.records(matching: groupQuery)
+//        let groupRecords = groupResults.compactMap { try? $0.1.get() }
+//        let groups = groupRecords.map { GroupModel(from: $0) }
+//        
+//        // Fetching challenges from prompt
+//        let groupRefs = userGroups.map { CKRecord.Reference(recordID: $0.id, action: .none) }
+//        
+//        let challengeNamePredicate = NSPredicate(format: "name CONTAINS %@", prompt)
+//        let groupListPredicate = NSPredicate(format: "group IN %@", groupRefs)
+//        let challengePredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+//            challengeNamePredicate,
+//            groupListPredicate
+//        ])
+//        
+//        let challengeQuery = CKQuery(recordType: "Challenge", predicate: challengePredicate)
+//        let (challengeResults, _) = try await db.records(matching: challengeQuery)
+//        let challengeRecords = challengeResults.compactMap { try? $0.1.get() }
+//        let challenges = challengeRecords.map { ChallengeModel(from: $0) }
+//        
+//        // Fetching tasks from prompt
+//        let taskPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+//            NSPredicate(format: "title CONTAINS %@", prompt),
+//            NSPredicate(format: "student == %@", userRef)
+//        ])
+//        let taskQuery = CKQuery(recordType: "Task", predicate: taskPredicate)
+//        let (taskResults, _) = try await db.records(matching: taskQuery)
+//        let taskRecords = taskResults.compactMap { try? $0.1.get() }
+//        let tasks = taskRecords.map { TaskModel(from: $0) }
+//        
+//        return (users, groups, challenges, tasks)
+//    }
     
     // MARK: Challenge Session
     func startChallengeSession(challengeID: CKRecord.ID, userID: CKRecord.ID) async throws -> CKRecord.ID {
@@ -785,7 +931,7 @@ class PersistenceServices: NSObject, ObservableObject {
         let challengeRef = CKRecord.Reference(recordID: challengeID, action: .none)
 
         // timeout de 90s
-        let limit = Date().addingTimeInterval(-90)
+        let limit = Date().addingTimeInterval(-120)
 
         let predicate = NSPredicate(
             format: "challenge == %@ AND isDoing == true AND timestamp > %@",

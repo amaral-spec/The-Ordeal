@@ -36,7 +36,7 @@ struct InitialTaskView: View {
                     rec.start()
                 }
             } label: {
-                RecordingButtonView(isRecording: rec.isRecording)
+                RecordingButtonView(isRecording: rec.isRecording, color: Color("GreenCard"))
             }
         }
         .navigationTitle(Text(doTaskVM.taskM?.title ?? "Sem titulo"))

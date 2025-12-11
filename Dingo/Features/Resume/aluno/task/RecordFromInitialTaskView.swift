@@ -57,8 +57,10 @@ struct RecordFromInitialTaskView: View {
                 onNavigation(.initialTask)
             } label: {
                 Text("Regravar Audio")
-                    .tint(Color("GreenCard"))
+                    .tint(.black)
             }
+            .buttonStyle(.borderedProminent)
+            .tint(Color("GreenCardBackground"))
         }
         .onAppear {
             doTaskVM.recordings = doTaskVM.recordingsList()

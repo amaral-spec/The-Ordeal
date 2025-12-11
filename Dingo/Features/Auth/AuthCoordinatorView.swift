@@ -17,7 +17,7 @@ struct AuthCoordinatorView: View {
     
     var body: some View {
         NavigationStack(path: $path) {
-            LoginView()
+            LoginView() 
                 .environmentObject(authVM)
                 .onChange(of: authVM.isNewUser ?? false) { _, newValue in
                     if newValue {
@@ -44,9 +44,6 @@ struct AuthCoordinatorView: View {
                             }
                             .environmentObject(authVM)
                     }
-                }
-                .onAppear() {
-                    authVM.checkStatus()
                 }
         }
     }

@@ -89,6 +89,7 @@ final class AuthService: NSObject, ObservableObject {
     
     // MARK: - Estado de login
     func checkAppleSignInStatus() {
+        
         guard !appleUserID.isEmpty else {
             isLoggedIn = false
             return
@@ -111,6 +112,8 @@ final class AuthService: NSObject, ObservableObject {
                 }
             }
         }
+        
+     
     }
     
     // MARK: - CloudKit

@@ -9,17 +9,18 @@ import SwiftUI
 
 struct DoChallengeCoordinatorView: View {
     enum Route: Hashable {
-        case waitingChained
-        case initialChained
-        case receiveChained
-        case recordChained
+        case waiting
+        case initial
+        case receive
+        case recordInitial
+        case recordReceived
     }
     
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var persistenceServices: PersistenceServices
     
-    @State private var path: [Route] = [.waitingChained]
+    @State private var path: [Route] = []
     
     @State private var showCancelAlert: Bool = false
     @State private var showConfirmAlert: Bool = false
@@ -28,18 +29,19 @@ struct DoChallengeCoordinatorView: View {
     @StateObject private var rec = MiniRecorder()
     @StateObject private var player = MiniPlayer()
     
-    @State private var currentRoute: Route = .waitingChained
+    @State private var currentRoute: Route
     @State private var micDenied = false
 
 
     init(challengeM: ChallengeModel) {
         _doChallengeVM = StateObject(wrappedValue: DoChallengeViewModel(persistenceServices: PersistenceServices.shared, challengeM: challengeM))
+            currentRoute = .waiting
     }
 
     var body: some View {
 
         NavigationStack(path: $path) {
-            screen(for: .waitingChained)
+            screen(for: self.currentRoute)
                 .navigationDestination(for: Route.self) { route in
                     screen(for: route)
                 }
@@ -56,9 +58,9 @@ struct DoChallengeCoordinatorView: View {
         }
         .alert("Cancelar desafio?", isPresented: $showCancelAlert) {
             Button("Manter", role: .cancel) { }
-            Button("Cancelar desafio", role: .destructive) {
+            Button("Descartar desafio", role: .destructive) {
                 
-                if currentRoute != .waitingChained {
+                if currentRoute != .waiting {
                     Task { await doChallengeVM.outChallenge() }
                 }
                 
@@ -110,8 +112,17 @@ struct DoChallengeCoordinatorView: View {
     @ViewBuilder
     private func screen(for route: Route) -> some View {
         switch route {
-        case .waitingChained:
-            WaitingChainedChallengeView { next in
+        case .waiting:
+            WaitingView { next in
+                currentRoute = next
+                path.append(next)
+            }
+            .toolbar { cancelWaitingToolbar }
+            .navigationBarBackButtonHidden(true)
+            .environmentObject(doChallengeVM)
+            
+        case .initial:
+            InitialView { next in
                 currentRoute = next
                 path.append(next)
             }
@@ -119,8 +130,8 @@ struct DoChallengeCoordinatorView: View {
             .navigationBarBackButtonHidden(true)
             .environmentObject(doChallengeVM)
             
-        case .initialChained:
-            InitialChainedChallengeView { next in
+        case .receive:
+            ReceivedAudioView { next in
                 currentRoute = next
                 path.append(next)
             }
@@ -128,17 +139,19 @@ struct DoChallengeCoordinatorView: View {
             .navigationBarBackButtonHidden(true)
             .environmentObject(doChallengeVM)
             
-        case .receiveChained:
-            ReceivedAudioRecordChainedChallengeView { next in
+        case .recordInitial:
+            RecordFromInitialView { next in
                 currentRoute = next
                 path.append(next)
             }
-            .toolbar { cancelToolbar }
+            .toolbar {
+                cancelToolbar
+                confirmToolbar
+            }
             .navigationBarBackButtonHidden(true)
-            .environmentObject(doChallengeVM)
-
-        case .recordChained:
-            RecordFromInitialChainedChallengeView { next in
+            
+        case .recordReceived:
+            RecordFromReceivedView { next in
                 currentRoute = next
                 path.append(next)
             }
@@ -149,6 +162,16 @@ struct DoChallengeCoordinatorView: View {
             .navigationBarBackButtonHidden(true)
         }
     }
+    
+    private var cancelWaitingToolbar: some ToolbarContent {
+        ToolbarItem(placement: .topBarLeading) {
+            Button("Cancelar", systemImage: "xmark") {
+                dismiss()
+            }
+            .tint(.black)
+        }
+    }
+    
     
     private var cancelToolbar: some ToolbarContent {
         ToolbarItem(placement: .topBarLeading) {
@@ -166,7 +189,7 @@ struct DoChallengeCoordinatorView: View {
             } label: {
                 Label("Confirmar", systemImage: "checkmark")
             }
-            .buttonStyle(.borderedProminent)      // Torna o botão primário
-            .tint(Color("BlueChallenge"))         }
+            .buttonStyle(.borderedProminent)
+            .tint(Color("BlueCard"))         }
     }
 }

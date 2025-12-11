@@ -5,6 +5,7 @@ options:
     iOS: "18.0"
   productName: Dingo
   createIntermediateGroups: true
+  developmentLanguage: pt-BR # <--- ADICIONE ESTA LINHA
 
 targets:
   Dingo:
@@ -13,7 +14,6 @@ targets:
     sources:
       - path: Shared
       - path: Dingo
-      - path: Shared
     resources:
       - path: Dingo/Assets.xcassets
 
