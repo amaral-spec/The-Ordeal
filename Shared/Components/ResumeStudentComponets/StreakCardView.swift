@@ -75,7 +75,7 @@ struct StreakCardView: View {
             //streakVM.loadStreak(userID: auth().currentUser!.uid)
             Task{
                 await streakVM.loadStreak()
-                print("Streak:\(streakVM.getStreak()) \n lista\(streakVM.trainingDates)\n hj: \(streakVM.today) \(streakVM.wToday)\n ultimo: \(streakVM.lastDate) \(streakVM.wLastDate)")
+                //print("Streak:\(streakVM.getStreak()) \n lista\(streakVM.trainingDates)\n hj: \(streakVM.today) \(streakVM.wToday)\n ultimo: \(streakVM.lastDate) \(streakVM.wLastDate)")
                 await streakVM.updateTrainingDates()
                 
             }
