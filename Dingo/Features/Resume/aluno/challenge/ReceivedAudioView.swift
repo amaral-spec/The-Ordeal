@@ -33,29 +33,49 @@ struct ReceivedAudioView: View {
             Spacer()
             
             // 2. Player de Áudio
-            audioPlayerSection
-                .padding(32)
-                .background(
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(Color(.secondarySystemBackground))
-                        .padding(16)
-                )
-            
-            Spacer()
-            
-            // 3. Ilustração e Mensagem
-            IconImageView(nomeIcone: "waveform")
-            ImageMessageView(
-                title: "Grave o seu áudio",
-                subtitle: "Faça história"
-            )
+            HStack{
+                VStack(alignment: .leading) {
+                    Text("Áudio Original")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .padding(.horizontal)
+                    
+                    audioPlayerSection
+                        .padding(32)
+                        .background(
+                            RoundedRectangle(cornerRadius: 16)
+                                .fill(Color(.secondarySystemBackground))
+                                .padding(16)
+                        )
+                        .frame(width: 350)
+                }
+                Spacer()
+            }
             
             Spacer()
             
             // 4. Visualizador de Gravação
-            MultiBarVisualizerView(values: rec.meterHistory, barCount: 24)
-                .frame(height: 54)
-                .padding(.horizontal)
+            HStack{
+                Spacer()
+                VStack(alignment: .trailing) {
+                    Text("Sua Gravação")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .padding(.horizontal)
+                    
+                    MultiBarVisualizerView(values: rec.meterHistory, barCount: 24)
+                        .frame(height: 40)
+                        .padding(32)
+                        .background(
+                            RoundedRectangle(cornerRadius: 16)
+                                .fill(Color(.secondarySystemBackground))
+                                .padding(16)
+                        )
+                        .frame(width: 310, height: 110)
+                        
+                }
+                
+            }
             
             Spacer()
             

@@ -1,62 +1,58 @@
 import SwiftUI
 
 struct ResumeStudentView: View, CardNavigationHandler {
-
+    
     @EnvironmentObject var resumeVM: ResumeViewModel
     let onNavigate: (ResumeCoordinatorView.Route) -> Void
     @State var startTraining: Bool = false
-
+    
     // MARK: - Navegação do protocolo
     func navigateToChallengeList() {
         onNavigate(.listChallenge)
     }
-
+    
     func navigateToTaskList() {
         onNavigate(.listTask)
     }
-
+    
     var body: some View {
         ScrollView() {
             // MARK: Streak Card
             StreakCardView()
-                .padding(.horizontal)
-          
+                .padding(.horizontal, 8)
+            
             // MARK: Challenge Card (Aluno)
             BigChallengeCardView(
                 resumoVM: resumeVM,
                 navigationHandler: self
             )
-            .padding(.horizontal)
-
+            .shadow(color: .black.opacity(0.1), radius: 2, y: 2)
+            .padding(.vertical, 8)
+            .padding(.horizontal, 8)
+            
             // MARK: Grid: Tarefas + Treino
             HStack(spacing: 16) {
                 BigTaskCardView(
                     resumoVM: resumeVM,
                     navigationHandler: self
                 )
+                .shadow(color: .black.opacity(0.1), radius: 2, y: 2)
                 
-                //Button of training
-                Button{
-                    //StartTrainingView()
-                    startTraining = true
-                } label: {
-                    TrainingCardView()
-                }
-//                    .padding(.leading)
-                    
+                TrainingCardView()
+                    .onTapGesture {
+                        startTraining = true
+                    }
+                    .shadow(color: .black.opacity(0.1), radius: 2, y: 2)
+                
             }
-            .padding(.horizontal)
-
+            .padding(.horizontal, 8)
+            
             Spacer()
         }
         .padding(.top, 12)
         .background(Color(.secondarySystemBackground).ignoresSafeArea())
         .navigationTitle("Resumo")
         .toolbarTitleDisplayMode(.inlineLarge)
-        .toolbar {
-            
-        }
-        
         .sheet(isPresented: $startTraining) {
             TrainingCoordinatorView()
                 .interactiveDismissDisabled(true)//Tira o deslizar para sair

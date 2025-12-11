@@ -88,7 +88,7 @@ struct StreakCardView: View {
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.white)
-                .shadow(color: .black.opacity(0.1), radius: 4, y: 2)
+                .shadow(color: .black.opacity(0.1), radius: 2, y: 2)
                 .frame(maxWidth: .infinity)
         )
         

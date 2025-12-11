@@ -129,7 +129,7 @@ struct VisualizarDadosView: View {
         }
         .sheet(isPresented: $startChallenge) {
             if let challenge = challengeModel {
-                DoChallengeCoordinatorView(challengeM: challenge)
+                DoChallengeCoordinatorView(challengeM: challenge, alreadyDone: $alreadyDone)
                     .interactiveDismissDisabled(true)
             }
         }
@@ -143,7 +143,6 @@ struct VisualizarDadosView: View {
                 }
             }
         }
-        // MARK: Async Tasks
         .onAppear {
             Task {
                 // 1. Carrega dados básicos
