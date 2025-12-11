@@ -51,7 +51,7 @@ struct StopwatchView: View {
 
             
             Spacer()
-            
+            Spacer()
             
             Button {
                 if isRunning {
@@ -68,7 +68,8 @@ struct StopwatchView: View {
                         .foregroundStyle(.white)
                 }
             }
-        
+            .padding(.bottom, 20)
+
             
             
             
@@ -76,30 +77,32 @@ struct StopwatchView: View {
             Spacer()
             
             //Botao de tirar foto
-            Button(action: {
-                if(isRunning == false && time != 0){
-                    onNavigate(.takePhoto)
-                }
-            }) {
-                if(!isRunning && time != 0){
-                    ZStack {
-                        Rectangle()
-                            .frame(width: 200, height: 50)
-                            .cornerRadius(10)
-                            .foregroundColor(Color("RedCard"))
-                        
-                        Text("Finalizar")
-                            .fontWeight(.bold)
-                            .frame(width: 200, height: 50)
-                            .foregroundColor(.white)
-                    }
-                }else{
-                    Rectangle()
-                        .frame(width: 200, height: 50)
-                        .opacity(0)
-                }
-            }
-            .padding(.bottom, 20)
+//            Button(action: {
+//                if(isRunning == false && time != 0){
+//                    onNavigate(.takePhoto)
+//                }
+//            }) {
+//                if(!isRunning && time != 0){
+//                    ZStack {
+//                        Rectangle()
+//                            .frame(width: 200, height: 50)
+//                            .cornerRadius(10)
+//                            .foregroundColor(Color("RedCard"))
+//                        
+//                        Text("Finalizar")
+//                            .fontWeight(.bold)
+//                            .frame(width: 200, height: 50)
+//                            .foregroundColor(.white)
+//                    }
+//                }else{
+//                    Rectangle()
+//                        .frame(width: 200, height: 50)
+//                        .opacity(0)
+//                }
+//            }
+//            .padding(.bottom, 20)
+            
+            
         }
 
         .toolbar{
@@ -107,6 +110,16 @@ struct StopwatchView: View {
                 Text("Treino")
                     .font(.headline)
             }
+            ToolbarItem(placement: .confirmationAction){
+                //Botao de tirar foto
+                Button("confirmar", systemImage: "checkmark"){
+                    if(isRunning == false && time != 0){
+                        onNavigate(.takePhoto)
+                    }
+                }
+                .tint(isRunning == false && time != 0 ? Color("RedCard") : Color(.gray))
+            }
+        
         }
         
     }
