@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ResumeStudentView: View, CardNavigationHandler {
     
+    @EnvironmentObject var streakVM: StreakViewModel
     @EnvironmentObject var resumeVM: ResumeViewModel
     let onNavigate: (ResumeCoordinatorView.Route) -> Void
     @State var startTraining: Bool = false
@@ -63,6 +64,8 @@ struct ResumeStudentView: View, CardNavigationHandler {
             _ = await (desafios, tarefas)
         }
         .refreshable {
+            await streakVM.loadStreak()
+            await streakVM.updateTrainingDates()
             async let desafios: () = resumeVM.carregarDesafios()
             async let tarefas: () = resumeVM.carregarTarefas()
             _ = await (desafios, tarefas)

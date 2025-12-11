@@ -109,6 +109,19 @@ struct EditProfileModal: View {
                             .fontWeight(.bold)
                             .padding(.horizontal, 40)
                     }
+                    
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 30)
+                            .frame(width: 350, height: 50)
+                            .foregroundStyle(.white)
+                        
+                        Text("Logout")
+                            .foregroundStyle(.red)
+                    }
+                    .padding(.top, 4)
+                    .onTapGesture {
+                        authService.cancelRegistration()
+                    }
                 }
                 
             }

@@ -12,7 +12,7 @@ import CloudKit
 
 @MainActor
 final class AuthService: NSObject, ObservableObject {
-    static let shared = AuthService()
+    static let shared = AuthService(persistenceServices: PersistenceServices())
     
     // MARK: - Public properties
     @Published private(set) var isLoggedIn: Bool = false
@@ -25,7 +25,10 @@ final class AuthService: NSObject, ObservableObject {
     private var database: CKDatabase { container.publicCloudDatabase }
     
     // MARK: - Init
-    private override init() {
+    private let persistenceServices: PersistenceServices   // agora é apenas referência externa
+
+    init(persistenceServices: PersistenceServices) {
+        self.persistenceServices = persistenceServices
         super.init()
         loadSession()
     }
@@ -164,6 +167,64 @@ final class AuthService: NSObject, ObservableObject {
         
         Task {
             await saveUserToCloudKit(currentUser)
+        }
+    }
+    
+    private func removeUserFromAllGroups() async {
+        guard let userRecordID = currentUser?.id else { return }
+        
+        do {
+            var listaGrupos = try await persistenceServices.fetchAllGroups()
+            
+            for grupo in listaGrupos {
+                try await database.deleteRecord(withID: grupo.id)
+            }
+            
+        } catch {
+            print("❌ Erro ao buscar grupos do usuário: \(error.localizedDescription)")
+        }
+    }
+    
+    private func removeUserFromAllTask() async {
+        guard let userRecordID = currentUser?.id else { return }
+        
+        do {
+            var listaTasks = try await persistenceServices.fetchAllTasks()
+            
+            for task in listaTasks {
+                try await database.deleteRecord(withID: task.id)
+            }
+            
+        } catch {
+            print("❌ Erro ao buscar grupos do usuário: \(error.localizedDescription)")
+        }
+    }
+    
+    
+    func cancelRegistration() {
+        // If there's no stored Apple ID, just clear local session
+        guard !appleUserID.isEmpty else {
+            logout()
+            return
+        }
+        let recordID = CKRecord.ID(recordName: appleUserID)
+        
+        Task {
+            print("🗑️ Iniciando remoção de todos os grupos...")
+            await removeUserFromAllGroups()
+            print("🗑️ Iniciando remoção de todas as tasks...")
+            await removeUserFromAllTask()
+            
+            do {
+                try await database.deleteRecord(withID: recordID)
+                print("✅ User deleted successfully: \(recordID.recordName)")
+            } catch {
+                print("❌ Failed to delete user: \(error.localizedDescription)")
+            }
+            
+            await MainActor.run {
+                self.logout()
+            }
         }
     }
 }
