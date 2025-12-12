@@ -52,7 +52,7 @@ struct ResumeStudentView: View, CardNavigationHandler {
         }
         .padding(.top, 12)
         .background(Color(.secondarySystemBackground).ignoresSafeArea())
-        .navigationTitle("Resumo")
+        .navigationTitle("Início")
         .toolbarTitleDisplayMode(.inlineLarge)
         .sheet(isPresented: $startTraining) {
             TrainingCoordinatorView()
