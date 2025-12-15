@@ -4,7 +4,7 @@ struct LoadingCardBase<T>: View {
     @ObservedObject var vm: CardLoaderViewModel<T>
     
     var sizeIcon: Int {
-        vm.currentIcon.contains("badge.plus") ? 150 : 100
+        vm.currentIcon.contains("badge.plus") ? 100 : 100
     }
     let title: String
 

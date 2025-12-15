@@ -50,9 +50,9 @@ struct SignUpView: View {
                 
                 Button(action: {
                     authVM.makeRegistration(isTeacher: isTeacher, name: nomeDeUsuario)
-                    onContinue?()
+                    authVM.finishRegistration()
                 }) {
-                    Text("Seguir para termos")
+                    Text("Finalizar cadastro")
                         .font(.headline)
                         .foregroundColor(.white)
                         .padding()

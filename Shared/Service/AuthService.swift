@@ -171,12 +171,13 @@ final class AuthService: NSObject, ObservableObject {
     }
     
     private func removeUserFromAllGroups() async {
-        guard let userRecordID = currentUser?.id else { return }
+        guard (currentUser?.id) != nil else { return }
         
         do {
-            var listaGrupos = try await persistenceServices.fetchAllGroups()
+            let listaGrupos = try await persistenceServices.fetchAllGroups()
             
             for grupo in listaGrupos {
+                print("Excluindo grupo: \(grupo.id.recordName)")
                 try await database.deleteRecord(withID: grupo.id)
             }
             
@@ -186,12 +187,13 @@ final class AuthService: NSObject, ObservableObject {
     }
     
     private func removeUserFromAllTask() async {
-        guard let userRecordID = currentUser?.id else { return }
+        guard (currentUser?.id) != nil else { return }
         
         do {
-            var listaTasks = try await persistenceServices.fetchAllTasks()
+            let listaTasks = try await persistenceServices.fetchAllTasks()
             
             for task in listaTasks {
+                print("Excluindo grupo: \(task.id.recordName)")
                 try await database.deleteRecord(withID: task.id)
             }
             
